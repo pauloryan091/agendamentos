@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamentos - Sistema de Agendamento</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Tabela e botões adicionais */
+    .table-actions button {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container header-content">
+    <a href="#" class="logo">Agendamento+</a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content container">
+
+  <section class="section">
+    <h2 class="section-title">Agendamentos</h2>
+
+    <!-- Filtro por Data -->
+    <div class="form-inline" style="margin-bottom:1.5rem;">
+      <input type="date" id="filtroData" class="form-control">
+      <button class="btn btn-primary" onclick="filtrarAgendamentos()">Filtrar</button>
+      <button class="btn btn-secondary" onclick="limparFiltro()">Limpar Filtro</button>
+    </div>
+
+    <!-- Tabela de Agendamentos -->
+    <table class="table table-striped" id="tabelaAgendamentos">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Serviço</th>
+          <th>Valor</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabela">
+        <!-- Linhas serão inseridas pelo JS -->
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="section">
+  <div class="container">
+    <p style="text-align:center;">&copy; 2025 Sistema de Agendamento. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  // Lista de agendamentos simulada
+  let agendamentos = [
+    {cliente: "Paulo Ryan", servico: "Corte de Cabelo", valor: 50, data: "2025-08-14", hora: "09:00"},
+    {cliente: "Carlos Silva", servico: "Massagem", valor: 80, data: "2025-08-15", hora: "14:00"},
+    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"}
+  ];
+
+  const corpoTabela = document.getElementById("corpoTabela");
+
+  function mostrarAgendamentos(lista) {
+    corpoTabela.innerHTML = "";
+    if(lista.length === 0){
+      corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>`;
+      return;
+    }
+    lista.forEach(a => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${a.cliente}</td>
+        <td>${a.servico}</td>
+        <td>R$ ${a.valor.toFixed(2)}</td>
+        <td>${a.data.split("-").reverse().join("/")}</td>
+        <td>${a.hora}</td>
+        <td class="table-actions">
+          <button class="btn btn-success" onclick="editarAgendamento('${a.cliente}', '${a.data}', '${a.hora}')">Editar</button>
+          <button class="btn btn-danger" onclick="cancelarAgendamento('${a.cliente}', '${a.data}', '${a.hora}')">Cancelar</button>
+        </td>
+      `;
+      corpoTabela.appendChild(row);
+    });
+  }
+
+  // Filtrar por data
+  function filtrarAgendamentos() {
+    const dataFiltro = document.getElementById("filtroData").value;
+    if(dataFiltro) {
+      const filtrados = agendamentos.filter(a => a.data === dataFiltro);
+      mostrarAgendamentos(filtrados);
+    }
+  }
+
+  function limparFiltro() {
+    document.getElementById("filtroData").value = "";
+    mostrarAgendamentos(agendamentos);
+  }
+
+  // Simular edição e cancelamento
+  function editarAgendamento(cliente, data, hora) {
+    alert(`Simulação: Editar agendamento de ${cliente} em ${data} às ${hora}`);
+  }
+
+  function cancelarAgendamento(cliente, data, hora) {
+    if(confirm(`Deseja realmente cancelar o agendamento de ${cliente} em ${data} às ${hora}?`)) {
+      agendamentos = agendamentos.filter(a => !(a.cliente === cliente && a.data === data && a.hora === hora));
+      mostrarAgendamentos(agendamentos);
+    }
+  }
+
+  // Inicializar tabela
+  mostrarAgendamentos(agendamentos);
+</script>
+
+</body>
+</html>

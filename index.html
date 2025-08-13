@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Sistema de Agendamento</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-content">
+    <a href="#" class="logo">Agendamento+</a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content container">
+
+  <section class="section">
+    <h2 class="section-title">Dashboard</h2>
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <h3 class="stat-value"><?php echo $agendamentos_hoje; ?></h3>
+        <p class="stat-label">Agendamentos Hoje</p>
+      </div>
+      <div class="stat-card success">
+        <h3 class="stat-value"><?php echo $agendamentos_semana; ?></h3>
+        <p class="stat-label">Agendamentos Semana</p>
+      </div>
+      <div class="stat-card warning">
+        <h3 class="stat-value"><?php echo $servicos_disponiveis; ?></h3>
+        <p class="stat-label">Serviços Disponíveis</p>
+      </div>
+      <div class="stat-card danger">
+        <h3 class="stat-value"><?php echo $pendencias; ?></h3>
+        <p class="stat-label">Pendências</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Agendamentos Recentes</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Serviço</th>
+          <th>Valor</th>
+          <th>Data</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($agendamentos_recentes as $agendamento): ?>
+        <tr>
+          <td><?php echo htmlspecialchars($agendamento['cliente_nome']); ?></td>
+          <td><?php echo htmlspecialchars($agendamento['servico']); ?></td>
+          <td>R$ <?php echo number_format($agendamento['valor'], 2, ',', '.'); ?></td>
+          <td><?php echo date('d/m/Y', strtotime($agendamento['data_agendamento'])); ?></td>
+          <td><?php echo date('H:i', strtotime($agendamento['hora_agendamento'])); ?></td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="section">
+  <div class="container">
+    <p style="text-align:center;">&copy; 2025 Sistema de Agendamento. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+</body>
+</html>

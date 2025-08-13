@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Agendamento</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header>
+    <div class="container header-content">
+      <a href="#" class="logo">Agendamento+</a>
+      <nav class="nav-links">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content container">
+
+    <!-- Serviços -->
+    <section id="servicos" class="section">
+      <h2 class="section-title">Serviços</h2>
+      <div class="card">
+        <img src="https://via.placeholder.com/400x200" alt="Serviço" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">Corte de Cabelo</h3>
+          <p class="card-text">Serviço completo de corte, lavagem e finalização.</p>
+          <p>Valor: R$ 50,00</p>
+          <button class="btn btn-primary" onclick="openModal('Corte de Cabelo', 50)">Agendar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://via.placeholder.com/400x200" alt="Serviço" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">Manicure</h3>
+          <p class="card-text">Cuidamos das suas unhas com todo cuidado e higiene.</p>
+          <p>Valor: R$ 30,00</p>
+          <button class="btn btn-primary" onclick="openModal('Manicure', 30)">Agendar</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal de Agendamento -->
+  <div class="modal" id="agendamentoModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h2 class="section-title">Agendar Serviço</h2>
+      <form id="agendamentoForm">
+        <div class="form-group">
+          <label class="form-label" for="servico">Serviço</label>
+          <input class="form-control" type="text" id="servico" name="servico" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="valor">Valor (R$)</label>
+          <input class="form-control" type="number" id="valor" name="valor" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="data">Data</label>
+          <input class="form-control" type="date" id="data" name="data" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="hora">Hora</label>
+          <input class="form-control" type="time" id="hora" name="hora" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cliente">Nome do Cliente</label>
+          <input class="form-control" type="text" id="cliente" name="cliente" placeholder="Seu nome" required>
+        </div>
+        <button type="submit" class="btn btn-success">Confirmar Agendamento</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="section">
+    <div class="container">
+      <p style="text-align:center;">&copy; 2025 Sistema de Agendamento. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Script do Modal -->
+  <script>
+    const modal = document.getElementById('agendamentoModal');
+    const servicoInput = document.getElementById('servico');
+    const valorInput = document.getElementById('valor');
+    const form = document.getElementById('agendamentoForm');
+
+    function openModal(servico, valor) {
+      servicoInput.value = servico;
+      valorInput.value = valor;
+      modal.classList.add('show');
+    }
+
+    function closeModal() {
+      modal.classList.remove('show');
+    }
+
+    // Submissão do formulário (simulação)
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert(`Agendamento do serviço "${servicoInput.value}" confirmado para ${document.getElementById('data').value} às ${document.getElementById('hora').value}`);
+      closeModal();
+      form.reset();
+    });
+
+    // Fechar modal clicando fora do conteúdo
+    window.addEventListener('click', function(e) {
+      if (e.target === modal) closeModal();
+    });
+  </script>
+
+</body>
+</html>
