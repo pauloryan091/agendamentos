@@ -539,3 +539,19 @@ function cancelarAgendamento(id) {
         }, 1000);
     }
 }
+// Menu hambúrguer
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('menu');
+
+menuBtn.addEventListener('click', () => {
+  navLinks.classList.toggle('show');
+});
+
+// Formulário
+const form = document.getElementById('agendamentoForm');
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  alert('Agendamento realizado com sucesso!');
+  form.reset();
+});
