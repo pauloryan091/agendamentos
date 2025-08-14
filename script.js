@@ -1,4 +1,255 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // ---------------------------
+    // Menu responsivo
+    // ---------------------------
+    const btn = document.getElementById('menuBtn');
+    const menu = document.querySelector('.nav-links');
+    btn && btn.addEventListener('click', () => menu.classList.toggle('show'));
+
+    // ---------------------------
+    // Perfil do usuário
+    // ---------------------------
+    const uploadFoto = document.getElementById('uploadFoto');
+    const fotoUsuario = document.getElementById('fotoUsuario');
+    const formPerfil = document.getElementById('formPerfil');
+    const msgPerfil = document.getElementById('msgPerfil');
+
+    // Carregar dados salvos (localStorage)
+    const fotoSalva = localStorage.getItem('fotoUsuario');
+    const nomeSalvo = localStorage.getItem('nomeUsuario');
+    const emailSalvo = localStorage.getItem('emailUsuario');
+    const telefoneSalvo = localStorage.getItem('telefoneUsuario');
+
+    if (fotoSalva) fotoUsuario.src = fotoSalva;
+    if (nomeSalvo) document.getElementById('nomeUsuario').innerText = nomeSalvo;
+    if (emailSalvo) document.getElementById('emailUsuario').innerText = emailSalvo;
+    if (telefoneSalvo) document.getElementById('telefoneUsuario').innerText = telefoneSalvo;
+
+    // Atualizar foto do perfil
+    uploadFoto && uploadFoto.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                fotoUsuario.src = e.target.result;
+                localStorage.setItem('fotoUsuario', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Editar perfil
+    formPerfil && formPerfil.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const telefone = document.getElementById('telefone').value;
+
+        document.getElementById('nomeUsuario').innerText = nome;
+        document.getElementById('emailUsuario').innerText = email;
+        document.getElementById('telefoneUsuario').innerText = telefone;
+
+        msgPerfil.innerText = "Perfil atualizado com sucesso!";
+        msgPerfil.style.color = "green";
+
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+        localStorage.setItem('telefoneUsuario', telefone);
+    });
+
+    // ---------------------------
+    // Agendamentos
+    // ---------------------------
+    const modal = document.getElementById('agendamentoModal');
+    const formAgendamento = document.getElementById('agendamentoForm');
+    const servicoInput = document.getElementById('servico');
+    const valorInput = document.getElementById('valor');
+    const corpoTabela = document.getElementById('corpoTabela');
+
+    let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+
+    function mostrarAgendamentos(lista = agendamentos) {
+        if (!corpoTabela) return;
+
+        corpoTabela.innerHTML = "";
+
+        if (lista.length === 0) {
+            corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>`;
+            return;
+        }
+
+        lista.forEach((a, i) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${a.cliente}</td>
+                <td>${a.servico}</td>
+                <td>R$ ${parseFloat(a.valor).toFixed(2)}</td>
+                <td>${a.data.split("-").reverse().join("/")}</td>
+                <td>${a.hora}</td>
+                <td class="table-actions">
+                    <button class="btn btn-danger" onclick="cancelarAgendamentoTabela(${i})">Cancelar</button>
+                </td>
+            `;
+            corpoTabela.appendChild(row);
+        });
+    }
+
+    window.cancelarAgendamentoTabela = function(index) {
+        if (confirm(`Deseja realmente cancelar o agendamento de ${agendamentos[index].cliente} em ${agendamentos[index].data} às ${agendamentos[index].hora}?`)) {
+            agendamentos.splice(index, 1);
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+            mostrarAgendamentos();
+        }
+    };
+
+    // Abrir modal
+    window.openAgendamentoModal = function(day, month, year) {
+        const data = `${day.toString().padStart(2,'0')}/${month.toString().padStart(2,'0')}/${year}`;
+        document.getElementById('agendamentoData').textContent = data;
+
+        // Simular serviços disponíveis
+        const selectServico = document.getElementById('servico');
+        selectServico.innerHTML = '<option value="" disabled selected>Selecione um serviço</option>';
+
+        const servicos = [
+            { nome: 'Corte de Cabelo', duracao: '45 min', valor: 60 },
+            { nome: 'Manicure Completa', duracao: '60 min', valor: 35 },
+            { nome: 'Design de Sobrancelhas', duracao: '30 min', valor: 25 },
+            { nome: 'Massagem Relaxante', duracao: '60 min', valor: 120 }
+        ];
+
+        servicos.forEach((s, i) => {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${s.nome} - ${s.duracao} (R$ ${s.valor})`;
+            option.dataset.valor = s.valor;
+            selectServico.appendChild(option);
+        });
+
+        // Atualizar valor ao selecionar serviço
+        selectServico.addEventListener('change', function() {
+            const selected = servicos[this.value];
+            valorInput.value = selected ? selected.valor : '';
+        });
+
+        // Mostrar modal
+        modal && modal.classList.add('active');
+    }
+
+    window.closeModal = function() {
+        modal && modal.classList.remove('active');
+        formAgendamento && formAgendamento.reset();
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) closeModal();
+    }
+
+    // Salvar agendamento
+    formAgendamento && formAgendamento.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const novoAgendamento = {
+            cliente: document.getElementById('cliente').value,
+            servico: servicoInput.options[servicoInput.selectedIndex].text,
+            valor: parseFloat(valorInput.value),
+            data: document.getElementById('data').value,
+            hora: document.getElementById('hora').value
+        };
+
+        agendamentos.push(novoAgendamento);
+        localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+        alert('Agendamento confirmado!');
+        closeModal();
+        mostrarAgendamentos();
+    });
+
+    // Filtrar agendamentos
+    window.filtrarAgendamentos = function() {
+        const filtroData = document.getElementById('filtroData').value;
+        if (!filtroData) return;
+        const listaFiltrada = agendamentos.filter(a => a.data === filtroData);
+        mostrarAgendamentos(listaFiltrada);
+    }
+
+    window.limparFiltro = function() {
+        document.getElementById('filtroData').value = '';
+        mostrarAgendamentos();
+    }
+
+    mostrarAgendamentos();
+
+    // ---------------------------
+    // Inicializar calendário
+    // ---------------------------
+    if (document.getElementById('calendar')) initCalendar();
+
+    function initCalendar() {
+        const now = new Date();
+        renderCalendar(now.getMonth(), now.getFullYear());
+
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+
+        prevMonthBtn && prevMonthBtn.addEventListener('click', () => changeMonth(-1));
+        nextMonthBtn && nextMonthBtn.addEventListener('click', () => changeMonth(1));
+    }
+
+    function changeMonth(offset) {
+        const calendar = document.getElementById('calendar');
+        let month = parseInt(calendar.getAttribute('data-month'));
+        let year = parseInt(calendar.getAttribute('data-year'));
+
+        month += offset;
+        if (month < 0) { month = 11; year--; }
+        if (month > 11) { month = 0; year++; }
+
+        renderCalendar(month, year);
+    }
+
+    function renderCalendar(month, year) {
+        const calendar = document.getElementById('calendar');
+        const title = document.getElementById('calendarTitle');
+        const body = document.getElementById('calendarBody');
+
+        calendar.setAttribute('data-month', month);
+        calendar.setAttribute('data-year', year);
+
+        const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        title.textContent = `${monthNames[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        body.innerHTML = '';
+        let day = 1;
+
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('tr');
+            for (let j = 0; j < 7; j++) {
+                const cell = document.createElement('td');
+                if (i === 0 && j < firstDay || day > daysInMonth) {
+                    cell.textContent = '';
+                } else {
+                    cell.textContent = day;
+                    const today = new Date();
+                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        cell.classList.add('today');
+                    }
+
+                    cell.classList.add('available');
+                    cell.title = 'Horário disponível';
+                    cell.addEventListener('click', () => openAgendamentoModal(day, month + 1, year));
+                    day++;
+                }
+                row.appendChild(cell);
+            }
+            body.appendChild(row);
+            if (day > daysInMonth) break;
+        }
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
     // Fechar alertas
     document.querySelectorAll('.alert-close').forEach(button => {
         button.addEventListener('click', function() {

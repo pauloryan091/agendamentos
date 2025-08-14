@@ -14,17 +14,20 @@
 </head>
 <body>
 
-<header>
-  <div class="container header-content">
-    <a href="#" class="logo">Agendamento+</a>
-    <nav class="nav-links">
-      <a href="index.html" class="nav-link">Dashboard</a>
-      <a href="serviços.html" class="nav-link">Serviços</a>
-      <a href="agendamento.html" class="nav-link">Agendamentos</a>
-      <a href="perfil.html" class="nav-link">Perfil</a>
-    </nav>
-  </div>
-</header>
+  <header>
+    <div class="container header-content">
+      <a href="index.html" class="logo">Agendamento+</a>
+      
+      <button id="menuBtn" aria-label="Abrir menu">☰</button>
+      
+      <nav id="menu" class="nav-links">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="serviços.html" class="nav-link">Serviços</a>
+        <a href="agendamento.html" class="nav-link">Agendamentos</a>
+        <a href="perfil.html" class="nav-link">Perfil</a>
+      </nav>
+    </div>
+  </header>
 
 <main class="main-content container">
 
@@ -58,18 +61,45 @@
 
 </main>
 
-<footer class="section">
-  <div class="container">
-    <p style="text-align:center;">&copy; 2025 Sistema de Agendamento. Todos os direitos reservados.</p>
+<!-- Rodapé -->
+<footer class="footer section">
+  <div class="container footer-content">
+    <!-- Nome e descrição -->
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="footer-nav">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+
+    <!-- Redes sociais -->
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
 <script>
-  // Lista de agendamentos simulada
+// Lista de agendamentos simulada
   let agendamentos = [
     {cliente: "Paulo Ryan", servico: "Corte de Cabelo", valor: 50, data: "2025-08-14", hora: "09:00"},
     {cliente: "Carlos Silva", servico: "Massagem", valor: 80, data: "2025-08-15", hora: "14:00"},
-    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"}
+    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
+    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
+    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
+    
   ];
 
   const corpoTabela = document.getElementById("corpoTabela");
@@ -125,6 +155,9 @@
 
   // Inicializar tabela
   mostrarAgendamentos(agendamentos);
+  const btn = document.getElementById('menuBtn');
+    const menu = document.querySelector('.nav-links');
+    btn && btn.addEventListener('click', () => menu.classList.toggle('show'));
 </script>
 
 </body>

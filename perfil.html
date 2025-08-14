@@ -8,17 +8,20 @@
 </head>
 <body>
 
-<header>
-  <div class="container header-content">
-    <a href="#" class="logo">Agendamento+</a>
-    <nav class="nav-links">
-      <a href="index.html" class="nav-link">Dashboard</a>
-      <a href="serviços.html" class="nav-link">Serviços</a>
-      <a href="agendamento.html" class="nav-link">Agendamentos</a>
-      <a href="perfil.html" class="nav-link">Perfil</a>
-    </nav>
-  </div>
-</header>
+  <header>
+    <div class="container header-content">
+      <a href="index.html" class="logo">Agendamento+</a>
+      
+      <button id="menuBtn" aria-label="Abrir menu">☰</button>
+      
+      <nav id="menu" class="nav-links">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="serviços.html" class="nav-link">Serviços</a>
+        <a href="agendamento.html" class="nav-link">Agendamentos</a>
+        <a href="perfil.html" class="nav-link">Perfil</a>
+      </nav>
+    </div>
+  </header>
 
 <main class="main-content container">
 
@@ -26,8 +29,15 @@
     <h2 class="section-title">Meu Perfil</h2>
 
     <!-- Informações do usuário -->
+     <!-- Foto do usuário -->
+
+     <div class="card" style="text-align:center; margin-bottom:1rem;">
+      <img id="fotoUsuario" src="default-avatar.png" alt="Foto do usuário" style="width:120px; height:120px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 10px;">
+      <input type="file" id="uploadFoto" accept="image/*">
+    </div>
+
     <div class="card">
-      <div class="card-body">
+      <div class="card-body"> 
         <p><strong>Nome:</strong> <span id="nomeUsuario">Paulo Ryan</span></p>
         <p><strong>Email:</strong> <span id="emailUsuario">paulo@example.com</span></p>
         <p><strong>Telefone:</strong> <span id="telefoneUsuario">(61) 99999-9999</span></p>
@@ -40,15 +50,15 @@
       <form id="formPerfil">
         <div class="form-group">
           <label class="form-label" for="nome">Nome</label>
-          <input class="form-control" type="text" id="nome" value="Paulo Ryan" required>
+          <input class="form-control" type="text" id="nome"  required>
         </div>
         <div class="form-group">
           <label class="form-label" for="email">Email</label>
-          <input class="form-control" type="email" id="email" value="paulo@example.com" required>
+          <input class="form-control" type="email" id="email"  required>
         </div>
         <div class="form-group">
           <label class="form-label" for="telefone">Telefone</label>
-          <input class="form-control" type="tel" id="telefone" value="(61) 99999-9999" required>
+          <input class="form-control" type="tel" id="telefone"  required>
         </div>
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
       </form>
@@ -59,32 +69,37 @@
 
 </main>
 
-<footer class="section">
-  <div class="container">
-    <p style="text-align:center;">&copy; 2025 Sistema de Agendamento. Todos os direitos reservados.</p>
+<!-- Rodapé -->
+<footer class="footer section">
+  <div class="container footer-content">
+    <!-- Nome e descrição -->
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="footer-nav">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+
+    <!-- Redes sociais -->
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<script>
-  const formPerfil = document.getElementById('formPerfil');
-  const msgPerfil = document.getElementById('msgPerfil');
-
-  formPerfil.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
-    const telefone = document.getElementById('telefone').value;
-
-    // Atualiza os dados na exibição
-    document.getElementById('nomeUsuario').innerText = nome;
-    document.getElementById('emailUsuario').innerText = email;
-    document.getElementById('telefoneUsuario').innerText = telefone;
-
-    msgPerfil.innerText = "Perfil atualizado com sucesso!";
-    msgPerfil.style.color = "green";
-  });
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
