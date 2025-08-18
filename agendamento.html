@@ -6,9 +6,18 @@
   <title>Agendamentos - Sistema de Agendamento</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Tabela e botões adicionais */
+    /* Tabela */
     .table-actions button {
       margin-right: 5px;
+    }
+    .form-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .form-inline select, .form-inline input, .form-inline button {
+      padding: 8px;
     }
   </style>
 </head>
@@ -17,9 +26,7 @@
   <header>
     <div class="container header-content">
       <a href="index.html" class="logo">Agendamento+</a>
-      
       <button id="menuBtn" aria-label="Abrir menu">☰</button>
-      
       <nav id="menu" class="nav-links">
         <a href="index.html" class="nav-link">Dashboard</a>
         <a href="serviços.html" class="nav-link">Serviços</a>
@@ -34,11 +41,18 @@
   <section class="section">
     <h2 class="section-title">Agendamentos</h2>
 
-    <!-- Filtro por Data -->
-    <div class="form-inline" style="margin-bottom:1.5rem;">
+    <!-- Filtro e Ações -->
+    <div class="form-inline">
       <input type="date" id="filtroData" class="form-control">
       <button class="btn btn-primary" onclick="filtrarAgendamentos()">Filtrar</button>
       <button class="btn btn-secondary" onclick="limparFiltro()">Limpar Filtro</button>
+      
+      <!-- Seletor de Agendamento -->
+      <select id="selectAgendamento">
+        <!-- opções serão carregadas dinamicamente -->
+      </select>
+      <button class="btn btn-success" onclick="editarSelecionado()">Editar Agendamento</button>
+      <button class="btn btn-danger" onclick="cancelarSelecionado()">Cancelar Agendamento</button>
     </div>
 
     <!-- Tabela de Agendamentos -->
@@ -50,114 +64,117 @@
           <th>Valor</th>
           <th>Data</th>
           <th>Hora</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody id="corpoTabela">
-        <!-- Linhas serão inseridas pelo JS -->
+        <!-- Linhas pelo JS -->
       </tbody>
     </table>
   </section>
 
 </main>
 
-<!-- Rodapé -->
 <footer class="footer section">
   <div class="container footer-content">
-    <!-- Nome e descrição -->
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
       <p>Sistema de Agendamento Online</p>
     </div>
-
-    <!-- Navegação -->
     <nav class="footer-nav">
       <a href="index.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
-
-    <!-- Redes sociais -->
     <div class="footer-social">
       <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
       <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
     </div>
   </div>
-
-  <!-- Copyright -->
   <div class="footer-copy">
     <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
 <script>
-// Lista de agendamentos simulada
-  let agendamentos = [
-    {cliente: "Paulo Ryan", servico: "Corte de Cabelo", valor: 50, data: "2025-08-14", hora: "09:00"},
-    {cliente: "Carlos Silva", servico: "Massagem", valor: 80, data: "2025-08-15", hora: "14:00"},
-    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
-    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
-    {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
-    
-  ];
+// Lista simulada
+let agendamentos = [
+  {cliente: "Paulo Ryan", servico: "Corte de Cabelo", valor: 50, data: "2025-08-14", hora: "09:00"},
+  {cliente: "Carlos Silva", servico: "Massagem", valor: 80, data: "2025-08-15", hora: "14:00"},
+  {cliente: "Ana Souza", servico: "Depilação", valor: 60, data: "2025-08-16", hora: "10:30"},
+];
 
-  const corpoTabela = document.getElementById("corpoTabela");
+// Elementos
+const corpoTabela = document.getElementById("corpoTabela");
+const selectAgendamento = document.getElementById("selectAgendamento");
 
-  function mostrarAgendamentos(lista) {
-    corpoTabela.innerHTML = "";
-    if(lista.length === 0){
-      corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>`;
-      return;
-    }
-    lista.forEach(a => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${a.cliente}</td>
-        <td>${a.servico}</td>
-        <td>R$ ${a.valor.toFixed(2)}</td>
-        <td>${a.data.split("-").reverse().join("/")}</td>
-        <td>${a.hora}</td>
-        <td class="table-actions">
-          <button class="btn btn-success" onclick="editarAgendamento('${a.cliente}', '${a.data}', '${a.hora}')">Editar</button>
-          <button class="btn btn-danger" onclick="cancelarAgendamento('${a.cliente}', '${a.data}', '${a.hora}')">Cancelar</button>
-        </td>
-      `;
-      corpoTabela.appendChild(row);
-    });
+// Exibir agendamentos
+function mostrarAgendamentos(lista) {
+  corpoTabela.innerHTML = "";
+  selectAgendamento.innerHTML = "";
+  
+  if(lista.length === 0){
+    corpoTabela.innerHTML = `<tr><td colspan="5" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>`;
+    return;
   }
+  lista.forEach((a, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${a.cliente}</td>
+      <td>${a.servico}</td>
+      <td>R$ ${a.valor.toFixed(2)}</td>
+      <td>${a.data.split("-").reverse().join("/")}</td>
+      <td>${a.hora}</td>
+    `;
+    corpoTabela.appendChild(row);
 
-  // Filtrar por data
-  function filtrarAgendamentos() {
-    const dataFiltro = document.getElementById("filtroData").value;
-    if(dataFiltro) {
-      const filtrados = agendamentos.filter(a => a.data === dataFiltro);
-      mostrarAgendamentos(filtrados);
-    }
+    // Adiciona no seletor
+    let opt = document.createElement("option");
+    opt.value = index;
+    opt.textContent = `${a.cliente} - ${a.data} ${a.hora}`;
+    selectAgendamento.appendChild(opt);
+  });
+}
+
+// Filtro
+function filtrarAgendamentos() {
+  const dataFiltro = document.getElementById("filtroData").value;
+  if(dataFiltro) {
+    const filtrados = agendamentos.filter(a => a.data === dataFiltro);
+    mostrarAgendamentos(filtrados);
   }
+}
 
-  function limparFiltro() {
-    document.getElementById("filtroData").value = "";
+function limparFiltro() {
+  document.getElementById("filtroData").value = "";
+  mostrarAgendamentos(agendamentos);
+}
+
+// Editar / Cancelar do seletor
+function editarSelecionado() {
+  const idx = selectAgendamento.value;
+  if(idx === "") return alert("Selecione um agendamento.");
+  const a = agendamentos[idx];
+  alert(`Simulação: Editar agendamento de ${a.cliente} em ${a.data} às ${a.hora}`);
+}
+
+function cancelarSelecionado() {
+  const idx = selectAgendamento.value;
+  if(idx === "") return alert("Selecione um agendamento.");
+  const a = agendamentos[idx];
+  if(confirm(`Deseja realmente cancelar o agendamento de ${a.cliente} em ${a.data} às ${a.hora}?`)) {
+    agendamentos.splice(idx, 1);
     mostrarAgendamentos(agendamentos);
   }
+}
 
-  // Simular edição e cancelamento
-  function editarAgendamento(cliente, data, hora) {
-    alert(`Simulação: Editar agendamento de ${cliente} em ${data} às ${hora}`);
-  }
+// Inicializa
+mostrarAgendamentos(agendamentos);
 
-  function cancelarAgendamento(cliente, data, hora) {
-    if(confirm(`Deseja realmente cancelar o agendamento de ${cliente} em ${data} às ${hora}?`)) {
-      agendamentos = agendamentos.filter(a => !(a.cliente === cliente && a.data === data && a.hora === hora));
-      mostrarAgendamentos(agendamentos);
-    }
-  }
-
-  // Inicializar tabela
-  mostrarAgendamentos(agendamentos);
-  const btn = document.getElementById('menuBtn');
-    const menu = document.querySelector('.nav-links');
-    btn && btn.addEventListener('click', () => menu.classList.toggle('show'));
+// Menu responsivo
+const btn = document.getElementById('menuBtn');
+const menu = document.querySelector('.nav-links');
+btn && btn.addEventListener('click', () => menu.classList.toggle('show'));
 </script>
 
 </body>
