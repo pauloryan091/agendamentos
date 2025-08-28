@@ -23,55 +23,62 @@
 </head>
 <body>
 
-  <header>
-    <div class="container header-content">
-      <a href="index.html" class="logo">Agendamento+</a>
-      <button id="menuBtn" aria-label="Abrir menu">☰</button>
-      <nav id="menu" class="nav-links">
-        <a href="index.html" class="nav-link">Dashboard</a>
-        <a href="serviços.html" class="nav-link">Serviços</a>
-        <a href="agendamento.html" class="nav-link">Agendamentos</a>
-        <a href="perfil.html" class="nav-link">Perfil</a>
-      </nav>
-    </div>
-  </header>
+<header>
+  <div class="container header-content">
+    <a href="#" class="logo">Agendamento+</a>
+    <button id="menuBtn" aria-label="Abrir menu">☰</button>
+    <nav id="menu" class="nav-links">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+  </div>
+</header>
+
 
 <main class="main-content container">
 
-  <section class="section">
-    <h2 class="section-title">Agendamentos</h2>
+    <section class="section">
+        <h2 class="section-title">Agendamentos</h2>
 
-    <!-- Filtro e Ações -->
-    <div class="form-inline">
-      <input type="date" id="filtroData" class="form-control">
-      <button class="btn btn-primary" onclick="filtrarAgendamentos()">Filtrar</button>
-      <button class="btn btn-secondary" onclick="limparFiltro()">Limpar Filtro</button>
-      
-      <!-- Seletor de Agendamento -->
-      <select id="selectAgendamento">
-        <!-- opções serão carregadas dinamicamente -->
-      </select>
-      <button class="btn btn-success" onclick="editarSelecionado()">Editar Agendamento</button>
-      <button class="btn btn-danger" onclick="cancelarSelecionado()">Cancelar Agendamento</button>
-    </div>
+        <form action="salvar_agendamento.php" method="POST"
+class="form-agendamento">
+            <input type="text" name="cliente" placeholder="Nome do cliente" required>
+            <input type="text" name="servico" placeholder="Serviço" required>
+            <input type="number" name="valor" placeholder="Valor" required>
+            <input type="date" name="data" required>
+            <input type="time" name="hora" required>
+            <button type="submit" class="btn btn-success">Agendar</button>
+        </form>
 
-    <!-- Tabela de Agendamentos -->
-    <table class="table table-striped" id="tabelaAgendamentos">
-      <thead>
-        <tr>
-          <th>Cliente</th>
-          <th>Serviço</th>
-          <th>Valor</th>
-          <th>Data</th>
-          <th>Hora</th>
-        </tr>
-      </thead>
-      <tbody id="corpoTabela">
-        <!-- Linhas pelo JS -->
-      </tbody>
-    </table>
-  </section>
+        <hr>
 
+        <div class="form-inline">
+            <input type="date" id="filtroData" class="form-control">
+            <button class="btn btn-primary" onclick="filtrarAgendamentos()">Filtrar</button>
+            <button class="btn btn-secondary" onclick="limparFiltro()">Limpar Filtro</button>
+            <select id="selectAgendamento">
+                </select>
+            <button class="btn btn-info" onclick="editarSelecionado()">Editar</button>
+            <button class="btn btn-danger" onclick="cancelarSelecionado()">Cancelar</button>
+        </div>
+
+        <table class="table table-striped" id="tabelaAgendamentos">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabela">
+                </tbody>
+        </table>
+    </section>
 </main>
 
 <footer class="footer section">
@@ -81,9 +88,10 @@
       <p>Sistema de Agendamento Online</p>
     </div>
     <nav class="footer-nav">
-      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
     <div class="footer-social">

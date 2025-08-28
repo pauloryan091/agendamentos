@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes - Sistema de Agendamento</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-content">
+    <a href="#" class="logo">Agendamento+</a>
+    <button id="menuBtn" aria-label="Abrir menu">☰</button>
+    <nav id="menu" class="nav-links">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content container">
+  <section class="section">
+    <h2 class="section-title">Lista de Clientes</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Maria Silva</td>
+            <td>maria@email.com</td>
+            <td>(61) 99999-9999</td>
+            <td>
+              <button class="btn btn-secondary">Editar</button>
+              <button class="btn btn-danger">Excluir</button>
+            </td>
+          </tr>
+          <tr>
+            <td>João Souza</td>
+            <td>joao@email.com</td>
+            <td>(61) 98888-8888</td>
+            <td>
+              <button class="btn btn-secondary">Editar</button>
+              <button class="btn btn-danger">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="footer section">
+  <div class="container footer-content">
+    <!-- Nome e descrição -->
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="footer-nav">
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+
+    <!-- Redes sociais -->
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

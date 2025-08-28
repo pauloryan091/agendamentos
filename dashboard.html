@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil - Sistema de Agendamento</title>
+  <title>Dashboard - Sistema de Agendamento</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header>
   <div class="container header-content">
-    <a href="index.html" class="logo">Agendamento+</a>
+    <a href="#" class="logo">Agendamento+</a>
     <button id="menuBtn" aria-label="Abrir menu">☰</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -22,53 +22,52 @@
   </div>
 </header>
 
-
 <main class="main-content container">
 
   <section class="section">
-    <h2 class="section-title">Meu Perfil</h2>
-
-    <!-- Informações do usuário -->
-     <!-- Foto do usuário -->
-
-     <div class="card" style="text-align:center; margin-bottom:1rem;">
-      <img id="fotoUsuario" src="default-avatar.png" alt="Foto do usuário" style="width:120px; height:120px; border-radius:50%; object-fit:cover; display:block; margin:0 auto 10px;">
-      <input type="file" id="uploadFoto" accept="image/*">
-    </div>
-
-    <div class="card">
-      <div class="card-body"> 
-        <p><strong>Nome:</strong> <span id="nomeUsuario">Paulo Ryan</span></p>
-        <p><strong>Email:</strong> <span id="emailUsuario">paulo@example.com</span></p>
-        <p><strong>Telefone:</strong> <span id="telefoneUsuario">(61) 99999-9999</span></p>
+    <h2 class="section-title">Dashboard</h2>
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <h3 class="stat-value" id="agendamentosHoje">0</h3>
+        <p class="stat-label">Agendamentos Hoje</p>
+      </div>
+      <div class="stat-card success">
+        <h3 class="stat-value" id="agendamentosSemana">0</h3>
+        <p class="stat-label">Agendamentos Semana</p>
+      </div>
+      <div class="stat-card warning">
+        <h3 class="stat-value" id="servicosDisponiveis">0</h3>
+        <p class="stat-label">Serviços Disponíveis</p>
+      </div>
+      <div class="stat-card danger">
+        <h3 class="stat-value" id="pendencias">0</h3>
+        <p class="stat-label">Pendências</p>
       </div>
     </div>
+  </section>
+ 
 
-    <!-- Formulário para editar perfil -->
-    <div class="section" style="margin-top:2rem;">
-      <h3 class="section-title">Editar Perfil</h3>
-      <form id="formPerfil">
-        <div class="form-group">
-          <label class="form-label" for="nome">Nome</label>
-          <input class="form-control" type="text" id="nome"  required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="email">Email</label>
-          <input class="form-control" type="email" id="email"  required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="telefone">Telefone</label>
-          <input class="form-control" type="tel" id="telefone"  required>
-        </div>
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-      </form>
-      <p id="msgPerfil" style="margin-top:10px;"></p>
-    </div>
-
+  
+  <section class="section">
+    <h2 class="section-title">Agendamentos Recentes</h2>
+    <table class="table table-striped" id="tabelaAgendamentos">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Serviço</th>
+          <th>Valor</th>
+          <th>Data</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Linhas serão geradas pelo JavaScript -->
+      </tbody>
+    </table>
   </section>
 
 </main>
-
+ 
 <!-- Rodapé -->
 <footer class="footer section">
   <div class="container footer-content">
@@ -80,7 +79,7 @@
 
     <!-- Navegação -->
     <nav class="footer-nav">
-       <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="clientes.html" class="nav-link">Clientes</a>
@@ -100,7 +99,9 @@
   </div>
 </footer>
 
+
 <script src="script.js"></script>
+
 
 </body>
 </html>
