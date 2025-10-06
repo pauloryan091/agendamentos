@@ -766,6 +766,109 @@ document.addEventListener("DOMContentLoaded", () => {
     menu.classList.toggle("show");
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const modalServico = document.getElementById('modalServico');
+  const formServico = document.getElementById('formServico');
+  const listaServicos = document.getElementById('listaServicos');
+  const btnAddServico = document.getElementById('btnAddServico');
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
+
+  // ---------------------------
+  // Abrir modal
+  // ---------------------------
+  btnAddServico.addEventListener('click', () => {
+    modalServico.style.display = 'flex';
+  });
+
+  // ---------------------------
+  // Fechar modal
+  // ---------------------------
+  window.closeModalServico = () => {
+    modalServico.style.display = 'none';
+  }
+  modalServico.addEventListener('click', e => {
+    if (e.target === modalServico) modalServico.style.display = 'none';
+  });
+
+  // ---------------------------
+  // Menu hamburger
+  // ---------------------------
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+
+  // ---------------------------
+  // Função para salvar e renderizar serviços
+  // ---------------------------
+  function salvarServicos(servicos) {
+    localStorage.setItem('servicos', JSON.stringify(servicos));
+  }
+
+  function carregarServicos() {
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    listaServicos.innerHTML = '';
+
+    servicos.forEach((s, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${s.foto}" alt="${s.nome}" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">${s.nome}</h3>
+          <p class="card-text">${s.descricao}</p>
+          <p>Valor: R$ ${parseFloat(s.valor).toFixed(2)}</p>
+          <a href="agendar.html?servico=${encodeURIComponent(s.nome)}" class="btn btn-primary">Agendar</a>
+          <button class="btn btn-danger btn-excluir" data-index="${index}">Excluir</button>
+        </div>
+      `;
+      listaServicos.appendChild(card);
+    });
+
+    // Adiciona evento para excluir
+    document.querySelectorAll('.btn-excluir').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = e.target.getAttribute('data-index');
+        if (confirm('Deseja realmente excluir este serviço?')) {
+          const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+          servicos.splice(idx, 1);
+          salvarServicos(servicos);
+          carregarServicos();
+        }
+      });
+    });
+  }
+
+  carregarServicos();
+
+  // ---------------------------
+  // Adicionar serviço
+  // ---------------------------
+  formServico.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById('nomeServico').value;
+    const descricao = document.getElementById('descricaoServico').value;
+    const valor = document.getElementById('valorServico').value;
+    const arquivo = document.getElementById('fotoServico').files[0];
+
+    if (!arquivo) return alert('Selecione uma foto para o serviço.');
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const fotoDataUrl = event.target.result;
+
+      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+      servicos.push({ nome, descricao, valor, foto: fotoDataUrl });
+      salvarServicos(servicos);
+
+      carregarServicos();
+      modalServico.style.display = 'none';
+      formServico.reset();
+    };
+    reader.readAsDataURL(arquivo);
+  });
+});
 
 </script>
 </body>
