@@ -62,19 +62,20 @@
   </div>
 </footer>
 <script>
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // impede envio do form
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // impede envio do formulário
 
     const usuario = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
 
-    if (usuario === "senac" && senha === "123") {
-      alert("Login realizado com sucesso!");
-      window.location.href = "dashboard.html"; // redireciona pro dashboard
+    // Usuário master
+    if(usuario === "senac" && senha === "123") {
+        alert("Login realizado com sucesso!");
+        window.location.href = "modos.html"; // redireciona para a página de modos
     } else {
-      alert("Usuário ou senha incorretos!");
+        alert("Usuário ou senha incorretos!");
     }
-  });
+});
 </script>
 
 </body>

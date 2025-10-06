@@ -1,247 +1,572 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ---------------------------
-    // Menu responsivo
-    // ---------------------------
-    const menuBtn = document.getElementById('menuBtn');
-    const navLinks = document.querySelector('.nav-links');
-    if(menuBtn && navLinks) {
-        menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
-    }
+    // -------------------
+    // Configurações de modo e menu
+    // -------------------
+    const nav = document.querySelector('.nav-links');
+    const modo = localStorage.getItem('modo') || 'cliente';
+    const linksCliente = [
+        {nome: "Dashboard", href:"dashboard.html"},
+        {nome: "Serviços", href:"serviços.html"},
+        {nome: "Perfil", href:"perfil.html"}
+    ];
+    const linksDev = [
+        {nome: "Dashboard", href:"dashboard.html"},
+        {nome: "Serviços", href:"serviços.html"},
+        {nome: "Agendamento", href:"agendamento.html"},
+        {nome: "Clientes", href:"clientes.html"},
+        {nome: "Perfil", href:"perfil.html"}
+    ];
+    nav.innerHTML = (modo === 'dev' ? linksDev : linksCliente).map(l => `<a href="${l.href}" class="nav-link">${l.nome}</a>`).join('');
+    document.getElementById('menuBtn')?.addEventListener('click', () => nav.classList.toggle('show'));
 
-    // ---------------------------
-    // Perfil do usuário
-    // ---------------------------
-    const uploadFoto = document.getElementById('uploadFoto');
+    // -------------------
+    // Perfil
+    // -------------------
     const fotoUsuario = document.getElementById('fotoUsuario');
+    const uploadFoto = document.getElementById('uploadFoto');
+    if(fotoUsuario) fotoUsuario.src = localStorage.getItem('fotoUsuario') || '';
+    uploadFoto?.addEventListener('change', function() {
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = e => {
+                fotoUsuario.src = e.target.result;
+                localStorage.setItem('fotoUsuario', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
     const formPerfil = document.getElementById('formPerfil');
-    const msgPerfil = document.getElementById('msgPerfil');
+    formPerfil?.addEventListener('submit', function(e){
+        e.preventDefault();
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const telefone = document.getElementById('telefone').value;
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+        localStorage.setItem('telefoneUsuario', telefone);
+        document.getElementById('nomeUsuario').innerText = nome;
+        document.getElementById('emailUsuario').innerText = email;
+        document.getElementById('telefoneUsuario').innerText = telefone;
+        document.getElementById('msgPerfil').innerText = "Perfil atualizado!";
+    });
 
-    // Carregar dados do localStorage
-    if(fotoUsuario) {
-        const fotoSalva = localStorage.getItem('fotoUsuario');
-        if(fotoSalva) fotoUsuario.src = fotoSalva;
-    }
-    if(document.getElementById('nomeUsuario')) document.getElementById('nomeUsuario').innerText = localStorage.getItem('nomeUsuario') || '';
-    if(document.getElementById('emailUsuario')) document.getElementById('emailUsuario').innerText = localStorage.getItem('emailUsuario') || '';
-    if(document.getElementById('telefoneUsuario')) document.getElementById('telefoneUsuario').innerText = localStorage.getItem('telefoneUsuario') || '';
-
-    // Atualizar foto
-    if(uploadFoto) {
-        uploadFoto.addEventListener('change', function() {
-            const file = this.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    if(fotoUsuario) fotoUsuario.src = e.target.result;
-                    localStorage.setItem('fotoUsuario', e.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    // Editar perfil
-    if(formPerfil) {
-        formPerfil.addEventListener('submit', function(e){
-            e.preventDefault();
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const telefone = document.getElementById('telefone').value;
-
-            if(document.getElementById('nomeUsuario')) document.getElementById('nomeUsuario').innerText = nome;
-            if(document.getElementById('emailUsuario')) document.getElementById('emailUsuario').innerText = email;
-            if(document.getElementById('telefoneUsuario')) document.getElementById('telefoneUsuario').innerText = telefone;
-
-            if(msgPerfil) {
-                msgPerfil.innerText = "Perfil atualizado com sucesso!";
-                msgPerfil.style.color = "green";
-            }
-
-            localStorage.setItem('nomeUsuario', nome);
-            localStorage.setItem('emailUsuario', email);
-            localStorage.setItem('telefoneUsuario', telefone);
-        });
-    }
-
-    // ---------------------------
+    // -------------------
     // Agendamentos
-    // ---------------------------
-    const modal = document.getElementById('agendamentoModal');
-    const formAgendamento = document.getElementById('agendamentoForm');
-    const corpoTabela = document.getElementById('corpoTabela');
-
+    // -------------------
     let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const corpoTabela = document.getElementById('corpoTabela');
+    const msgAgendamento = document.getElementById('msgAgendamento');
 
-    function mostrarAgendamentos(lista = agendamentos) {
+    function mostrarAgendamentos(){
         if(!corpoTabela) return;
-        corpoTabela.innerHTML = '';
-
-        if(lista.length === 0) {
-            corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum agendamento encontrado.</td></tr>`;
-            return;
-        }
-
-        lista.forEach((a, i) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${a.cliente}</td>
-                <td>${a.servico}</td>
-                <td>R$ ${parseFloat(a.valor).toFixed(2)}</td>
-                <td>${a.data.split("-").reverse().join("/")}</td>
-                <td>${a.hora}</td>
-                <td class="table-actions">
-                    <button class="btn btn-danger" onclick="cancelarAgendamentoTabela(${i})">Cancelar</button>
-                </td>
-            `;
-            corpoTabela.appendChild(row);
-        });
-    }
-
-    window.cancelarAgendamentoTabela = function(index) {
-        if(confirm(`Deseja realmente cancelar o agendamento de ${agendamentos[index].cliente} em ${agendamentos[index].data} às ${agendamentos[index].hora}?`)) {
-            agendamentos.splice(index, 1);
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-            mostrarAgendamentos();
-        }
-    };
-
-    // Abrir modal de agendamento
-    window.openAgendamentoModal = function(day, month, year) {
-        if(!modal) return;
-
-        const data = `${day.toString().padStart(2,'0')}/${month.toString().padStart(2,'0')}/${year}`;
-        document.getElementById('agendamentoData').textContent = data;
-
-        // Serviços
-        const selectServico = document.getElementById('servico');
-        const valorInput = document.getElementById('valor');
-        if(selectServico) {
-            selectServico.innerHTML = '<option value="" disabled selected>Selecione um serviço</option>';
-            const servicos = [
-                { nome: 'Corte de Cabelo', duracao: '45 min', valor: 60 },
-                { nome: 'Manicure Completa', duracao: '60 min', valor: 35 },
-                { nome: 'Design de Sobrancelhas', duracao: '30 min', valor: 25 },
-                { nome: 'Massagem Relaxante', duracao: '60 min', valor: 120 }
-            ];
-            servicos.forEach((s, i) => {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = `${s.nome} - ${s.duracao} (R$ ${s.valor})`;
-                option.dataset.valor = s.valor;
-                selectServico.appendChild(option);
-            });
-
-            selectServico.addEventListener('change', function() {
-                const selected = servicos[this.value];
-                if(valorInput) valorInput.value = selected ? selected.valor : '';
-            });
-        }
-
-        modal.classList.add('active');
-    }
-
-    window.closeModal = function() {
-        if(modal) {
-            modal.classList.remove('active');
-        }
-        if(formAgendamento) formAgendamento.reset();
-    }
-
-    if(window.onclick === undefined) {
-        window.onclick = function(event) {
-            if(event.target === modal) closeModal();
-        }
-    }
-
-    if(formAgendamento) {
-        formAgendamento.addEventListener('submit', function(e){
-            e.preventDefault();
-            const novoAgendamento = {
-                cliente: document.getElementById('cliente').value,
-                servico: document.getElementById('servico').options[document.getElementById('servico').selectedIndex].text,
-                valor: parseFloat(document.getElementById('valor').value),
-                data: document.getElementById('data').value,
-                hora: document.getElementById('hora').value
-            };
-            agendamentos.push(novoAgendamento);
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-            alert('Agendamento confirmado!');
-            closeModal();
-            mostrarAgendamentos();
-        });
+        corpoTabela.innerHTML = agendamentos.length === 0 ? 
+            `<tr><td colspan="4" style="text-align:center;">Nenhum agendamento.</td></tr>` : 
+            agendamentos.map(a => `<tr>
+                <td>${a.cliente}</td><td>${a.servico}</td><td>${a.data}</td><td>${a.hora}</td>
+            </tr>`).join('');
     }
 
     mostrarAgendamentos();
 
-    // ---------------------------
-    // Inicializar calendário
-    // ---------------------------
-    if(document.getElementById('calendar')) initCalendar();
-
-    function initCalendar() {
-        const now = new Date();
-        renderCalendar(now.getMonth(), now.getFullYear());
-
-        const prevMonthBtn = document.getElementById('prevMonth');
-        const nextMonthBtn = document.getElementById('nextMonth');
-
-        if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => changeMonth(-1));
-        if(nextMonthBtn) nextMonthBtn.addEventListener('click', () => changeMonth(1));
-    }
-
-    function changeMonth(offset) {
-        const calendar = document.getElementById('calendar');
-        if(!calendar) return;
-
-        let month = parseInt(calendar.getAttribute('data-month'));
-        let year = parseInt(calendar.getAttribute('data-year'));
-
-        month += offset;
-        if(month < 0) { month = 11; year--; }
-        if(month > 11) { month = 0; year++; }
-
-        renderCalendar(month, year);
-    }
-
-    function renderCalendar(month, year) {
-        const calendar = document.getElementById('calendar');
-        const title = document.getElementById('calendarTitle');
-        const body = document.getElementById('calendarBody');
-        if(!calendar || !title || !body) return;
-
-        calendar.setAttribute('data-month', month);
-        calendar.setAttribute('data-year', year);
-
-        const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-        title.textContent = `${monthNames[month]} ${year}`;
-
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        body.innerHTML = '';
-        let day = 1;
-
-        for(let i = 0; i < 6; i++) {
-            const row = document.createElement('tr');
-            for(let j = 0; j < 7; j++) {
-                const cell = document.createElement('td');
-                if(i === 0 && j < firstDay || day > daysInMonth) {
-                    cell.textContent = '';
-                } else {
-                    cell.textContent = day;
-                    const today = new Date();
-                    if(day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                        cell.classList.add('today');
-                    }
-                    cell.classList.add('available');
-                    cell.title = 'Horário disponível';
-                    cell.addEventListener('click', () => openAgendamentoModal(day, month+1, year));
-                    day++;
-                }
-                row.appendChild(cell);
-            }
-            body.appendChild(row);
-            if(day > daysInMonth) break;
+    document.getElementById('agendamentoForm')?.addEventListener('submit', function(e){
+        e.preventDefault();
+        const cliente = document.getElementById('cliente').value;
+        const servico = document.getElementById('servico').value;
+        const data = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+        if(!cliente || !servico || !data || !hora){
+            msgAgendamento.innerText = "Preencha todos os campos!";
+            msgAgendamento.style.color = "red";
+            return;
         }
+        agendamentos.push({cliente, servico, data, hora});
+        localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        msgAgendamento.innerText = "Agendamento realizado!";
+        msgAgendamento.style.color = "green";
+        mostrarAgendamentos();
+        this.reset();
+    });
+
+    // -------------------
+    // Serviços
+    // -------------------
+    let servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    function mostrarServicos(){
+        const lista = document.getElementById('listaServicos');
+        if(!lista) return;
+        lista.innerHTML = servicos.map(s => `
+            <div class="card">
+                <img src="${s.foto}" alt="${s.nome}" class="card-img">
+                <div class="card-body">
+                    <h3>${s.nome}</h3>
+                    <p>${s.descricao}</p>
+                    <p>Valor: R$ ${s.valor.toFixed(2)}</p>
+                    <a href="agendamento.html?servico=${s.nome}" class="btn btn-primary">Agendar</a>
+                </div>
+            </div>
+        `).join('');
     }
+    mostrarServicos();
+});
+// ------------------------
+// Menu responsivo
+// ------------------------
+const menuBtn = document.getElementById("menuBtn");
+const menu = document.getElementById("menu");
+
+menuBtn.addEventListener("click", () => {
+  menu.classList.toggle("show");
+});
+
+// ------------------------
+// Carregar agendamentos existentes do localStorage
+// ------------------------
+function carregarAgendamentos() {
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  const corpoTabela = document.getElementById("corpoTabela");
+  corpoTabela.innerHTML = ""; // limpa tabela antes de preencher
+
+  agendamentos.forEach((agendamento, index) => {
+    const linha = document.createElement("tr");
+    linha.innerHTML = `
+      <td>${agendamento.cliente}</td>
+      <td>${agendamento.servico}</td>
+      <td>${agendamento.data}</td>
+      <td>${agendamento.hora}</td>
+    `;
+    corpoTabela.appendChild(linha);
+  });
+}
+
+// ------------------------
+// Adicionar novo agendamento
+// ------------------------
+document.getElementById("agendamentoForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const cliente = document.getElementById("cliente").value;
+  const servico = document.getElementById("servico").value;
+  const data = document.getElementById("data").value;
+  const hora = document.getElementById("hora").value;
+
+  if (!cliente || !servico || !data || !hora) {
+    alert("Por favor, preencha todos os campos!");
+    return;
+  }
+
+  const novoAgendamento = { cliente, servico, data, hora };
+
+  // Pega lista existente e adiciona novo
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  agendamentos.push(novoAgendamento);
+  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+
+  // Mostra mensagem de confirmação
+  const msg = document.getElementById("msgAgendamento");
+  msg.textContent = "Agendamento confirmado com sucesso!";
+  msg.style.color = "green";
+
+  // Limpa formulário
+  this.reset();
+
+  // Atualiza tabela
+  carregarAgendamentos();
+});
+
+// ------------------------
+// Inicialização
+// ------------------------
+carregarAgendamentos();
+document.getElementById('agendamentoForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const cliente = document.getElementById('cliente').value;
+  const servico = document.getElementById('servico').value;
+  const data = document.getElementById('data').value;
+  const hora = document.getElementById('hora').value;
+
+  if (!cliente || !servico || !data || !hora) return;
+
+  // pega os agendamentos já salvos ou cria um array vazio
+  const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+
+  // adiciona o novo agendamento
+  agendamentos.push({ cliente, servico, data, hora });
+
+  // salva no localStorage
+  localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+  // mensagem de sucesso
+  document.getElementById('msgAgendamento').textContent = 'Agendamento salvo com sucesso!';
+
+  // limpa formulário
+  this.reset();
+});
+
+// Carrega agendamentos do localStorage e preenche tabela e select
+  function carregarAgendamentos() {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const tbody = document.getElementById('corpoTabela');
+    const select = document.getElementById('selectAgendamento');
+    tbody.innerHTML = '';
+    select.innerHTML = '<option value="">Selecione um agendamento</option>';
+
+    agendamentos.forEach((a, index) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${a.cliente}</td>
+                      <td>${a.servico}</td>
+                      <td>${a.valor || ''}</td>
+                      <td>${a.data}</td>
+                      <td>${a.hora}</td>`;
+      tbody.appendChild(tr);
+
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = `${a.cliente} - ${a.servico} - ${a.data} ${a.hora}`;
+      select.appendChild(option);
+    });
+  }
+
+  // Filtrar por data
+  function filtrarAgendamentos() {
+    const dataFiltro = document.getElementById('filtroData').value;
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const tbody = document.getElementById('corpoTabela');
+    tbody.innerHTML = '';
+
+    agendamentos.forEach(a => {
+      if (!dataFiltro || a.data === dataFiltro) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${a.cliente}</td>
+                        <td>${a.servico}</td>
+                        <td>${a.valor || ''}</td>
+                        <td>${a.data}</td>
+                        <td>${a.hora}</td>`;
+        tbody.appendChild(tr);
+      }
+    });
+  }
+
+  function limparFiltro() {
+    document.getElementById('filtroData').value = '';
+    carregarAgendamentos();
+  }
+
+  function editarSelecionado() {
+    const index = document.getElementById('selectAgendamento').value;
+    if (index === '') return alert('Selecione um agendamento para editar.');
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const a = agendamentos[index];
+
+    const novoCliente = prompt('Nome do cliente:', a.cliente);
+    const novoServico = prompt('Serviço:', a.servico);
+    const novaData = prompt('Data:', a.data);
+    const novaHora = prompt('Hora:', a.hora);
+
+    if (novoCliente && novoServico && novaData && novaHora) {
+      agendamentos[index] = { cliente: novoCliente, servico: novoServico, data: novaData, hora: novaHora };
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+      carregarAgendamentos();
+    }
+  }
+
+  function cancelarSelecionado() {
+    const index = document.getElementById('selectAgendamento').value;
+    if (index === '') return alert('Selecione um agendamento para cancelar.');
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    if (confirm('Deseja realmente cancelar este agendamento?')) {
+      agendamentos.splice(index, 1);
+      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+      carregarAgendamentos();
+    }
+  }
+
+  // Carrega ao abrir a página
+  window.onload = carregarAgendamentos;
+
+  // Painel Desenvolvedor
+  const devToggle = document.getElementById('devToggle');
+  const devControls = document.getElementById('devControls');
+  const modalServico = document.getElementById('modalServico');
+  const formServico = document.getElementById('formServico');
+  const listaServicos = document.getElementById('listaServicos');
+
+  let modoDevAtivo = false;
+
+  devToggle.addEventListener('click', () => {
+    modoDevAtivo = !modoDevAtivo;
+    devControls.style.display = modoDevAtivo ? 'block' : 'none';
+    alert(`Modo Desenvolvedor ${modoDevAtivo ? 'Ativado' : 'Desativado'}`);
+  });
+
+  // Botão adicionar serviço
+  if(devControls){
+    const btnAddServico = document.createElement('button');
+    btnAddServico.textContent = 'Adicionar Serviço';
+    btnAddServico.className = 'btn btn-primary';
+    btnAddServico.onclick = () => modalServico.style.display = 'flex';
+    devControls.appendChild(btnAddServico);
+  }
+
+  function closeModalServico(){
+    modalServico.style.display = 'none';
+  }
+
+  formServico.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const nome = document.getElementById('nomeServico').value;
+    const descricao = document.getElementById('descricaoServico').value;
+    const valor = document.getElementById('valorServico').value;
+    const foto = document.getElementById('fotoServico').value;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${foto}" alt="${nome}" class="card-img">
+      <div class="card-body">
+        <h3 class="card-title">${nome}</h3>
+        <p class="card-text">${descricao}</p>
+        <p>Valor: R$ ${valor}</p>
+        <a href="agendar.html" class="btn btn-primary">Agendar</a>
+      </div>
+    `;
+    listaServicos.appendChild(card);
+    closeModalServico();
+    formServico.reset();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const devToggle = document.getElementById('devToggle');
+  const devControls = document.getElementById('devControls');
+  const modalServico = document.getElementById('modalServico');
+  const formServico = document.getElementById('formServico');
+  const listaServicos = document.getElementById('listaServicos');
+
+  let modoDevAtivo = false;
+
+  // Alterna Modo Desenvolvedor
+  devToggle.addEventListener('click', () => {
+    modoDevAtivo = !modoDevAtivo;
+    devControls.style.display = modoDevAtivo ? 'block' : 'none';
+
+    if (modoDevAtivo && devControls.children.length === 0) {
+      // Cria botão Adicionar Serviço dentro do painel dev
+      const btnAddServico = document.createElement('button');
+      btnAddServico.textContent = 'Adicionar Serviço';
+      btnAddServico.className = 'btn btn-primary';
+      btnAddServico.addEventListener('click', () => {
+        modalServico.style.display = 'flex';
+      });
+      devControls.appendChild(btnAddServico);
+    }
+  });
+
+  // Fecha o modal
+  window.closeModalServico = () => {
+    modalServico.style.display = 'none';
+  }
+
+  // Adiciona serviço ao enviar o form
+  formServico.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById('nomeServico').value;
+    const descricao = document.getElementById('descricaoServico').value;
+    const valor = document.getElementById('valorServico').value;
+    const foto = document.getElementById('fotoServico').value;
+
+    // Cria card do serviço
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${foto}" alt="${nome}" class="card-img">
+      <div class="card-body">
+        <h3 class="card-title">${nome}</h3>
+        <p class="card-text">${descricao}</p>
+        <p>Valor: R$ ${valor}</p>
+        <a href="agendar.html" class="btn btn-primary">Agendar</a>
+      </div>
+    `;
+
+    listaServicos.appendChild(card);
+    modalServico.style.display = 'none';
+    formServico.reset();
+  });
+
+  // Fecha modal ao clicar fora do conteúdo
+  modalServico.addEventListener('click', (e) => {
+    if (e.target === modalServico) modalServico.style.display = 'none';
+  });
+
+  // Botão hamburger para mobile
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const devToggle = document.getElementById('devToggle');
+  const devControls = document.getElementById('devControls');
+  const modalServico = document.getElementById('modalServico');
+  const formServico = document.getElementById('formServico');
+  const listaServicos = document.getElementById('listaServicos');
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
+
+  let modoDevAtivo = false;
+
+  // Alterna Modo Desenvolvedor
+  devToggle.addEventListener('click', () => {
+    modoDevAtivo = !modoDevAtivo;
+    devControls.style.display = modoDevAtivo ? 'block' : 'none';
+
+    if (modoDevAtivo && devControls.children.length === 0) {
+      const btnAddServico = document.createElement('button');
+      btnAddServico.textContent = 'Adicionar Serviço';
+      btnAddServico.className = 'btn btn-primary';
+      btnAddServico.addEventListener('click', () => {
+        modalServico.style.display = 'flex';
+      });
+      devControls.appendChild(btnAddServico);
+    }
+  });
+
+  // Fecha o modal
+  window.closeModalServico = () => {
+    modalServico.style.display = 'none';
+  }
+
+  // Adiciona serviço
+  formServico.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('nomeServico').value;
+    const descricao = document.getElementById('descricaoServico').value;
+    const valor = document.getElementById('valorServico').value;
+    const foto = document.getElementById('fotoServico').value;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${foto}" alt="${nome}" class="card-img">
+      <div class="card-body">
+        <h3 class="card-title">${nome}</h3>
+        <p class="card-text">${descricao}</p>
+        <p>Valor: R$ ${valor}</p>
+        <a href="agendar.html" class="btn btn-primary">Agendar</a>
+      </div>
+    `;
+    listaServicos.appendChild(card);
+    modalServico.style.display = 'none';
+    formServico.reset();
+  });
+
+  // Fecha modal clicando fora
+  modalServico.addEventListener('click', e => {
+    if (e.target === modalServico) modalServico.style.display = 'none';
+  });
+
+  // Hamburger menu
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const modalServico = document.getElementById('modalServico');
+  const formServico = document.getElementById('formServico');
+  const listaServicos = document.getElementById('listaServicos');
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
+  const btnAddServico = document.getElementById('btnAddServico');
+
+  // Mostrar modal para qualquer usuário
+  btnAddServico.addEventListener('click', () => {
+    modalServico.style.display = 'flex';
+  });
+
+  // Fechar modal
+  window.closeModalServico = () => {
+    modalServico.style.display = 'none';
+  }
+
+  // Carregar serviços do localStorage
+  function carregarServicos() {
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    servicos.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${s.foto}" alt="${s.nome}" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">${s.nome}</h3>
+          <p class="card-text">${s.descricao}</p>
+          <p>Valor: R$ ${s.valor}</p>
+          <a href="agendar.html" class="btn btn-primary">Agendar</a>
+        </div>
+      `;
+      listaServicos.appendChild(card);
+    });
+  }
+  carregarServicos();
+
+  // Adicionar serviço
+  formServico.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('nomeServico').value;
+    const descricao = document.getElementById('descricaoServico').value;
+    const valor = document.getElementById('valorServico').value;
+    const arquivo = document.getElementById('fotoServico').files[0];
+
+    if (!arquivo) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const fotoDataUrl = event.target.result;
+
+      // Cria card
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${fotoDataUrl}" alt="${nome}" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">${nome}</h3>
+          <p class="card-text">${descricao}</p>
+          <p>Valor: R$ ${valor}</p>
+          <a href="agendar.html" class="btn btn-primary">Agendar</a>
+        </div>
+      `;
+      listaServicos.appendChild(card);
+
+      // Salva no localStorage
+      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+      servicos.push({ nome, descricao, valor, foto: fotoDataUrl });
+      localStorage.setItem('servicos', JSON.stringify(servicos));
+
+      modalServico.style.display = 'none';
+      formServico.reset();
+    };
+    reader.readAsDataURL(arquivo);
+  });
+
+  // Fecha modal clicando fora
+  modalServico.addEventListener('click', e => {
+    if (e.target === modalServico) modalServico.style.display = 'none';
+  });
+
+  // Menu hamburger
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const menuBtn = document.getElementById("menuBtn");
+  const menu = document.getElementById("menu");
+
+  menuBtn.addEventListener("click", () => {
+    menu.classList.toggle("show");
+  });
 });

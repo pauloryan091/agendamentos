@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleção de Modo - Agendamento+</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-content">
+    <a href="index.html" class="logo">Agendamento+</a>
+  </div>
+</header>
+
+<main class="container main-content">
+  <h1 class="section-title center">Escolha o Modo</h1>
+  <div class="center mt-3">
+    <button class="btn btn-primary" onclick="selecionarModo('cliente')">Modo Cliente</button>
+    <button class="btn btn-secondary" onclick="selecionarModo('dev')">Modo Desenvolvedor</button>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+
+    <nav class="footer-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  function selecionarModo(modo){
+    localStorage.setItem('modo', modo);
+    window.location.href = "dashboard.html";
+  }
+</script>
+
+</body>
+</html>
