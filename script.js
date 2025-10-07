@@ -673,3 +673,160 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(arquivo);
   });
 });
+// =====================
+// BOTÃO FLUTUANTE CONFIGURAÇÕES
+// =====================
+const floatingConfigBtn = document.getElementById('floatingConfigBtn');
+const floatingMenu = document.getElementById('floatingMenu');
+
+// Alternar menu flutuante
+floatingConfigBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    floatingMenu.classList.toggle('show');
+});
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', (e) => {
+    if (!floatingMenu.contains(e.target) && !floatingConfigBtn.contains(e.target)) {
+        floatingMenu.classList.remove('show');
+    }
+});
+
+// Funções do menu flutuante
+window.alternarTema = () => {
+    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateThemeButton();
+    floatingMenu.classList.remove('show');
+};
+
+window.fazerBackupRapido = () => {
+    const backup = {
+        agendamentos: JSON.parse(localStorage.getItem('agendamentos')) || [],
+        clientes: JSON.parse(localStorage.getItem('clientes')) || [],
+        servicos: JSON.parse(localStorage.getItem('servicos')) || [],
+        configuracoes: JSON.parse(localStorage.getItem('configuracoes')) || {},
+        dataBackup: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `backup-rapido-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    floatingMenu.classList.remove('show');
+    mostrarNotificacao('Backup rápido realizado com sucesso!', 'success');
+};
+
+window.verEstatisticas = () => {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    
+    const hoje = new Date().toISOString().split('T')[0];
+    const agendamentosHoje = agendamentos.filter(a => a.data === hoje).length;
+    const totalClientes = clientes.length;
+    const totalServicos = servicos.length;
+    const faturamentoTotal = agendamentos.reduce((total, a) => total + (a.valor || 0), 0);
+    
+    const estatisticas = `
+📊 ESTATÍSTICAS RÁPIDAS:
+
+👥 Clientes: ${totalClientes}
+💼 Serviços: ${totalServicos}
+📅 Agendamentos Hoje: ${agendamentosHoje}
+💰 Faturamento Total: R$ ${faturamentoTotal.toFixed(2)}
+📈 Total de Agendamentos: ${agendamentos.length}
+    `;
+    
+    alert(estatisticas);
+    floatingMenu.classList.remove('show');
+};
+
+window.sairSistema = () => {
+    if (confirm('Deseja realmente sair do sistema?')) {
+        localStorage.removeItem('usuarioLogado');
+        window.location.href = 'index.html';
+    }
+};
+
+// Atualizar texto do botão de tema
+function updateThemeButton() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    
+    if (theme === "light") {
+        themeIcon.textContent = "🌙";
+        themeText.textContent = "Tema Escuro";
+    } else {
+        themeIcon.textContent = "☀️";
+        themeText.textContent = "Tema Claro";
+    }
+}
+
+// Função para mostrar notificações
+function mostrarNotificacao(mensagem, tipo = 'info') {
+    // Remove notificação anterior se existir
+    const notificacaoAnterior = document.querySelector('.floating-notification');
+    if (notificacaoAnterior) {
+        notificacaoAnterior.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = `floating-notification ${tipo}`;
+    notification.textContent = mensagem;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${tipo === 'success' ? 'var(--success-color)' : 'var(--primary-color)'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 1001;
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Adicionar animações CSS para notificações
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Inicializar botão de tema
+updateThemeButton();

@@ -4,50 +4,412 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agendar Serviço - Agendamento+</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+    }
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      color: var(--text-color);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 12px;
+      padding-right: 40px;
+    }
+
+    [data-theme="dark"] select.form-control {
+      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23fff' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--success-color);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    .service-preview {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid var(--primary-color);
+      margin-top: 20px;
+      display: none;
+    }
+
+    .service-preview h4 {
+      margin: 0 0 10px 0;
+      color: var(--primary-color);
+    }
+
+    .service-preview p {
+      margin: 5px 0;
+      color: var(--text-color);
+    }
+
+    .footer {
+      background: var(--card-bg);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      text-align: left;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-copy {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.10s ease, visibility 0.10s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* ========================
+       BOTÃO FLUTUANTE
+    ======================== */
+    .floating-config-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    .floating-menu {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      width: 200px;
+      z-index: 999;
+    }
+
+    .floating-menu-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-color);
+    }
+
+    .floating-menu-item:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    .floating-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    /* ========================
+       RESPONSIVIDADE
+    ======================== */
+    @media (max-width: 768px) {
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-brand { text-align: center; }
+      .section { padding: 30px 20px; margin: 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .section { padding: 20px 15px; }
+      .section-title { font-size: 1.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+  </style>
 </head>
 <body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">AGENDAR</div>
+</div>
 
 <header>
   <div class="container header-content">
     <a href="dashboard.html" class="logo">Agendamento+</a>
+    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
   </div>
 </header>
 
-<main class="container main-content">
-  <h2>Agendar Serviço</h2>
+<main class="main-content container">
+  <section class="section">
+    <h1 class="section-title">Agendar Serviço</h1>
+    
+    <form id="agendamentoForm">
+      <div class="form-group">
+        <label for="servico" class="form-label">Serviço</label>
+        <select id="servico" class="form-control" required></select>
+      </div>
 
-  <form id="agendamentoForm">
-    <div class="form-group">
-      <label for="servico">Serviço</label>
-      <select id="servico" required>
-        <option value="">Selecione um serviço</option>
-        <option value="Corte de Cabelo">Corte de Cabelo - R$50</option>
-        <option value="Manicure">Manicure - R$30</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label for="cliente" class="form-label">Nome do Cliente</label>
+        <input type="text" id="cliente" class="form-control" placeholder="Digite seu nome completo" required>
+      </div>
 
-    <div class="form-group">
-      <label for="data">Data</label>
-      <input type="date" id="data" required>
-    </div>
+      <div class="form-group">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
+      </div>
 
-    <div class="form-group">
-      <label for="hora">Hora</label>
-      <input type="time" id="hora" required>
-    </div>
+      <div class="form-group">
+        <label for="telefone" class="form-label">Telefone</label>
+        <input type="tel" id="telefone" class="form-control" placeholder="(61) 99999-9999" required>
+      </div>
 
-    <div class="form-group">
-      <label for="cliente">Nome do Cliente</label>
-      <input type="text" id="cliente" placeholder="Seu nome" required>
-    </div>
+      <div class="form-group">
+        <label for="data" class="form-label">Data</label>
+        <input type="date" id="data" class="form-control" required>
+      </div>
 
-    <button type="submit" class="btn btn-success">Confirmar Agendamento</button>
-  </form>
+      <div class="form-group">
+        <label for="hora" class="form-label">Hora</label>
+        <input type="time" id="hora" class="form-control" required>
+      </div>
 
-  <div id="msgAgendamento" style="margin-top:20px; font-weight:bold;"></div>
+      <div class="form-group">
+        <label for="observacoes" class="form-label">Observações</label>
+        <textarea id="observacoes" class="form-control" placeholder="Alguma observação especial..." rows="3"></textarea>
+      </div>
+
+      <div class="service-preview" id="servicePreview">
+        <h4>Resumo do Agendamento</h4>
+        <p><strong>Serviço:</strong> <span id="previewServico"></span></p>
+        <p><strong>Valor:</strong> R$ <span id="previewValor"></span></p>
+        <p><strong>Data:</strong> <span id="previewData"></span></p>
+        <p><strong>Hora:</strong> <span id="previewHora"></span></p>
+        <p><strong>Observações:</strong> <span id="previewObservacoes"></span></p>
+      </div>
+
+      <button type="submit" class="btn">Confirmar Agendamento</button>
+    </form>
+
+    <div id="msgAgendamento" style="margin-top:20px; text-align:center; font-weight:bold;"></div>
+  </section>
 </main>
-<footer class="footer section">
+
+<footer class="footer">
   <div class="container footer-content">
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
@@ -60,12 +422,246 @@
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
   </div>
   <div class="footer-copy">
     <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<script src="script.js"></script>
+<!-- Botão Flutuante -->
+<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">⚙️</button>
+
+<!-- Menu Flutuante -->
+<div class="floating-menu" id="floatingMenu">
+    <a href="configuracoes.html" class="floating-menu-item">
+        <span class="icon">⚙️</span> Configurações
+    </a>
+    <a href="perfil.html" class="floating-menu-item">
+        <span class="icon">👤</span> Meu Perfil
+    </a>
+    <button class="floating-menu-item" onclick="alternarTema()">
+        <span class="icon" id="themeIcon">🌙</span> <span id="themeText">Tema Escuro</span>
+    </button>
+    <button class="floating-menu-item" onclick="fazerBackupRapido()">
+        <span class="icon">💾</span> Backup Rápido
+    </button>
+    <button class="floating-menu-item" onclick="verEstatisticas()">
+        <span class="icon">📊</span> Estatísticas
+    </button>
+    <button class="floating-menu-item" onclick="sairSistema()">
+        <span class="icon">🚪</span> Sair
+    </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.getElementById('themeToggle');
+  const agendamentoForm = document.getElementById('agendamentoForm');
+  const servicoSelect = document.getElementById('servico');
+  const servicePreview = document.getElementById('servicePreview');
+  const dataInput = document.getElementById('data');
+  const observacoes = document.getElementById('observacoes');
+
+  // =====================
+  // TEMA CLARO / ESCURO
+  // =====================
+  const currentTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  updateButtonText();
+
+  themeToggle.addEventListener("click", () => {
+    alternarTema();
+  });
+
+  function updateButtonText() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+    document.getElementById("themeText").textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
+    document.getElementById("themeIcon").textContent = theme === "light" ? "🌙" : "☀️";
+  }
+
+  window.alternarTema = function() {
+    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateButtonText();
+  }
+
+  // =====================
+  // PRELOADER - 3 SEGUNDOS
+  // =====================
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    setTimeout(() => preloader.classList.add("hidden"), 3000);
+  });
+
+  // =====================
+  // CARREGAR SERVIÇOS
+  // =====================
+  function carregarServicos() {
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [
+      { nome: "Corte de Cabelo", valor: 50, descricao: "Corte completo com lavagem" },
+      { nome: "Manicure", valor: 30, descricao: "Manicure completa" }
+    ];
+    servicoSelect.innerHTML = '<option value="">Selecione um serviço</option>';
+    servicos.forEach(servico => {
+      const option = document.createElement('option');
+      option.value = servico.nome;
+      option.textContent = `${servico.nome} - R$ ${servico.valor}`;
+      option.setAttribute('data-valor', servico.valor);
+      servicoSelect.appendChild(option);
+    });
+  }
+
+  // =====================
+  // PREVIEW DO SERVIÇO
+  // =====================
+  function atualizarPreview() {
+    const servicoSelecionado = servicoSelect.options[servicoSelect.selectedIndex];
+    const data = document.getElementById('data').value;
+    const hora = document.getElementById('hora').value;
+    const obs = observacoes.value;
+
+    if (servicoSelecionado.value && data && hora) {
+      document.getElementById('previewServico').textContent = servicoSelecionado.value;
+      document.getElementById('previewValor').textContent = servicoSelecionado.getAttribute('data-valor');
+      document.getElementById('previewData').textContent = formatarData(data);
+      document.getElementById('previewHora').textContent = hora;
+      document.getElementById('previewObservacoes').textContent = obs;
+      servicePreview.style.display = 'block';
+    } else {
+      servicePreview.style.display = 'none';
+    }
+  }
+
+  servicoSelect.addEventListener('change', atualizarPreview);
+  document.getElementById('data').addEventListener('change', atualizarPreview);
+  document.getElementById('hora').addEventListener('change', atualizarPreview);
+  observacoes.addEventListener('input', atualizarPreview);
+
+  function formatarData(data) {
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  // =====================
+  // AGENDAMENTO
+  // =====================
+  agendamentoForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const servico = servicoSelect.value;
+    const cliente = document.getElementById('cliente').value;
+    const email = document.getElementById('email').value;
+    const telefone = document.getElementById('telefone').value;
+    const data = document.getElementById('data').value;
+    const hora = document.getElementById('hora').value;
+    const obs = observacoes.value;
+    const servicoSelecionado = servicoSelect.options[servicoSelect.selectedIndex];
+    const valor = servicoSelecionado.getAttribute('data-valor');
+
+    const dataAgendamento = new Date(data + 'T' + hora);
+    const agora = new Date();
+    if (dataAgendamento <= agora) {
+      alert('Por favor, selecione uma data e hora futuras!');
+      return;
+    }
+
+    const agendamento = {
+      id: Date.now(),
+      servico,
+      cliente,
+      email,
+      telefone,
+      valor: parseFloat(valor),
+      data,
+      hora,
+      observacoes: obs,
+      status: 'confirmado',
+      dataCriacao: new Date().toISOString()
+    };
+
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    agendamentos.push(agendamento);
+    localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+    const msg = document.getElementById('msgAgendamento');
+    msg.textContent = 'Agendamento confirmado com sucesso!';
+    msg.style.color = 'var(--success-color)';
+
+    agendamentoForm.reset();
+    servicePreview.style.display = 'none';
+
+    setTimeout(() => {
+      window.location.href = 'agendamento.html';
+    }, 2000);
+  });
+
+  // =====================
+  // DATA MÍNIMA HOJE
+  // =====================
+  const hoje = new Date().toISOString().split('T')[0];
+  dataInput.min = hoje;
+
+  // =====================
+  // FORMATAÇÃO TELEFONE
+  // =====================
+  document.getElementById('telefone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.substring(0, 11);
+
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 6) {
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/^(\d{0,2})/, '($1');
+    }
+    
+    e.target.value = value;
+  });
+
+  // =====================
+  // FOCO NO NOME DO CLIENTE
+  // =====================
+  document.getElementById('cliente').focus();
+
+  // =====================
+  // CARREGAR SERVIÇOS INICIAL
+  // =====================
+  carregarServicos();
+
+  // =====================
+  // MENU FLUTUANTE
+  // =====================
+  const floatingBtn = document.getElementById('floatingConfigBtn');
+  const floatingMenu = document.getElementById('floatingMenu');
+
+  floatingBtn.addEventListener('click', () => {
+    floatingMenu.style.display = floatingMenu.style.display === 'flex' ? 'none' : 'flex';
+  });
+
+  window.fazerBackupRapido = function() {
+    alert("Backup rápido realizado com sucesso!");
+  }
+
+  window.verEstatisticas = function() {
+    alert("Exibindo estatísticas do sistema...");
+  }
+
+  window.sairSistema = function() {
+    alert("Saindo do sistema...");
+    window.location.href = 'login.html';
+  }
+
+});
+</script>
+
 </body>
 </html>

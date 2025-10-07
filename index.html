@@ -5,12 +5,175 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Sistema de Agendamento</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+    }
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 50px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      margin-top: 50px;
+      background: var(--card-bg);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ========================
+       PRELOADER (LOGO)
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.10s ease, visibility 0.10s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+  </style>
 </head>
 <body>
+
+<!-- Preloader (Logo carregando) -->
+<div id="preloader">
+  <div class="preloader-logo">Agendamento+</div>
+</div>
 
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
+    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
   </div>
 </header>
 
@@ -28,53 +191,77 @@
       </div>
       <button type="submit" class="btn btn-primary btn-block">Entrar</button>
     </form>
-    <p class="mt-2">Não tem conta? <a href="cadastro.html">Cadastre-se</a></p>
+    <p class="mt-2" style="text-align:center;">Não tem conta? <a href="cadastro.html">Cadastre-se</a></p>
   </section>
 </main>
 
 <footer class="footer section">
   <div class="container footer-content">
-    <!-- Nome e descrição -->
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
       <p>Sistema de Agendamento Online</p>
     </div>
-
-    <!-- Navegação -->
     <nav class="footer-nav">
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
-
-    <!-- Redes sociais -->
     <div class="footer-social">
       <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
       <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
     </div>
   </div>
-
-  <!-- Copyright -->
   <div class="footer-copy">
     <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
+
 <script>
+// =====================
+// LOGIN SIMPLES
+// =====================
 document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // impede envio do formulário
+  event.preventDefault();
+  const usuario = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
-    const usuario = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
+  if(usuario === "senac" && senha === "123") {
+    alert("Login realizado com sucesso!");
+    window.location.href = "modos.html";
+  } else {
+    alert("Usuário ou senha incorretos!");
+  }
+});
 
-    // Usuário master
-    if(usuario === "senac" && senha === "123") {
-        alert("Login realizado com sucesso!");
-        window.location.href = "modos.html"; // redireciona para a página de modos
-    } else {
-        alert("Usuário ou senha incorretos!");
-    }
+// =====================
+// TEMA CLARO / ESCURO
+// =====================
+const themeToggle = document.getElementById("themeToggle");
+const currentTheme = localStorage.getItem("theme") || "light";
+document.documentElement.setAttribute("data-theme", currentTheme);
+updateButtonText();
+
+themeToggle.addEventListener("click", () => {
+  const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+  updateButtonText();
+});
+
+function updateButtonText() {
+  const theme = document.documentElement.getAttribute("data-theme");
+  themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+}
+
+// =====================
+// PRELOADER - 5 SEGUNDOS
+// =====================
+window.addEventListener("load", () => {
+  const preloader = document.getElementById("preloader");
+  // Preloader visível por 5 segundos (5000ms)
+  setTimeout(() => preloader.classList.add("hidden"), 3000);
 });
 </script>
 

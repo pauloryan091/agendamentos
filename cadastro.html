@@ -3,72 +3,904 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro - Sistema de Agendamento</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Cadastro - Agendamento+</title>
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+    }
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --danger-color: #c82333;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .profile-photo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-avatar-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin: 0 auto;
+      border: 4px solid var(--card-bg);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      object-fit: cover;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .change-photo-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .change-photo-btn:hover {
+      background: var(--success-color);
+      transform: scale(1.1);
+    }
+
+    .photo-hint {
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+      margin-top: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--success-color);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+    }
+
+    .footer {
+      background: var(--card-bg);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      text-align: left;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 15px;
+    }
+
+    .footer-copy {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER (CADASTRO)
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.10s ease, visibility 0.10s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* ========================
+       MODAL DE TROCA DE FOTO
+    ======================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 500px;
+      padding: 30px;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.show .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+    }
+
+    [data-theme="dark"] .modal-header {
+      border-bottom-color: #444;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--secondary-color);
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: var(--danger-color);
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+    }
+
+    .photo-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px dashed #ddd;
+    }
+
+    [data-theme="dark"] .photo-preview {
+      background-color: #333;
+      border-color: #555;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-preview-placeholder {
+      color: var(--secondary-color);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .file-input-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: block;
+      padding: 12px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .file-input-label:hover {
+      background-color: #0069d9;
+    }
+
+    .photo-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    /* Notificações flutuantes */
+    .floating-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background-color: var(--success-color);
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1001;
+      animation: slideInRight 0.3s ease;
+    }
+
+    .floating-notification.success {
+      background-color: var(--success-color);
+    }
+
+    .floating-notification.error {
+      background-color: var(--danger-color);
+    }
+
+    .floating-notification.info {
+      background-color: var(--primary-color);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-brand {
+        text-align: center;
+      }
+      
+      .section {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .modal {
+        padding: 20px;
+      }
+      
+      .photo-options {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .section {
+        padding: 20px 15px;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+      }
+      
+      .change-photo-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
+
+<!-- Preloader (Cadastro carregando) -->
+<div id="preloader">
+  <div class="preloader-logo">CADASTRO</div>
+</div>
 
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
+    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
   </div>
 </header>
 
 <main class="main-content container">
   <section class="section">
-    <h2 class="section-title">Cadastro</h2>
-    <form>
+    <h2 class="section-title">Criar sua Conta</h2>
+    
+    <!-- Seção da Foto de Perfil -->
+    <div class="profile-photo-section">
+      <div class="profile-avatar-container">
+        <img id="profileAvatar" class="profile-avatar" src="" alt="Foto de perfil">
+        <button class="change-photo-btn" onclick="openPhotoModal()">📷</button>
+      </div>
+      <p class="photo-hint">Clique na câmera para adicionar uma foto de perfil (opcional)</p>
+    </div>
+    
+    <form id="cadastroForm">
       <div class="form-group">
-        <label for="nome">Nome Completo</label>
-        <input type="text" id="nome" class="form-control" placeholder="Digite seu nome" required>
+        <label for="nome" class="form-label">Nome Completo</label>
+        <input type="text" id="nome" class="form-control" placeholder="Digite seu nome completo" required>
       </div>
       <div class="form-group">
-        <label for="email">E-mail</label>
+        <label for="email" class="form-label">E-mail</label>
         <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
       </div>
       <div class="form-group">
-        <label for="telefone">Telefone</label>
-        <input type="tel" id="telefone" class="form-control" placeholder="(99) 99999-9999">
+        <label for="telefone" class="form-label">Telefone</label>
+        <input type="tel" id="telefone" class="form-control" placeholder="(61) 99999-9999" required>
       </div>
       <div class="form-group">
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" class="form-control" placeholder="Crie uma senha" required>
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" id="senha" class="form-control" placeholder="Crie uma senha forte" required>
       </div>
-      <button type="submit" class="btn btn-success btn-block">Cadastrar</button>
+      <div class="form-group">
+        <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+        <input type="password" id="confirmarSenha" class="form-control" placeholder="Digite a senha novamente" required>
+      </div>
+      <button type="submit" class="btn">Cadastrar</button>
     </form>
-    <p class="mt-2">Já tem conta? <a href="index.html">Faça login</a></p>
+    <p class="mt-2" style="text-align:center; margin-top:20px;">
+      Já tem conta? <a href="index.html">Faça login</a>
+    </p>
   </section>
 </main>
 
-<footer class="footer section">
+<footer class="footer">
   <div class="container footer-content">
-    <!-- Nome e descrição -->
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
       <p>Sistema de Agendamento Online</p>
     </div>
-
-    <!-- Navegação -->
     <nav class="footer-nav">
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
-
-    <!-- Redes sociais -->
     <div class="footer-social">
       <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
       <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
     </div>
   </div>
-
-  <!-- Copyright -->
   <div class="footer-copy">
     <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
+<!-- Modal para trocar foto -->
+<div class="modal-overlay" id="photoModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Adicionar Foto de Perfil</h2>
+      <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="photo-preview" id="photoPreview">
+        <div class="photo-preview-placeholder">Prévia da foto</div>
+      </div>
+      
+      <div class="file-input-container">
+        <input type="file" id="photoInput" class="file-input" accept="image/*">
+        <label for="photoInput" class="file-input-label">Escolher Foto</label>
+      </div>
+      
+      <div class="photo-options">
+        <button class="btn btn-primary" id="savePhotoBtn" onclick="savePhoto()" disabled>Salvar Foto</button>
+        <button class="btn btn-danger" onclick="removePhoto()">Remover Foto</button>
+        <button class="btn btn-secondary" onclick="closePhotoModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================
+// VARIÁVEIS GLOBAIS
+// =====================
+let currentPhotoFile = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.getElementById('themeToggle');
+  const cadastroForm = document.getElementById('cadastroForm');
+
+  // =====================
+  // TEMA CLARO / ESCURO
+  // =====================
+  const currentTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  updateButtonText();
+
+  themeToggle.addEventListener("click", () => {
+    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateButtonText();
+  });
+
+  function updateButtonText() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+  }
+
+  // =====================
+  // PRELOADER - 3 SEGUNDOS
+  // =====================
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    setTimeout(() => preloader.classList.add("hidden"), 3000);
+  });
+
+  // =====================
+  // SISTEMA DE FOTO DE PERFIL
+  // =====================
+  // Configurar o input de arquivo
+  document.getElementById('photoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      // Verificar se é uma imagem
+      if (!file.type.match('image.*')) {
+        mostrarNotificacao('Por favor, selecione apenas arquivos de imagem.', 'error');
+        return;
+      }
+      
+      // Verificar tamanho do arquivo (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        mostrarNotificacao('A imagem deve ter no máximo 5MB.', 'error');
+        return;
+      }
+      
+      currentPhotoFile = file;
+      
+      // Mostrar prévia
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('photoPreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Prévia da foto">`;
+        document.getElementById('savePhotoBtn').disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // =====================
+  // CADASTRO DE USUÁRIO
+  // =====================
+  cadastroForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const telefone = document.getElementById('telefone').value;
+    const senha = document.getElementById('senha').value;
+    const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+    // Validações
+    if (senha !== confirmarSenha) {
+      mostrarNotificacao('As senhas não coincidem!', 'error');
+      return;
+    }
+
+    if (senha.length < 6) {
+      mostrarNotificacao('A senha deve ter pelo menos 6 caracteres!', 'error');
+      return;
+    }
+
+    // Salvar usuário no localStorage
+    const usuario = {
+      nome,
+      email,
+      telefone,
+      senha,
+      dataCadastro: new Date().toISOString()
+    };
+
+    // Adicionar foto de perfil se existir
+    const savedPhoto = localStorage.getItem('tempProfilePhoto');
+    if (savedPhoto) {
+      usuario.fotoPerfil = savedPhoto;
+      // Limpar foto temporária
+      localStorage.removeItem('tempProfilePhoto');
+    }
+
+    // Verificar se usuário já existe
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    const usuarioExistente = usuarios.find(u => u.email === email);
+    
+    if (usuarioExistente) {
+      mostrarNotificacao('Este e-mail já está cadastrado!', 'error');
+      return;
+    }
+
+    usuarios.push(usuario);
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    
+    mostrarNotificacao('Cadastro realizado com sucesso! Redirecionando para login...', 'success');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 2000);
+  });
+
+  // Formatação do telefone
+  document.getElementById('telefone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.substring(0, 11);
+    
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 6) {
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/^(\d{0,2})/, '($1');
+    }
+    
+    e.target.value = value;
+  });
+});
+
+// =====================
+// FUNÇÕES DO SISTEMA DE FOTO
+// =====================
+function openPhotoModal() {
+  document.getElementById('photoModal').classList.add('show');
+}
+
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('show');
+  resetPhotoModal();
+}
+
+function resetPhotoModal() {
+  const preview = document.getElementById('photoPreview');
+  preview.innerHTML = '<div class="photo-preview-placeholder">Prévia da foto</div>';
+  document.getElementById('photoInput').value = '';
+  document.getElementById('savePhotoBtn').disabled = true;
+  currentPhotoFile = null;
+}
+
+function savePhoto() {
+  if (!currentPhotoFile) {
+    mostrarNotificacao('Nenhuma foto selecionada.', 'error');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    // Salvar temporariamente no localStorage (será transferido para o usuário no cadastro)
+    localStorage.setItem('tempProfilePhoto', e.target.result);
+    
+    // Atualizar a foto no perfil
+    document.getElementById('profileAvatar').src = e.target.result;
+    document.getElementById('profileAvatar').style.backgroundColor = 'transparent';
+    document.getElementById('profileAvatar').innerHTML = '';
+    
+    // Fechar modal e mostrar notificação
+    closePhotoModal();
+    mostrarNotificacao('Foto de perfil adicionada com sucesso!', 'success');
+  };
+  reader.readAsDataURL(currentPhotoFile);
+}
+
+function removePhoto() {
+  // Remover foto temporária do localStorage
+  localStorage.removeItem('tempProfilePhoto');
+  
+  // Atualizar a foto no perfil para a inicial
+  document.getElementById('profileAvatar').src = '';
+  document.getElementById('profileAvatar').style.backgroundColor = '';
+  document.getElementById('profileAvatar').innerHTML = 'U';
+  document.getElementById('profileAvatar').style.display = 'flex';
+  
+  // Fechar modal e mostrar notificação
+  closePhotoModal();
+  mostrarNotificacao('Foto de perfil removida.', 'info');
+}
+
+// Carregar foto temporária se existir
+window.addEventListener('load', () => {
+  const savedPhoto = localStorage.getItem('tempProfilePhoto');
+  const avatar = document.getElementById('profileAvatar');
+  
+  if (savedPhoto) {
+    avatar.src = savedPhoto;
+    avatar.style.backgroundColor = 'transparent';
+    avatar.innerHTML = '';
+  } else {
+    avatar.src = '';
+    avatar.style.backgroundColor = '';
+    avatar.innerHTML = 'U';
+    avatar.style.display = 'flex';
+  }
+});
+
+// Função para mostrar notificações
+function mostrarNotificacao(mensagem, tipo = 'info') {
+  // Remove notificação anterior se existir
+  const notificacaoAnterior = document.querySelector('.floating-notification');
+  if (notificacaoAnterior) {
+    notificacaoAnterior.remove();
+  }
+  
+  const notification = document.createElement('div');
+  notification.className = `floating-notification ${tipo}`;
+  notification.textContent = mensagem;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+</script>
 </body>
 </html>

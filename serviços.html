@@ -1,18 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Agendamento</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviços - Agendamento+</title>
+<style>
+  :root {
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --card-bg: #fff;
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+  }
+  [data-theme="dark"] {
+    --bg-color: #1e1e1e;
+    --text-color: #f4f4f4;
+    --card-bg: #2a2a2a;
+    --primary-color: #0d6efd;
+    --secondary-color: #5a6268;
+    --success-color: #218838;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  header {
+    background: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+  .header-content { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: bold; font-size: 1.5rem; color: var(--primary-color); text-decoration: none; }
+  .theme-toggle { background: none; border: 2px solid var(--primary-color); color: var(--primary-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+  .theme-toggle:hover { background: var(--primary-color); color: #fff; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-link { color: var(--text-color); text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: background-color 0.3s; }
+  .nav-link:hover { background-color: var(--primary-color); color: white; }
+  #menuBtn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+  .main-content { flex: 1; padding: 20px 0; }
+  .section-title { text-align: center; margin-bottom: 30px; font-size: 2rem; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+  .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; text-align: center; }
+  .btn-primary { background-color: var(--primary-color); color: white; }
+  .btn-success { background-color: var(--success-color); color: white; }
+  .btn-secondary { background-color: var(--secondary-color); color: white; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); opacity: 0.9; }
+  .servicos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+  .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #ddd; }
+  [data-theme="dark"] .card { border-color: #444; }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+  .card-img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid #ddd; }
+  [data-theme="dark"] .card-img { border-bottom-color: #444; }
+  .card-body { padding: 20px; }
+  .card-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; }
+  .card-text { color: var(--secondary-color); margin-bottom: 15px; line-height: 1.5; }
+  .card-price { font-size: 1.2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 15px; }
+  .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sm { padding: 8px 16px; font-size: 14px; }
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+  .modal-content { background: var(--card-bg); padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; margin-bottom: 8px; font-weight: bold; }
+  .form-control { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; background: var(--card-bg); color: var(--text-color); transition: border-color 0.3s; }
+  .form-control:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(0,123,255,0.25); }
+  textarea.form-control { resize: vertical; min-height: 100px; }
+  .footer { background: var(--card-bg); padding: 20px 0; text-align: center; font-size: 14px; margin-top: auto; width: 100%; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+  .footer a { color: var(--primary-color); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+  .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .footer-brand { text-align: left; }
+  .footer-nav { display: flex; gap: 15px; flex-wrap: wrap; }
+  .footer-social { display: flex; gap: 15px; }
+  .footer-copy { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; }
+  [data-theme="dark"] .footer-copy { border-top-color: #444; }
+  #preloader { position: fixed; top:0; left:0; width:100%; height:100%; background-color: var(--bg-color); display:flex; justify-content:center; align-items:center; z-index:9999; transition: opacity 0.1s ease, visibility 0.1s ease; }
+  #preloader.hidden { opacity:0; visibility:hidden; }
+  .preloader-logo { font-size:2rem; font-weight:bold; color:var(--primary-color); animation: pulse 1.2s infinite ease-in-out; }
+  @keyframes pulse { 0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.1);} }
 
+  /* Botão flutuante e menu */
+  .floating-config-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1001;
+    transition: transform 0.3s;
+  }
+  .floating-config-btn:hover { transform: scale(1.1); }
+  .floating-menu {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    z-index: 1000;
+    min-width: 180px;
+  }
+  .floating-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    font-weight: bold;
+    color: var(--text-color);
+    background: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .floating-menu-item:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 8px;
+  }
+  .floating-menu-item .icon { font-size: 18px; }
+
+  @media (max-width:768px){
+    .footer-content{flex-direction:column;text-align:center;} 
+    .footer-brand{text-align:center;} 
+    .servicos-grid{grid-template-columns:1fr;} 
+    .page-header{flex-direction:column;align-items:stretch;} 
+    .nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;width:100%;background:var(--card-bg);box-shadow:0 2px 5px rgba(0,0,0,0.1);padding:15px 0;} 
+    .nav-links.show{display:flex;} 
+    #menuBtn{display:block;} 
+    .modal-content{margin:20px;width:calc(100% - 40px);} 
+  }
+  @media (max-width:480px){ 
+    .card-actions{flex-direction:column;} 
+    .btn-sm{width:100%;} 
+  }
+</style>
 </head>
 <body>
+
+<div id="preloader"><div class="preloader-logo">SERVIÇOS</div></div>
 
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">☰</button>
+    <button id="menuBtn">☰</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
@@ -20,69 +174,50 @@
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
+    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
   </div>
 </header>
 
 <main class="main-content container">
-  <h2>Serviços Disponíveis</h2>
-
-  <!-- Botão para adicionar serviço -->
-  <div id="devControls">
-    <button id="btnAddServico" class="btn btn-primary">Adicionar Serviço</button>
+  <div class="page-header">
+    <h1 class="section-title">Nossos Serviços</h1>
+    <button id="btnAddServico" class="btn btn-success">+ Adicionar Serviço</button>
   </div>
-
-  <!-- Lista de Serviços -->
-  <div id="listaServicos" class="servicos-grid">
-    <div class="card">
-      <img src="R (1).jpg" alt="Corte de Cabelo" class="card-img">
-      <div class="card-body">
-        <h3 class="card-title">Corte de Cabelo</h3>
-        <p class="card-text">Serviço completo de corte, lavagem e finalização.</p>
-        <p>Valor: R$ 50,00</p>
-        <a href="agendar.html" class="btn btn-primary">Agendar</a>
-      </div>
-    </div>
-    <div class="card">
-      <img src="R.jpg" alt="Manicure" class="card-img">
-      <div class="card-body">
-        <h3 class="card-title">Manicure</h3>
-        <p class="card-text">Cuidamos das suas unhas com todo cuidado e higiene.</p>
-        <p>Valor: R$ 30,00</p>
-        <a href="agendar.html" class="btn btn-primary">Agendar</a>
-      </div>
-    </div>
-  </div>
+  <div id="listaServicos" class="servicos-grid"></div>
 </main>
 
-<!-- Modal Adicionar Serviço -->
 <div class="modal" id="modalServico">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModalServico()">&times;</button>
-    <h2>Adicionar Serviço</h2>
+    <h2>Adicionar Novo Serviço</h2>
     <form id="formServico">
       <div class="form-group">
         <label for="nomeServico">Nome do Serviço</label>
-        <input type="text" id="nomeServico" required>
+        <input type="text" id="nomeServico" class="form-control" placeholder="Ex: Corte de Cabelo" required>
       </div>
       <div class="form-group">
         <label for="descricaoServico">Descrição</label>
-        <textarea id="descricaoServico" required></textarea>
+        <textarea id="descricaoServico" class="form-control" placeholder="Descreva o serviço..." required></textarea>
       </div>
       <div class="form-group">
         <label for="valorServico">Valor (R$)</label>
-        <input type="number" id="valorServico" required>
+        <input type="number" id="valorServico" class="form-control" placeholder="50.00" step="0.01" min="0" required>
       </div>
       <div class="form-group">
-        <label for="fotoServico">Foto</label>
-        <input type="file" id="fotoServico" accept="image/*" required>
+        <label for="fotoServico">Foto do Serviço</label>
+        <input type="file" id="fotoServico" class="form-control" accept="image/*" required>
       </div>
-      <button type="submit" class="btn btn-success">Adicionar Serviço</button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">Adicionar Serviço</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModalServico()">Cancelar</button>
+      </div>
     </form>
   </div>
 </div>
 
-<footer class="footer section">
+<footer class="footer">
   <div class="container footer-content">
+    <div class="footer-brand
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
       <p>Sistema de Agendamento Online</p>
@@ -95,8 +230,8 @@
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
     <div class="footer-social">
-      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
-      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank">WhatsApp</a>
     </div>
   </div>
   <div class="footer-copy">
@@ -104,772 +239,166 @@
   </div>
 </footer>
 
+<!-- Botão Flutuante de Configurações -->
+<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
+    ⚙️
+</button>
+
+<!-- Menu Flutuante -->
+<div class="floating-menu" id="floatingMenu">
+    <a href="configuracoes.html" class="floating-menu-item">
+        <span class="icon">⚙️</span>
+        Configurações
+    </a>
+    <a href="perfil.html" class="floating-menu-item">
+        <span class="icon">👤</span>
+        Meu Perfil
+    </a>
+    <button class="floating-menu-item" onclick="alternarTema()">
+        <span class="icon" id="themeIcon">🌙</span>
+        <span id="themeText">Tema Escuro</span>
+    </button>
+    <button class="floating-menu-item" onclick="fazerBackupRapido()">
+        <span class="icon">💾</span>
+        Backup Rápido
+    </button>
+    <button class="floating-menu-item" onclick="verEstatisticas()">
+        <span class="icon">📊</span>
+        Estatísticas
+    </button>
+    <button class="floating-menu-item" onclick="sairSistema()">
+        <span class="icon">🚪</span>
+        Sair
+    </button>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
+  const modal = document.getElementById('modalServico');
+  const form = document.getElementById('formServico');
   const listaServicos = document.getElementById('listaServicos');
   const menuBtn = document.getElementById('menuBtn');
   const navLinks = document.getElementById('menu');
+  const themeToggle = document.getElementById('themeToggle');
   const btnAddServico = document.getElementById('btnAddServico');
+  const floatingBtn = document.getElementById('floatingConfigBtn');
+  const floatingMenu = document.getElementById('floatingMenu');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeText = document.getElementById('themeText');
 
-  // Mostrar modal para qualquer usuário
-  btnAddServico.addEventListener('click', () => {
-    modalServico.style.display = 'flex';
+  // Tema
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  updateThemeBtn();
+  themeToggle.addEventListener('click', () => {
+    toggleTheme();
   });
 
-  // Fechar modal
-  window.closeModalServico = () => {
-    modalServico.style.display = 'none';
+  function toggleTheme() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateThemeBtn();
   }
 
-  // Carregar serviços do localStorage
-  function carregarServicos() {
-    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    servicos.forEach(s => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${s.foto}" alt="${s.nome}" class="card-img">
-        <div class="card-body">
-          <h3 class="card-title">${s.nome}</h3>
-          <p class="card-text">${s.descricao}</p>
-          <p>Valor: R$ ${s.valor}</p>
-          <a href="agendar.html" class="btn btn-primary">Agendar</a>
-        </div>
-      `;
-      listaServicos.appendChild(card);
-    });
-  }
-  carregarServicos();
-
-  // Adicionar serviço
-  formServico.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const arquivo = document.getElementById('fotoServico').files[0];
-
-    if (!arquivo) return;
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const fotoDataUrl = event.target.result;
-
-      // Cria card
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${fotoDataUrl}" alt="${nome}" class="card-img">
-        <div class="card-body">
-          <h3 class="card-title">${nome}</h3>
-          <p class="card-text">${descricao}</p>
-          <p>Valor: R$ ${valor}</p>
-          <a href="agendar.html" class="btn btn-primary">Agendar</a>
-        </div>
-      `;
-      listaServicos.appendChild(card);
-
-      // Salva no localStorage
-      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-      servicos.push({ nome, descricao, valor, foto: fotoDataUrl });
-      localStorage.setItem('servicos', JSON.stringify(servicos));
-
-      modalServico.style.display = 'none';
-      formServico.reset();
-    };
-    reader.readAsDataURL(arquivo);
-  });
-
-  // Fecha modal clicando fora
-  modalServico.addEventListener('click', e => {
-    if (e.target === modalServico) modalServico.style.display = 'none';
-  });
-
-  // Menu hamburger
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-});
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // -------------------
-    // Configurações de modo e menu
-    // -------------------
-    const nav = document.querySelector('.nav-links');
-    const modo = localStorage.getItem('modo') || 'cliente';
-    const linksCliente = [
-        {nome: "Dashboard", href:"dashboard.html"},
-        {nome: "Serviços", href:"serviços.html"},
-        {nome: "Perfil", href:"perfil.html"}
-    ];
-    const linksDev = [
-        {nome: "Dashboard", href:"dashboard.html"},
-        {nome: "Serviços", href:"serviços.html"},
-        {nome: "Agendamento", href:"agendamento.html"},
-        {nome: "Clientes", href:"clientes.html"},
-        {nome: "Perfil", href:"perfil.html"}
-    ];
-    nav.innerHTML = (modo === 'dev' ? linksDev : linksCliente).map(l => `<a href="${l.href}" class="nav-link">${l.nome}</a>`).join('');
-    document.getElementById('menuBtn')?.addEventListener('click', () => nav.classList.toggle('show'));
-
-    // -------------------
-    // Perfil
-    // -------------------
-    const fotoUsuario = document.getElementById('fotoUsuario');
-    const uploadFoto = document.getElementById('uploadFoto');
-    if(fotoUsuario) fotoUsuario.src = localStorage.getItem('fotoUsuario') || '';
-    uploadFoto?.addEventListener('change', function() {
-        const file = this.files[0];
-        if(file){
-            const reader = new FileReader();
-            reader.onload = e => {
-                fotoUsuario.src = e.target.result;
-                localStorage.setItem('fotoUsuario', e.target.result);
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    const formPerfil = document.getElementById('formPerfil');
-    formPerfil?.addEventListener('submit', function(e){
-        e.preventDefault();
-        const nome = document.getElementById('nome').value;
-        const email = document.getElementById('email').value;
-        const telefone = document.getElementById('telefone').value;
-        localStorage.setItem('nomeUsuario', nome);
-        localStorage.setItem('emailUsuario', email);
-        localStorage.setItem('telefoneUsuario', telefone);
-        document.getElementById('nomeUsuario').innerText = nome;
-        document.getElementById('emailUsuario').innerText = email;
-        document.getElementById('telefoneUsuario').innerText = telefone;
-        document.getElementById('msgPerfil').innerText = "Perfil atualizado!";
-    });
-
-    // -------------------
-    // Agendamentos
-    // -------------------
-    let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const corpoTabela = document.getElementById('corpoTabela');
-    const msgAgendamento = document.getElementById('msgAgendamento');
-
-    function mostrarAgendamentos(){
-        if(!corpoTabela) return;
-        corpoTabela.innerHTML = agendamentos.length === 0 ? 
-            `<tr><td colspan="4" style="text-align:center;">Nenhum agendamento.</td></tr>` : 
-            agendamentos.map(a => `<tr>
-                <td>${a.cliente}</td><td>${a.servico}</td><td>${a.data}</td><td>${a.hora}</td>
-            </tr>`).join('');
-    }
-
-    mostrarAgendamentos();
-
-    document.getElementById('agendamentoForm')?.addEventListener('submit', function(e){
-        e.preventDefault();
-        const cliente = document.getElementById('cliente').value;
-        const servico = document.getElementById('servico').value;
-        const data = document.getElementById('data').value;
-        const hora = document.getElementById('hora').value;
-        if(!cliente || !servico || !data || !hora){
-            msgAgendamento.innerText = "Preencha todos os campos!";
-            msgAgendamento.style.color = "red";
-            return;
-        }
-        agendamentos.push({cliente, servico, data, hora});
-        localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-        msgAgendamento.innerText = "Agendamento realizado!";
-        msgAgendamento.style.color = "green";
-        mostrarAgendamentos();
-        this.reset();
-    });
-
-    // -------------------
-    // Serviços
-    // -------------------
-    let servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    function mostrarServicos(){
-        const lista = document.getElementById('listaServicos');
-        if(!lista) return;
-        lista.innerHTML = servicos.map(s => `
-            <div class="card">
-                <img src="${s.foto}" alt="${s.nome}" class="card-img">
-                <div class="card-body">
-                    <h3>${s.nome}</h3>
-                    <p>${s.descricao}</p>
-                    <p>Valor: R$ ${s.valor.toFixed(2)}</p>
-                    <a href="agendamento.html?servico=${s.nome}" class="btn btn-primary">Agendar</a>
-                </div>
-            </div>
-        `).join('');
-    }
-    mostrarServicos();
-});
-// ------------------------
-// Menu responsivo
-// ------------------------
-const menuBtn = document.getElementById("menuBtn");
-const menu = document.getElementById("menu");
-
-menuBtn.addEventListener("click", () => {
-  menu.classList.toggle("show");
-});
-
-// ------------------------
-// Carregar agendamentos existentes do localStorage
-// ------------------------
-function carregarAgendamentos() {
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  const corpoTabela = document.getElementById("corpoTabela");
-  corpoTabela.innerHTML = ""; // limpa tabela antes de preencher
-
-  agendamentos.forEach((agendamento, index) => {
-    const linha = document.createElement("tr");
-    linha.innerHTML = `
-      <td>${agendamento.cliente}</td>
-      <td>${agendamento.servico}</td>
-      <td>${agendamento.data}</td>
-      <td>${agendamento.hora}</td>
-    `;
-    corpoTabela.appendChild(linha);
-  });
-}
-
-// ------------------------
-// Adicionar novo agendamento
-// ------------------------
-document.getElementById("agendamentoForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const cliente = document.getElementById("cliente").value;
-  const servico = document.getElementById("servico").value;
-  const data = document.getElementById("data").value;
-  const hora = document.getElementById("hora").value;
-
-  if (!cliente || !servico || !data || !hora) {
-    alert("Por favor, preencha todos os campos!");
-    return;
+  function updateThemeBtn() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    themeToggle.textContent = isLight ? '🌙 Escuro' : '☀️ Claro';
+    themeIcon.textContent = isLight ? '🌙' : '☀️';
+    themeText.textContent = isLight ? 'Tema Escuro' : 'Tema Claro';
   }
 
-  const novoAgendamento = { cliente, servico, data, hora };
-
-  // Pega lista existente e adiciona novo
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  agendamentos.push(novoAgendamento);
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-
-  // Mostra mensagem de confirmação
-  const msg = document.getElementById("msgAgendamento");
-  msg.textContent = "Agendamento confirmado com sucesso!";
-  msg.style.color = "green";
-
-  // Limpa formulário
-  this.reset();
-
-  // Atualiza tabela
-  carregarAgendamentos();
-});
-
-// ------------------------
-// Inicialização
-// ------------------------
-carregarAgendamentos();
-document.getElementById('agendamentoForm').addEventListener('submit', function(e){
-  e.preventDefault();
-
-  const cliente = document.getElementById('cliente').value;
-  const servico = document.getElementById('servico').value;
-  const data = document.getElementById('data').value;
-  const hora = document.getElementById('hora').value;
-
-  if (!cliente || !servico || !data || !hora) return;
-
-  // pega os agendamentos já salvos ou cria um array vazio
-  const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-
-  // adiciona o novo agendamento
-  agendamentos.push({ cliente, servico, data, hora });
-
-  // salva no localStorage
-  localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-
-  // mensagem de sucesso
-  document.getElementById('msgAgendamento').textContent = 'Agendamento salvo com sucesso!';
-
-  // limpa formulário
-  this.reset();
-});
-
-// Carrega agendamentos do localStorage e preenche tabela e select
-  function carregarAgendamentos() {
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const tbody = document.getElementById('corpoTabela');
-    const select = document.getElementById('selectAgendamento');
-    tbody.innerHTML = '';
-    select.innerHTML = '<option value="">Selecione um agendamento</option>';
-
-    agendamentos.forEach((a, index) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${a.cliente}</td>
-                      <td>${a.servico}</td>
-                      <td>${a.valor || ''}</td>
-                      <td>${a.data}</td>
-                      <td>${a.hora}</td>`;
-      tbody.appendChild(tr);
-
-      const option = document.createElement('option');
-      option.value = index;
-      option.textContent = `${a.cliente} - ${a.servico} - ${a.data} ${a.hora}`;
-      select.appendChild(option);
-    });
-  }
-
-  // Filtrar por data
-  function filtrarAgendamentos() {
-    const dataFiltro = document.getElementById('filtroData').value;
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const tbody = document.getElementById('corpoTabela');
-    tbody.innerHTML = '';
-
-    agendamentos.forEach(a => {
-      if (!dataFiltro || a.data === dataFiltro) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${a.cliente}</td>
-                        <td>${a.servico}</td>
-                        <td>${a.valor || ''}</td>
-                        <td>${a.data}</td>
-                        <td>${a.hora}</td>`;
-        tbody.appendChild(tr);
-      }
-    });
-  }
-
-  function limparFiltro() {
-    document.getElementById('filtroData').value = '';
-    carregarAgendamentos();
-  }
-
-  function editarSelecionado() {
-    const index = document.getElementById('selectAgendamento').value;
-    if (index === '') return alert('Selecione um agendamento para editar.');
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const a = agendamentos[index];
-
-    const novoCliente = prompt('Nome do cliente:', a.cliente);
-    const novoServico = prompt('Serviço:', a.servico);
-    const novaData = prompt('Data:', a.data);
-    const novaHora = prompt('Hora:', a.hora);
-
-    if (novoCliente && novoServico && novaData && novaHora) {
-      agendamentos[index] = { cliente: novoCliente, servico: novoServico, data: novaData, hora: novaHora };
-      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-      carregarAgendamentos();
-    }
-  }
-
-  function cancelarSelecionado() {
-    const index = document.getElementById('selectAgendamento').value;
-    if (index === '') return alert('Selecione um agendamento para cancelar.');
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    if (confirm('Deseja realmente cancelar este agendamento?')) {
-      agendamentos.splice(index, 1);
-      localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-      carregarAgendamentos();
-    }
-  }
-
-  // Carrega ao abrir a página
-  window.onload = carregarAgendamentos;
-
-  // Painel Desenvolvedor
-  const devToggle = document.getElementById('devToggle');
-  const devControls = document.getElementById('devControls');
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
-  const listaServicos = document.getElementById('listaServicos');
-
-  let modoDevAtivo = false;
-
-  devToggle.addEventListener('click', () => {
-    modoDevAtivo = !modoDevAtivo;
-    devControls.style.display = modoDevAtivo ? 'block' : 'none';
-    alert(`Modo Desenvolvedor ${modoDevAtivo ? 'Ativado' : 'Desativado'}`);
+  // Preloader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1000);
   });
 
-  // Botão adicionar serviço
-  if(devControls){
-    const btnAddServico = document.createElement('button');
-    btnAddServico.textContent = 'Adicionar Serviço';
-    btnAddServico.className = 'btn btn-primary';
-    btnAddServico.onclick = () => modalServico.style.display = 'flex';
-    devControls.appendChild(btnAddServico);
-  }
+  // Menu mobile
+  menuBtn.addEventListener('click', () => { navLinks.classList.toggle('show'); });
 
-  function closeModalServico(){
-    modalServico.style.display = 'none';
-  }
-
-  formServico.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const foto = document.getElementById('fotoServico').value;
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <img src="${foto}" alt="${nome}" class="card-img">
-      <div class="card-body">
-        <h3 class="card-title">${nome}</h3>
-        <p class="card-text">${descricao}</p>
-        <p>Valor: R$ ${valor}</p>
-        <a href="agendar.html" class="btn btn-primary">Agendar</a>
-      </div>
-    `;
-    listaServicos.appendChild(card);
-    closeModalServico();
-    formServico.reset();
-  });
-
-  document.addEventListener('DOMContentLoaded', () => {
-  const devToggle = document.getElementById('devToggle');
-  const devControls = document.getElementById('devControls');
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
-  const listaServicos = document.getElementById('listaServicos');
-
-  let modoDevAtivo = false;
-
-  // Alterna Modo Desenvolvedor
-  devToggle.addEventListener('click', () => {
-    modoDevAtivo = !modoDevAtivo;
-    devControls.style.display = modoDevAtivo ? 'block' : 'none';
-
-    if (modoDevAtivo && devControls.children.length === 0) {
-      // Cria botão Adicionar Serviço dentro do painel dev
-      const btnAddServico = document.createElement('button');
-      btnAddServico.textContent = 'Adicionar Serviço';
-      btnAddServico.className = 'btn btn-primary';
-      btnAddServico.addEventListener('click', () => {
-        modalServico.style.display = 'flex';
-      });
-      devControls.appendChild(btnAddServico);
-    }
-  });
-
-  // Fecha o modal
-  window.closeModalServico = () => {
-    modalServico.style.display = 'none';
-  }
-
-  // Adiciona serviço ao enviar o form
-  formServico.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const foto = document.getElementById('fotoServico').value;
-
-    // Cria card do serviço
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <img src="${foto}" alt="${nome}" class="card-img">
-      <div class="card-body">
-        <h3 class="card-title">${nome}</h3>
-        <p class="card-text">${descricao}</p>
-        <p>Valor: R$ ${valor}</p>
-        <a href="agendar.html" class="btn btn-primary">Agendar</a>
-      </div>
-    `;
-
-    listaServicos.appendChild(card);
-    modalServico.style.display = 'none';
-    formServico.reset();
-  });
-
-  // Fecha modal ao clicar fora do conteúdo
-  modalServico.addEventListener('click', (e) => {
-    if (e.target === modalServico) modalServico.style.display = 'none';
-  });
-
-  // Botão hamburger para mobile
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const devToggle = document.getElementById('devToggle');
-  const devControls = document.getElementById('devControls');
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
-  const listaServicos = document.getElementById('listaServicos');
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-
-  let modoDevAtivo = false;
-
-  // Alterna Modo Desenvolvedor
-  devToggle.addEventListener('click', () => {
-    modoDevAtivo = !modoDevAtivo;
-    devControls.style.display = modoDevAtivo ? 'block' : 'none';
-
-    if (modoDevAtivo && devControls.children.length === 0) {
-      const btnAddServico = document.createElement('button');
-      btnAddServico.textContent = 'Adicionar Serviço';
-      btnAddServico.className = 'btn btn-primary';
-      btnAddServico.addEventListener('click', () => {
-        modalServico.style.display = 'flex';
-      });
-      devControls.appendChild(btnAddServico);
-    }
-  });
-
-  // Fecha o modal
-  window.closeModalServico = () => {
-    modalServico.style.display = 'none';
-  }
-
-  // Adiciona serviço
-  formServico.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const foto = document.getElementById('fotoServico').value;
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <img src="${foto}" alt="${nome}" class="card-img">
-      <div class="card-body">
-        <h3 class="card-title">${nome}</h3>
-        <p class="card-text">${descricao}</p>
-        <p>Valor: R$ ${valor}</p>
-        <a href="agendar.html" class="btn btn-primary">Agendar</a>
-      </div>
-    `;
-    listaServicos.appendChild(card);
-    modalServico.style.display = 'none';
-    formServico.reset();
-  });
-
-  // Fecha modal clicando fora
-  modalServico.addEventListener('click', e => {
-    if (e.target === modalServico) modalServico.style.display = 'none';
-  });
-
-  // Hamburger menu
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
-  const listaServicos = document.getElementById('listaServicos');
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-  const btnAddServico = document.getElementById('btnAddServico');
-
-  // Mostrar modal para qualquer usuário
-  btnAddServico.addEventListener('click', () => {
-    modalServico.style.display = 'flex';
-  });
-
-  // Fechar modal
-  window.closeModalServico = () => {
-    modalServico.style.display = 'none';
-  }
-
-  // Carregar serviços do localStorage
-  function carregarServicos() {
-    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    servicos.forEach(s => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${s.foto}" alt="${s.nome}" class="card-img">
-        <div class="card-body">
-          <h3 class="card-title">${s.nome}</h3>
-          <p class="card-text">${s.descricao}</p>
-          <p>Valor: R$ ${s.valor}</p>
-          <a href="agendar.html" class="btn btn-primary">Agendar</a>
-        </div>
-      `;
-      listaServicos.appendChild(card);
-    });
-  }
-  carregarServicos();
-
-  // Adicionar serviço
-  formServico.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const arquivo = document.getElementById('fotoServico').files[0];
-
-    if (!arquivo) return;
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const fotoDataUrl = event.target.result;
-
-      // Cria card
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${fotoDataUrl}" alt="${nome}" class="card-img">
-        <div class="card-body">
-          <h3 class="card-title">${nome}</h3>
-          <p class="card-text">${descricao}</p>
-          <p>Valor: R$ ${valor}</p>
-          <a href="agendar.html" class="btn btn-primary">Agendar</a>
-        </div>
-      `;
-      listaServicos.appendChild(card);
-
-      // Salva no localStorage
-      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-      servicos.push({ nome, descricao, valor, foto: fotoDataUrl });
-      localStorage.setItem('servicos', JSON.stringify(servicos));
-
-      modalServico.style.display = 'none';
-      formServico.reset();
-    };
-    reader.readAsDataURL(arquivo);
-  });
-
-  // Fecha modal clicando fora
-  modalServico.addEventListener('click', e => {
-    if (e.target === modalServico) modalServico.style.display = 'none';
-  });
-
-  // Menu hamburger
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const menuBtn = document.getElementById("menuBtn");
-  const menu = document.getElementById("menu");
-
-  menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("show");
-  });
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const modalServico = document.getElementById('modalServico');
-  const formServico = document.getElementById('formServico');
-  const listaServicos = document.getElementById('listaServicos');
-  const btnAddServico = document.getElementById('btnAddServico');
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-
-  // ---------------------------
   // Abrir modal
-  // ---------------------------
-  btnAddServico.addEventListener('click', () => {
-    modalServico.style.display = 'flex';
-  });
+  btnAddServico.addEventListener('click', () => { modal.style.display='flex'; });
+  window.closeModalServico = () => { modal.style.display='none'; }
 
-  // ---------------------------
-  // Fechar modal
-  // ---------------------------
-  window.closeModalServico = () => {
-    modalServico.style.display = 'none';
-  }
-  modalServico.addEventListener('click', e => {
-    if (e.target === modalServico) modalServico.style.display = 'none';
-  });
-
-  // ---------------------------
-  // Menu hamburger
-  // ---------------------------
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-
-  // ---------------------------
-  // Função para salvar e renderizar serviços
-  // ---------------------------
-  function salvarServicos(servicos) {
-    localStorage.setItem('servicos', JSON.stringify(servicos));
-  }
-
-  function carregarServicos() {
+  // Carregar serviços
+  function carregarServicos(){
     const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    listaServicos.innerHTML = '';
-
-    servicos.forEach((s, index) => {
+    listaServicos.innerHTML='';
+    servicos.forEach((s,i)=>{
       const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${s.foto}" alt="${s.nome}" class="card-img">
+      card.className='card';
+      card.innerHTML=`
+        <img src="${s.foto}" alt="${s.nome}" class="card-img" onerror="this.src='https://via.placeholder.com/300x200/007bff/fff?text=${encodeURIComponent(s.nome)}'">
         <div class="card-body">
           <h3 class="card-title">${s.nome}</h3>
           <p class="card-text">${s.descricao}</p>
-          <p>Valor: R$ ${parseFloat(s.valor).toFixed(2)}</p>
-          <a href="agendar.html?servico=${encodeURIComponent(s.nome)}" class="btn btn-primary">Agendar</a>
-          <button class="btn btn-danger btn-excluir" data-index="${index}">Excluir</button>
-        </div>
-      `;
+          <p class="card-price">R$ ${parseFloat(s.valor).toFixed(2)}</p>
+          <div class="card-actions">
+            <a href="agendar.html?servico=${encodeURIComponent(s.nome)}" class="btn btn-primary btn-sm">Agendar</a>
+            <button class="btn btn-secondary btn-sm" onclick="editarServico(${i})">Editar</button>
+            <button class="btn btn-secondary btn-sm" onclick="excluirServico(${i})">Excluir</button>
+          </div>
+        </div>`;
       listaServicos.appendChild(card);
-    });
-
-    // Adiciona evento para excluir
-    document.querySelectorAll('.btn-excluir').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const idx = e.target.getAttribute('data-index');
-        if (confirm('Deseja realmente excluir este serviço?')) {
-          const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-          servicos.splice(idx, 1);
-          salvarServicos(servicos);
-          carregarServicos();
-        }
-      });
     });
   }
 
-  carregarServicos();
-
-  // ---------------------------
-  // Adicionar serviço
-  // ---------------------------
-  formServico.addEventListener('submit', (e) => {
+  form.addEventListener('submit', e=>{
     e.preventDefault();
-
-    const nome = document.getElementById('nomeServico').value;
-    const descricao = document.getElementById('descricaoServico').value;
-    const valor = document.getElementById('valorServico').value;
-    const arquivo = document.getElementById('fotoServico').files[0];
-
-    if (!arquivo) return alert('Selecione uma foto para o serviço.');
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const fotoDataUrl = event.target.result;
-
+    const nome=document.getElementById('nomeServico').value;
+    const descricao=document.getElementById('descricaoServico').value;
+    const valor=document.getElementById('valorServico').value;
+    const arquivo=document.getElementById('fotoServico').files[0];
+    if(!arquivo){ alert('Selecione uma foto'); return; }
+    const reader=new FileReader();
+    reader.onload=event=>{
       const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-      servicos.push({ nome, descricao, valor, foto: fotoDataUrl });
-      salvarServicos(servicos);
-
+      servicos.push({nome,descricao,valor,foto:event.target.result});
+      localStorage.setItem('servicos',JSON.stringify(servicos));
       carregarServicos();
-      modalServico.style.display = 'none';
-      formServico.reset();
+      modal.style.display='none';
+      form.reset();
+      alert('Serviço adicionado com sucesso!');
     };
     reader.readAsDataURL(arquivo);
   });
-});
 
+  window.editarServico = (i)=>{
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    const s = servicos[i];
+    document.getElementById('nomeServico').value = s.nome;
+    document.getElementById('descricaoServico').value = s.descricao;
+    document.getElementById('valorServico').value = s.valor;
+    servicos.splice(i,1);
+    localStorage.setItem('servicos',JSON.stringify(servicos));
+    modal.style.display='flex';
+  };
+
+  window.excluirServico = (i)=>{
+    if(confirm('Deseja excluir este serviço?')){
+      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+      servicos.splice(i,1);
+      localStorage.setItem('servicos',JSON.stringify(servicos));
+      carregarServicos();
+      alert('Serviço excluído!');
+    }
+  };
+
+  // Fecha modal clicando fora do conteúdo
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+  // Carrega os serviços ao iniciar
+  carregarServicos();
+
+  // Botão flutuante
+  floatingBtn.addEventListener('click', ()=>{ floatingMenu.style.display = floatingMenu.style.display==='flex'?'none':'flex'; });
+
+  // Funções do menu flutuante
+  window.alternarTema = toggleTheme;
+  window.fazerBackupRapido = ()=>{ alert('Backup realizado com sucesso!'); };
+  window.verEstatisticas = ()=>{ alert('Exibindo estatísticas...'); };
+  window.sairSistema = ()=>{ if(confirm('Deseja sair do sistema?')) window.location.href='login.html'; };
+});
 </script>
 </body>
 </html>

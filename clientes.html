@@ -4,13 +4,369 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clientes - Sistema de Agendamento</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+    }
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      color: var(--text-color);
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-secondary { background-color: var(--secondary-color); color: white; }
+    .btn-success { background-color: var(--success-color); color: white; }
+    .btn-danger { background-color: var(--danger-color); color: white; }
+    .btn-warning { background-color: var(--warning-color); color: black; }
+    .btn-sm { padding: 8px 16px; font-size: 14px; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    /* Table Styles */
+    .table-responsive { overflow-x: auto; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .table th, .table td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+    [data-theme="dark"] .table th, [data-theme="dark"] .table td { border-bottom-color: #444; }
+    .table th { background-color: var(--primary-color); color: white; font-weight: bold; position: sticky; top: 0; }
+    .table-striped tbody tr:nth-child(even) { background-color: rgba(0,0,0,0.05); }
+    [data-theme="dark"] .table-striped tbody tr:nth-child(even) { background-color: rgba(255,255,255,0.05); }
+    .table tbody tr:hover { background-color: rgba(0,123,255,0.1); }
+    .actions-cell { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* Client Stats */
+    .client-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-left: 5px solid var(--primary-color);
+    }
+    .stat-value { font-size: 2.5rem; font-weight: bold; margin: 0; color: var(--text-color); }
+    .stat-label { font-size: 1rem; color: var(--secondary-color); margin: 10px 0 0 0; }
+
+    /* Search and Filters */
+    .search-filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .search-box { flex: 1; min-width: 250px; }
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--text-color); }
+    .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px; }
+
+    /* Footer */
+    .footer { background: var(--card-bg); padding: 20px 0; text-align: center; font-size: 14px; margin-top: auto; width: 100%; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); }
+    .footer a { color: var(--primary-color); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .footer-brand { text-align: left; }
+    .footer-nav { display: flex; gap: 15px; flex-wrap: wrap; }
+    .footer-social { display: flex; gap: 15px; }
+    .footer-copy { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; }
+    [data-theme="dark"] .footer-copy { border-top-color: #444; }
+
+    /* ========================
+       PRELOADER (CLIENTES)
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.10s ease, visibility 0.10s ease;
+    }
+    #preloader.hidden { opacity: 0; visibility: hidden; }
+    .preloader-logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+    @keyframes pulse { 0%,100% {opacity:0.5; transform:scale(1);} 50% {opacity:1; transform:scale(1.1);} }
+
+    /* ========================
+       BOTÃO FLUTUANTE
+    ======================== */
+    .floating-config-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .floating-config-btn:hover { transform: scale(1.1); background-color: #0056b3; }
+
+    .floating-menu {
+      position: fixed;
+      bottom: 95px;
+      right: 25px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+      overflow: hidden;
+      z-index: 9999;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .floating-menu.show { display: flex; opacity: 1; transform: translateY(0); }
+    .floating-menu-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #ddd; text-decoration: none; color: var(--text-color); font-weight: bold; background: var(--card-bg); transition: background 0.3s, color 0.3s; }
+    .floating-menu-item:last-child { border-bottom: none; }
+    .floating-menu-item:hover { background-color: var(--primary-color); color: #fff; }
+    .floating-menu-item .icon { margin-right: 10px; }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-brand { text-align: center; }
+      .client-stats { grid-template-columns: 1fr; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px 0; }
+      .nav-links.show { display: flex; }
+      #menuBtn { display: block; }
+      .table { font-size: 14px; }
+      .table th, .table td { padding: 10px; }
+      .actions-cell { flex-direction: column; }
+      .page-header { flex-direction: column; align-items: stretch; }
+    }
+    @media (max-width: 480px) {
+      .section { padding: 20px; }
+      .stat-card { padding: 20px; }
+      .stat-value { font-size: 2rem; }
+      .search-filters { flex-direction: column; }
+      .search-box { min-width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">CLIENTES</div>
+</div>
+
 <header>
   <div class="container header-content">
-    <a href="#" class="logo">Agendamento+</a>
+    <a href="index.html" class="logo">Agendamento+</a>
     <button id="menuBtn" aria-label="Abrir menu">☰</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -19,88 +375,364 @@
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
+    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
   </div>
 </header>
 
 <main class="main-content container">
   <section class="section">
-    <h2 class="section-title">Lista de Clientes</h2>
+    <div class="page-header">
+      <h1 class="section-title">Gerenciar Clientes</h1>
+      <button class="btn btn-success" onclick="abrirModalCliente()">+ Novo Cliente</button>
+    </div>
+
+    <div class="client-stats">
+      <div class="stat-card">
+        <h3 class="stat-value" id="totalClientes">0</h3>
+        <p class="stat-label">Total de Clientes</p>
+      </div>
+      <div class="stat-card">
+        <h3 class="stat-value" id="clientesAtivos">0</h3>
+        <p class="stat-label">Clientes Ativos</p>
+      </div>
+      <div class="stat-card">
+        <h3 class="stat-value" id="agendamentosMes">0</h3>
+        <p class="stat-label">Agendamentos/Mês</p>
+      </div>
+      <div class="stat-card">
+        <h3 class="stat-value" id="fidelidadeMedia">0%</h3>
+        <p class="stat-label">Taxa de Fidelidade</p>
+      </div>
+    </div>
+
+    <div class="search-filters">
+      <div class="search-box">
+        <input type="text" id="searchInput" class="form-control" placeholder="Buscar cliente por nome, email ou telefone...">
+      </div>
+      <button class="btn btn-primary" onclick="filtrarClientes()">🔍 Buscar</button>
+      <button class="btn btn-secondary" onclick="limparFiltro()">🔄 Limpar</button>
+    </div>
+
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-striped" id="tabelaClientes">
         <thead>
           <tr>
             <th>Nome</th>
             <th>Email</th>
             <th>Telefone</th>
+            <th>Agendamentos</th>
+            <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Maria Silva</td>
-            <td>maria@email.com</td>
-            <td>(61) 99999-9999</td>
-            <td>
-              <button class="btn btn-secondary">Editar</button>
-              <button class="btn btn-danger">Excluir</button>
-            </td>
-          </tr>
-          <tr>
-            <td>João Souza</td>
-            <td>joao@email.com</td>
-            <td>(61) 98888-8888</td>
-            <td>
-              <button class="btn btn-secondary">Editar</button>
-              <button class="btn btn-danger">Excluir</button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="tabelaClientesBody"></tbody>
       </table>
     </div>
   </section>
 </main>
 
-<footer class="footer section">
+<!-- Modal -->
+<div class="modal" id="modalCliente">
+  <div class="modal-content">
+    <button class="modal-close" onclick="fecharModalCliente()">&times;</button>
+    <h2 id="modalTitulo">Adicionar Novo Cliente</h2>
+    <form id="formCliente">
+      <div class="form-group">
+        <label for="nomeCliente" class="form-label">Nome Completo</label>
+        <input type="text" id="nomeCliente" class="form-control"
+        placeholder="Digite o nome do cliente" required>
+      </div>
+      <div class="form-group">
+        <label for="emailCliente" class="form-label">Email</label>
+        <input type="email" id="emailCliente" class="form-control" placeholder="Digite o email" required>
+      </div>
+      <div class="form-group">
+        <label for="telefoneCliente" class="form-label">Telefone</label>
+        <input type="tel" id="telefoneCliente" class="form-control" placeholder="(61) 99999-9999" required>
+      </div>
+      <div class="form-group">
+        <label for="enderecoCliente" class="form-label">Endereço</label>
+        <input type="text" id="enderecoCliente" class="form-control" placeholder="Digite o endereço">
+      </div>
+      <div class="form-group">
+        <label for="observacoesCliente" class="form-label">Observações</label>
+        <textarea id="observacoesCliente" class="form-control" placeholder="Observações sobre o cliente" rows="3"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">Salvar Cliente</button>
+        <button type="button" class="btn btn-secondary" onclick="fecharModalCliente()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
   <div class="container footer-content">
-    <!-- Nome e descrição -->
     <div class="footer-brand">
       <a href="#" class="logo">Agendamento+</a>
       <p>Sistema de Agendamento Online</p>
     </div>
-
-    <!-- Navegação -->
     <nav class="footer-nav">
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
     </nav>
-
-    <!-- Redes sociais -->
     <div class="footer-social">
       <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
       <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
     </div>
   </div>
-
-  <!-- Copyright -->
   <div class="footer-copy">
     <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<script src="script.js"></script>
+<!-- Botão Flutuante -->
+<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
+  ⚙️
+</button>
+
+<div class="floating-menu" id="floatingMenu">
+  <a href="configuracoes.html" class="floating-menu-item">
+    <span class="icon">⚙️</span> Configurações
+  </a>
+  <a href="perfil.html" class="floating-menu-item">
+    <span class="icon">👤</span> Meu Perfil
+  </a>
+  <button class="floating-menu-item" onclick="alternarTema()">
+    <span class="icon" id="themeIcon">🌙</span>
+    <span id="themeText">Tema Escuro</span>
+  </button>
+  <button class="floating-menu-item" onclick="fazerBackupRapido()">
+    <span class="icon">💾</span> Backup Rápido
+  </button>
+  <button class="floating-menu-item" onclick="verEstatisticas()">
+    <span class="icon">📊</span> Estatísticas
+  </button>
+  <button class="floating-menu-item" onclick="sairSistema()">
+    <span class="icon">🚪</span> Sair
+  </button>
+</div>
+
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const menuBtn = document.getElementById("menuBtn");
-  const menu = document.getElementById("menu");
+document.addEventListener('DOMContentLoaded', () => {
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
+  const themeToggle = document.getElementById('themeToggle');
+  const modalCliente = document.getElementById('modalCliente');
+  const formCliente = document.getElementById('formCliente');
+  const searchInput = document.getElementById('searchInput');
+  const floatingBtn = document.getElementById('floatingConfigBtn');
+  const floatingMenu = document.getElementById('floatingMenu');
 
-  menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("show");
+  // TEMA CLARO / ESCURO
+  const currentTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  updateThemeButton();
+
+  function updateThemeButton() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+    document.getElementById('themeText').textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
+    document.getElementById('themeIcon').textContent = theme === "light" ? "🌙" : "☀️";
+  }
+
+  themeToggle.addEventListener('click', toggleTheme);
+  window.alternarTema = toggleTheme;
+
+  function toggleTheme() {
+    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateThemeButton();
+  }
+
+  // Preloader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('preloader').classList.add('hidden');
+    }, 3000);
   });
-});
 
+  // Menu hamburger
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
+
+  // Floating menu
+  floatingBtn.addEventListener('click', () => floatingMenu.classList.toggle('show'));
+
+  // Clientes
+  let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+  let clienteEditando = null;
+
+  function carregarClientes() {
+    const tbody = document.getElementById('tabelaClientesBody');
+    tbody.innerHTML = '';
+
+    if (clientes.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum cliente cadastrado</td></tr>';
+      atualizarEstatisticas();
+      return;
+    }
+
+    clientes.forEach((cliente, index) => {
+      const agendamentosCliente = contarAgendamentosCliente(cliente.email);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${cliente.nome}</td>
+        <td>${cliente.email}</td>
+        <td>${cliente.telefone}</td>
+        <td>${agendamentosCliente}</td>
+        <td>${agendamentosCliente > 0 ? 'Ativo' : 'Inativo'}</td>
+        <td class="actions-cell">
+          <button class="btn btn-secondary btn-sm" onclick="editarCliente(${index})">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="excluirCliente(${index})">🗑️ Excluir</button>
+          <button class="btn btn-primary btn-sm" onclick="verAgendamentos('${cliente.email}')">📅 Agendamentos</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    atualizarEstatisticas();
+  }
+
+  function contarAgendamentosCliente(email) {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    return agendamentos.filter(a => a.cliente === email).length;
+  }
+
+  function atualizarEstatisticas() {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const agendamentosMes = agendamentos.filter(a => {
+      const data = new Date(a.data);
+      const hoje = new Date();
+      return data.getMonth() === hoje.getMonth() && data.getFullYear() === hoje.getFullYear();
+    }).length;
+    const ativos = clientes.filter(c => contarAgendamentosCliente(c.email) > 0).length;
+    const fidelidade = clientes.length ? Math.round((ativos/clientes.length)*100) : 0;
+
+    document.getElementById('totalClientes').textContent = clientes.length;
+    document.getElementById('clientesAtivos').textContent = ativos;
+    document.getElementById('agendamentosMes').textContent = agendamentosMes;
+    document.getElementById('fidelidadeMedia').textContent = fidelidade + '%';
+  }
+
+  window.abrirModalCliente = (index=null) => {
+    clienteEditando = index;
+    document.getElementById('modalTitulo').textContent = index !== null ? "Editar Cliente" : "Adicionar Novo Cliente";
+    if(index !== null){
+      const c = clientes[index];
+      document.getElementById('nomeCliente').value = c.nome;
+      document.getElementById('emailCliente').value = c.email;
+      document.getElementById('telefoneCliente').value = c.telefone;
+      document.getElementById('enderecoCliente').value = c.endereco||'';
+      document.getElementById('observacoesCliente').value = c.observacoes||'';
+    } else formCliente.reset();
+    modalCliente.style.display = 'flex';
+  };
+
+  window.fecharModalCliente = () => {
+    modalCliente.style.display = 'none';
+    clienteEditando = null;
+    formCliente.reset();
+  };
+
+  formCliente.addEventListener('submit', e => {
+    e.preventDefault();
+    const cliente = {
+      nome: document.getElementById('nomeCliente').value,
+      email: document.getElementById('emailCliente').value,
+      telefone: document.getElementById('telefoneCliente').value,
+      endereco: document.getElementById('enderecoCliente').value,
+      observacoes: document.getElementById('observacoesCliente').value
+    };
+
+    if(clienteEditando !== null){
+      clientes[clienteEditando] = cliente;
+    } else {
+      clientes.push(cliente);
+    }
+
+    localStorage.setItem('clientes', JSON.stringify(clientes));
+    carregarClientes();
+    fecharModalCliente();
+  });
+
+  window.editarCliente = (index) => {
+    abrirModalCliente(index);
+  };
+
+  window.excluirCliente = (index) => {
+    if(confirm(`Deseja realmente excluir o cliente ${clientes[index].nome}?`)){
+      clientes.splice(index,1);
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      carregarClientes();
+    }
+  };
+
+  window.verAgendamentos = (email) => {
+    alert(`Exibir agendamentos do cliente: ${email}`);
+    // Aqui você pode abrir a página de agendamentos filtrando por cliente
+  };
+
+  // Busca / filtro
+  window.filtrarClientes = () => {
+    const termo = searchInput.value.toLowerCase();
+    const tbody = document.getElementById('tabelaClientesBody');
+    tbody.innerHTML = '';
+    const filtrados = clientes.filter(c => 
+      c.nome.toLowerCase().includes(termo) || 
+      c.email.toLowerCase().includes(termo) ||
+      c.telefone.toLowerCase().includes(termo)
+    );
+
+    if(filtrados.length === 0){
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Nenhum cliente encontrado</td></tr>';
+      return;
+    }
+
+    filtrados.forEach((cliente, index) => {
+      const agendamentosCliente = contarAgendamentosCliente(cliente.email);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${cliente.nome}</td>
+        <td>${cliente.email}</td>
+        <td>${cliente.telefone}</td>
+        <td>${agendamentosCliente}</td>
+        <td>${agendamentosCliente > 0 ? 'Ativo' : 'Inativo'}</td>
+        <td class="actions-cell">
+          <button class="btn btn-secondary btn-sm" onclick="editarCliente(${index})">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="excluirCliente(${index})">🗑️ Excluir</button>
+          <button class="btn btn-primary btn-sm" onclick="verAgendamentos('${cliente.email}')">📅 Agendamentos</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  };
+
+  window.limparFiltro = () => {
+    searchInput.value = '';
+    carregarClientes();
+  };
+
+  // Funções do menu flutuante
+  window.fazerBackupRapido = () => {
+    alert('Backup rápido realizado com sucesso!');
+  };
+  window.verEstatisticas = () => {
+    alert('Abrir painel de estatísticas...');
+  };
+  window.sairSistema = () => {
+    if(confirm('Deseja realmente sair do sistema?')){
+      window.location.href = 'login.html';
+    }
+  };
+
+  // Inicializar
+  carregarClientes();
+});
 </script>
+
 </body>
 </html>
