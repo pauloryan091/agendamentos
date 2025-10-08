@@ -1317,3 +1317,157 @@ a { text-decoration:none; color:inherit; }
           min-width: 160px;
       }
     }
+
+
+/* ========================
+   TEMA CLARO/ESCURO E ACESSIBILIDADE
+   (Incluir este CSS em todas as páginas)
+======================= */
+:root {
+  --bg-color: #f4f4f4;
+  --text-color: #333;
+  --card-bg: #fff;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --focus-ring: 3px solid #007bff;
+  --focus-ring-offset: 2px;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1e1e1e;
+  --text-color: #f4f4f4;
+  --card-bg: #2a2a2a;
+  --primary-color: #0d6efd;
+  --secondary-color: #5a6268;
+  --success-color: #218838;
+  --warning-color: #e0a800;
+  --danger-color: #c82333;
+  --focus-ring: 3px solid #0d6efd;
+}
+
+[data-theme="high-contrast"] {
+  --bg-color: #000;
+  --text-color: #fff;
+  --card-bg: #000;
+  --primary-color: #ffff00;
+  --secondary-color: #ccc;
+  --success-color: #00ff00;
+  --warning-color: #ffa500;
+  --danger-color: #ff0000;
+  --focus-ring: 3px solid #ffff00;
+}
+
+[data-theme="high-contrast"] .card,
+[data-theme="high-contrast"] .setting-card {
+  border: 2px solid var(--primary-color);
+}
+
+[data-theme="high-contrast"] .btn {
+  border: 2px solid currentColor;
+}
+
+[data-reading-mode="enabled"] {
+  --font-size-base: 18px;
+  --line-height-base: 1.8;
+}
+
+[data-reading-mode="enabled"] .card,
+[data-reading-mode="enabled"] .setting-card {
+  border: 2px solid var(--primary-color);
+}
+
+/* Barra de acessibilidade */
+.accessibility-bar {
+  background: var(--card-bg);
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.accessibility-controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.accessibility-btn {
+  background: none;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.accessibility-btn:hover, .accessibility-btn:focus {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Indicador de progresso para TDAH */
+.progress-indicator {
+  height: 5px;
+  background: var(--primary-color);
+  width: 0%;
+  transition: width 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* Controles de fonte */
+.font-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.font-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Notificações */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  background: var(--success-color);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Melhorias de foco */
+*:focus {
+  outline: var(--focus-ring) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+}

@@ -502,43 +502,6 @@
         <button class="btn btn-primary" onclick="salvarAparencia()">Salvar Aparência</button>
       </div>
 
-      <!-- Configurações de Notificações -->
-      <div class="setting-card">
-        <div class="setting-header">
-          <div class="setting-icon">🔔</div>
-          <h3 class="setting-title">Notificações</h3>
-        </div>
-        <p class="setting-description">Configure como deseja receber notificações do sistema.</p>
-        
-        <div class="form-group">
-          <label class="form-label">Notificações por Email</label>
-          <label class="switch">
-            <input type="checkbox" id="emailNotifications" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Lembretes de Agendamentos</label>
-          <label class="switch">
-            <input type="checkbox" id="appointmentReminders" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label for="reminderTime" class="form-label">Horário de Lembretes</label>
-          <select id="reminderTime" class="form-control">
-            <option value="15">15 minutos antes</option>
-            <option value="30">30 minutos antes</option>
-            <option value="60">1 hora antes</option>
-            <option value="1440">1 dia antes</option>
-          </select>
-        </div>
-
-        <button class="btn btn-primary" onclick="salvarNotificacoes()">Salvar Notificações</button>
-      </div>
-
       <!-- Configurações de Negócio -->
       <div class="setting-card">
         <div class="setting-header">
@@ -631,9 +594,9 @@
         
         <div class="form-group">
           <p><strong>Versão:</strong> 2.1.0</p>
-          <p><strong>Desenvolvedor:</strong> Paulo Ryan Tomaz</p>
+          <p><strong>Desenvolvedor:</strong> Grupo Senac</p>
           <p><strong>Última Atualização:</strong> 2025</p>
-          <p><strong>Contato:</strong> pauloryantomaz@gmail.com</p>
+          <p><strong>Contato:</strong> senacgroup@gmail.com</p>
         </div>
 
         <div class="backup-options">
@@ -712,11 +675,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('darkModeToggle').checked = configuracoes.darkMode || false;
     document.getElementById('primaryColor').value = configuracoes.primaryColor || '#007bff';
     
-    // Notificações
-    document.getElementById('emailNotifications').checked = configuracoes.emailNotifications !== false;
-    document.getElementById('appointmentReminders').checked = configuracoes.appointmentReminders !== false;
-    document.getElementById('reminderTime').value = configuracoes.reminderTime || '30';
-    
     // Negócio
     document.getElementById('businessName').value = configuracoes.businessName || '';
     document.getElementById('businessPhone').value = configuracoes.businessPhone || '';
@@ -745,16 +703,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     alert('Configurações de aparência salvas com sucesso!');
-  };
-
-  window.salvarNotificacoes = () => {
-    const configuracoes = JSON.parse(localStorage.getItem('configuracoes')) || {};
-    configuracoes.emailNotifications = document.getElementById('emailNotifications').checked;
-    configuracoes.appointmentReminders = document.getElementById('appointmentReminders').checked;
-    configuracoes.reminderTime = document.getElementById('reminderTime').value;
-    
-    localStorage.setItem('configuracoes', JSON.stringify(configuracoes));
-    alert('Configurações de notificações salvas com sucesso!');
   };
 
   window.salvarNegocio = () => {
