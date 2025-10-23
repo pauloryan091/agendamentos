@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO
+       TEMA CLARO/ESCURO - OTIMIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -16,7 +22,10 @@
       --secondary-color: #6c757d;
       --success-color: #28a745;
       --danger-color: #dc3545;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
     }
+    
     [data-theme="dark"] {
       --bg-color: #1e1e1e;
       --text-color: #f4f4f4;
@@ -25,44 +34,59 @@
       --secondary-color: #5a6268;
       --success-color: #218838;
       --danger-color: #c82333;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      transition: all 0.3s ease;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
+    /* ========================
+       HEADER RESPONSIVO
+    ======================== */
     header {
       background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px 0;
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
     }
 
     .container {
       width: 90%;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 0 1rem;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
 
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
       color: var(--primary-color);
       text-decoration: none;
     }
@@ -71,65 +95,77 @@
       background: none;
       border: 2px solid var(--primary-color);
       color: var(--primary-color);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: clamp(0.875rem, 3vw, 1rem);
+      min-width: 80px;
     }
 
     .theme-toggle:hover {
       background: var(--primary-color);
       color: #fff;
+      transform: translateY(-2px);
     }
 
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
     .main-content {
       flex: 1;
-      padding: 20px 0;
+      padding: 2rem 0;
     }
 
     .section {
       background: var(--card-bg);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-top: 30px;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
     }
 
     .section-title {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
     }
 
+    /* ========================
+       CABEÇALHO DO PERFIL
+    ======================== */
     .profile-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 2rem;
       position: relative;
     }
 
     .profile-avatar-container {
       position: relative;
       display: inline-block;
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .profile-avatar {
-      width: 120px;
-      height: 120px;
+      width: clamp(100px, 20vw, 120px);
+      height: clamp(100px, 20vw, 120px);
       border-radius: 50%;
       background: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
-      margin: 0 auto 20px;
+      font-size: clamp(2rem, 6vw, 3rem);
+      margin: 0 auto;
       border: 4px solid var(--card-bg);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
       object-fit: cover;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-weight: 700;
     }
 
     .profile-avatar:hover {
@@ -139,10 +175,10 @@
 
     .change-photo-btn {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 36px;
-      height: 36px;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      width: clamp(2rem, 6vw, 2.25rem);
+      height: clamp(2rem, 6vw, 2.25rem);
       border-radius: 50%;
       background: var(--primary-color);
       color: white;
@@ -151,7 +187,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
     }
@@ -162,52 +198,69 @@
     }
 
     .profile-name {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
 
     .profile-role {
       color: var(--secondary-color);
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
+    /* ========================
+       FORMULÁRIO RESPONSIVO
+    ======================== */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .form-label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .form-control {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      transition: border-color 0.3s;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) 1rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
       background: var(--card-bg);
       color: var(--text-color);
+      transition: border-color 0.3s;
+    }
+
+    [data-theme="dark"] .form-control {
+      border-color: #444;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
     }
 
+    /* ========================
+       BOTÕES RESPONSIVOS
+    ======================== */
     .btn {
-      padding: 12px 24px;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: var(--border-radius);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      margin: 5px;
+      margin: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
     }
 
     .btn-primary {
@@ -242,25 +295,29 @@
 
     .form-actions {
       display: flex;
-      gap: 10px;
+      gap: 0.75rem;
       justify-content: center;
-      margin-top: 30px;
+      margin-top: 2rem;
       flex-wrap: wrap;
     }
 
+    /* ========================
+       ESTATÍSTICAS DO PERFIL
+    ======================== */
     .profile-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
     }
 
     .stat-card {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
+      padding: clamp(1rem, 3vw, 1.25rem);
+      border-radius: var(--border-radius);
       text-align: center;
       border: 1px solid #ddd;
+      box-shadow: var(--shadow);
     }
 
     [data-theme="dark"] .stat-card {
@@ -268,71 +325,20 @@
     }
 
     .stat-number {
-      font-size: 2rem;
-      font-weight: bold;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
       color: var(--primary-color);
-      margin-bottom: 5px;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
     }
 
     .stat-label {
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       color: var(--secondary-color);
     }
 
-    .footer {
-      background: var(--card-bg);
-      padding: 20px 0;
-      text-align: center;
-      font-size: 14px;
-      margin-top: auto;
-      width: 100%;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-    }
-
-    .footer a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .footer-brand {
-      text-align: left;
-    }
-
-    .footer-nav {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 15px;
-    }
-
-    .footer-copy {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-    }
-
-    [data-theme="dark"] .footer-copy {
-      border-top-color: #444;
-    }
-
     /* ========================
-       MODAL DE TROCA DE FOTO
+       MODAL DE FOTO
     ======================== */
     .modal-overlay {
       position: fixed;
@@ -348,6 +354,7 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
+      padding: 1rem;
     }
 
     .modal-overlay.show {
@@ -357,11 +364,11 @@
 
     .modal {
       background: var(--card-bg);
-      border-radius: 12px;
+      border-radius: var(--border-radius);
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      width: 90%;
+      width: 100%;
       max-width: 500px;
-      padding: 30px;
+      padding: clamp(1.5rem, 4vw, 2rem);
       transform: translateY(-20px);
       transition: transform 0.3s ease;
     }
@@ -374,9 +381,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
       border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
+      padding-bottom: 1rem;
     }
 
     [data-theme="dark"] .modal-header {
@@ -384,8 +391,8 @@
     }
 
     .modal-title {
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-weight: 700;
       margin: 0;
     }
 
@@ -396,21 +403,28 @@
       cursor: pointer;
       color: var(--secondary-color);
       transition: color 0.3s;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
 
     .modal-close:hover {
       color: var(--danger-color);
+      background-color: rgba(0,0,0,0.1);
     }
 
     .modal-body {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .photo-preview {
-      width: 150px;
-      height: 150px;
+      width: clamp(120px, 25vw, 150px);
+      height: clamp(120px, 25vw, 150px);
       border-radius: 50%;
-      margin: 0 auto 20px;
+      margin: 0 auto 1.5rem;
       background-color: #f8f9fa;
       display: flex;
       align-items: center;
@@ -433,12 +447,12 @@
     .photo-preview-placeholder {
       color: var(--secondary-color);
       text-align: center;
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
 
     .file-input-container {
       position: relative;
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
     }
 
     .file-input {
@@ -451,13 +465,14 @@
 
     .file-input-label {
       display: block;
-      padding: 12px 20px;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) 1.25rem;
       background-color: var(--primary-color);
       color: white;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       text-align: center;
       cursor: pointer;
       transition: background-color 0.3s;
+      font-weight: 600;
     }
 
     .file-input-label:hover {
@@ -466,35 +481,128 @@
 
     .photo-options {
       display: flex;
-      gap: 10px;
+      gap: 0.75rem;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    /* Notificações flutuantes */
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       NOTIFICAÇÕES
+    ======================== */
     .floating-notification {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      background-color: var(--success-color);
+      top: clamp(1.25rem, 4vw, 1.875rem);
+      right: clamp(1.25rem, 4vw, 1.875rem);
+      background: var(--success-color);
       color: white;
-      border-radius: 8px;
+      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
+      border-radius: var(--border-radius);
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       z-index: 1001;
       animation: slideInRight 0.3s ease;
+      max-width: min(300px, 90vw);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
 
     .floating-notification.success {
-      background-color: var(--success-color);
+      background: var(--success-color);
     }
 
     .floating-notification.error {
-      background-color: var(--danger-color);
+      background: var(--danger-color);
     }
 
     .floating-notification.info {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
     }
 
     @keyframes slideInRight {
@@ -519,60 +627,144 @@
       }
     }
 
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .footer-brand {
-        text-align: center;
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
       }
       
       .section {
-        padding: 20px;
-        margin-top: 20px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      
+      .profile-stats {
+        grid-template-columns: 1fr;
       }
       
       .form-actions {
         flex-direction: column;
       }
       
-      .btn {
+      .form-actions .btn {
         width: 100%;
-        margin: 5px 0;
-      }
-      
-      .profile-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-      
-      .modal {
-        padding: 20px;
       }
       
       .photo-options {
         flex-direction: column;
       }
+      
+      .photo-options .btn {
+        width: 100%;
+      }
     }
 
+    /* Mobile (até 480px) */
     @media (max-width: 480px) {
-      .profile-stats {
-        grid-template-columns: 1fr;
+      .profile-avatar-container {
+        margin-bottom: 1rem;
       }
       
       .profile-avatar {
-        width: 100px;
-        height: 100px;
-        font-size: 2.5rem;
+        width: 90px;
+        height: 90px;
+        font-size: 2rem;
       }
       
       .change-photo-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.875rem;
       }
+    }
+
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Desktop (acima de 1024px) */
+    @media (min-width: 1024px) {
+      .profile-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Orientação paisagem em mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+      
+      .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+    }
+
+    /* Alturas específicas para mobile */
+    @media (max-height: 600px) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+      
+      .profile-header {
+        margin-bottom: 1rem;
+      }
+      
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 1.75rem;
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .form-control:focus-visible,
+    .theme-toggle:focus-visible,
+    .file-input-label:focus-visible,
+    .modal-close:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -581,7 +773,9 @@
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
-    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
+    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+      Tema Escuro
+    </button>
   </div>
 </header>
 
@@ -592,7 +786,9 @@
     <div class="profile-header">
       <div class="profile-avatar-container">
         <div id="profileAvatar" class="profile-avatar">U</div>
-        <button class="change-photo-btn" onclick="openPhotoModal()">📷</button>
+        <button class="change-photo-btn" onclick="openPhotoModal()" aria-label="Alterar foto de perfil">
+          Foto
+        </button>
       </div>
       <div id="profileName" class="profile-name">Usuário Senac</div>
       <div class="profile-role">Cliente</div>
@@ -665,7 +861,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title">Alterar Foto de Perfil</h2>
-      <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+      <button class="modal-close" onclick="closePhotoModal()" aria-label="Fechar modal">&times;</button>
     </div>
     <div class="modal-body">
       <div class="photo-preview" id="photoPreview">
@@ -673,7 +869,7 @@
       </div>
       
       <div class="file-input-container">
-        <input type="file" id="photoInput" class="file-input" accept="image/*">
+        <input type="file" id="photoInput" class="file-input" accept="image/*" aria-label="Selecionar foto">
         <label for="photoInput" class="file-input-label">Escolher Foto</label>
       </div>
       
@@ -709,7 +905,7 @@ themeToggle.addEventListener("click", () => {
 
 function updateButtonText() {
   const theme = document.documentElement.getAttribute("data-theme");
-  themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+  themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
 }
 
 // =====================
@@ -780,7 +976,7 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(e) {
       const preview = document.getElementById('photoPreview');
-      preview.innerHTML = `<img src="${e.target.result}" alt="Prévia da foto">`;
+      preview.innerHTML = `<img src="${e.target.result}" alt="Prévia da foto de perfil">`;
       document.getElementById('savePhotoBtn').disabled = false;
     };
     reader.readAsDataURL(file);
@@ -869,6 +1065,31 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
     setTimeout(() => notification.remove(), 300);
   }, 3000);
 }
+
+// Fechar modal ao clicar fora
+document.getElementById('photoModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closePhotoModal();
+  }
+});
+
+// Formatação do telefone
+document.getElementById('telefone').addEventListener('input', function(e) {
+  let value = e.target.value.replace(/\D/g, '');
+  if (value.length > 11) value = value.substring(0, 11);
+  
+  if (value.length > 10) {
+    value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  } else if (value.length > 6) {
+    value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+  } else if (value.length > 2) {
+    value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+  } else if (value.length > 0) {
+    value = value.replace(/^(\d{0,2})/, '($1');
+  }
+  
+  e.target.value = value;
+});
 
 // Carregar dados quando a página carregar
 window.addEventListener('load', function() {

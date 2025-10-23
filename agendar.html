@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agendar Serviço - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO
+       TEMA CLARO/ESCURO - MESMO PADRÃO DASHBOARD
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -15,7 +21,13 @@
       --primary-color: #007bff;
       --secondary-color: #6c757d;
       --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
     }
+    
     [data-theme="dark"] {
       --bg-color: #1e1e1e;
       --text-color: #f4f4f4;
@@ -23,44 +35,62 @@
       --primary-color: #0d6efd;
       --secondary-color: #5a6268;
       --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA - MESMO PADRÃO
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      transition: all 0.3s ease;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
+    /* ========================
+       HEADER RESPONSIVO - IDÊNTICO AO DASHBOARD
+    ======================== */
     header {
       background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px 0;
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
     }
 
     .container {
       width: 90%;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 0 1rem;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
 
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
       color: var(--primary-color);
       text-decoration: none;
     }
@@ -69,91 +99,142 @@
       background: none;
       border: 2px solid var(--primary-color);
       color: var(--primary-color);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: clamp(0.875rem, 3vw, 1rem);
+      min-width: 80px;
     }
 
     .theme-toggle:hover {
       background: var(--primary-color);
       color: #fff;
+      transform: translateY(-2px);
     }
 
+    /* ========================
+       NAVEGAÇÃO - ADICIONADA PARA PADRONIZAÇÃO
+    ======================== */
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    #menuBtn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+      padding: 0.25rem;
+    }
+
+    /* ========================
+       MAIN CONTENT RESPONSIVO - MESMO PADRÃO
+    ======================== */
     .main-content {
       flex: 1;
-      padding: 20px 0;
+      padding: 2rem 0;
     }
 
     .section {
       background: var(--card-bg);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
     }
 
     .section-title {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
       color: var(--text-color);
+      font-weight: 700;
     }
 
+    /* ========================
+       FORMULÁRIO RESPONSIVO - MESMO PADRÃO
+    ======================== */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .form-label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
       color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .form-control {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      padding: clamp(0.75rem, 2.5vw, 1rem);
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
       background: var(--card-bg);
       color: var(--text-color);
-      transition: border-color 0.3s;
+      transition: all 0.3s ease;
       box-sizing: border-box;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
     }
 
     select.form-control {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
       background-repeat: no-repeat;
-      background-position: right 12px center;
+      background-position: right 1rem center;
       background-size: 12px;
-      padding-right: 40px;
+      padding-right: 3rem;
     }
 
     [data-theme="dark"] select.form-control {
       background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23fff' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
     }
 
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
     .btn {
       width: 100%;
-      padding: 15px;
+      padding: clamp(0.875rem, 2.5vw, 1rem);
       border: none;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       background-color: var(--success-color);
       color: white;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      text-align: center;
     }
 
     .btn:hover {
@@ -162,71 +243,118 @@
       opacity: 0.9;
     }
 
+    /* ========================
+       PREVIEW DO SERVIÇO
+    ======================== */
     .service-preview {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      border: 2px solid var(--primary-color);
-      margin-top: 20px;
+      padding: clamp(1.25rem, 3vw, 1.5rem);
+      border-radius: var(--border-radius);
+      border: 3px solid var(--primary-color);
+      margin-top: 1.5rem;
       display: none;
+      box-shadow: var(--shadow);
     }
 
     .service-preview h4 {
-      margin: 0 0 10px 0;
+      margin: 0 0 1rem 0;
       color: var(--primary-color);
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-weight: 600;
     }
 
     .service-preview p {
-      margin: 5px 0;
+      margin: 0.5rem 0;
       color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
+    .service-preview strong {
+      color: var(--primary-color);
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO - IDÊNTICO AO DASHBOARD
+    ======================== */
     .footer {
       background: var(--card-bg);
-      padding: 20px 0;
+      padding: 2rem 0 1rem;
       text-align: center;
-      font-size: 14px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       margin-top: auto;
       width: 100%;
       box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
 
-    .footer a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
     .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
     }
 
     .footer-brand {
-      text-align: left;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
     }
 
     .footer-nav {
       display: flex;
-      gap: 15px;
       flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
     }
 
     .footer-social {
       display: flex;
-      gap: 15px;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
     }
 
     .footer-copy {
-      margin-top: 20px;
-      padding-top: 20px;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid #ddd;
+      color: var(--secondary-color);
     }
 
     [data-theme="dark"] .footer-copy {
@@ -234,7 +362,7 @@
     }
 
     /* ========================
-       PRELOADER
+       PRELOADER OTIMIZADO - MESMO PADRÃO
     ======================== */
     #preloader {
       position: fixed;
@@ -244,10 +372,11 @@
       height: 100%;
       background-color: var(--bg-color);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.10s ease, visibility 0.10s ease;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     #preloader.hidden {
@@ -256,100 +385,315 @@
     }
 
     .preloader-logo {
-      font-size: 2rem;
-      font-weight: bold;
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
       color: var(--primary-color);
       animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
     }
 
     /* ========================
-       BOTÃO FLUTUANTE
+       BOTÃO FLUTUANTE - IDÊNTICO AO DASHBOARD
     ======================== */
     .floating-config-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: var(--primary-color);
-      color: #fff;
+      bottom: clamp(1.25rem, 4vw, 1.875rem);
+      right: clamp(1.25rem, 4vw, 1.875rem);
+      width: clamp(3.125rem, 8vw, 3.75rem);
+      height: clamp(3.125rem, 8vw, 3.75rem);
+      background: var(--primary-color);
+      color: white;
       border: none;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 28px;
+      font-size: clamp(1rem, 3vw, 1.25rem);
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
       z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: bold;
     }
 
+    .floating-config-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+      background: var(--secondary-color);
+    }
+
+    .floating-config-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Menu flutuante */
     .floating-menu {
       position: fixed;
-      bottom: 90px;
-      right: 20px;
+      bottom: clamp(5rem, 12vw, 6.25rem);
+      right: clamp(1.25rem, 4vw, 1.875rem);
       background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      padding: 1rem;
+      z-index: 999;
       display: none;
       flex-direction: column;
-      width: 200px;
-      z-index: 999;
+      gap: 0.5rem;
+      min-width: min(200px, 80vw);
+      border: 2px solid var(--primary-color);
+    }
+
+    .floating-menu.show {
+      display: flex;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .floating-menu-item {
-      padding: 12px 16px;
-      border-bottom: 1px solid #ddd;
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: none;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--card-bg);
       border: none;
-      text-align: left;
-      cursor: pointer;
-      text-decoration: none;
+      border-radius: 8px;
       color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-size: clamp(0.8rem, 2.5vw, 0.875rem);
+      font-weight: 500;
+      text-align: left;
     }
 
     .floating-menu-item:hover {
-      background-color: rgba(0, 123, 255, 0.1);
-    }
-
-    .floating-menu-item:last-child {
-      border-bottom: none;
+      background: var(--primary-color);
+      color: white;
+      transform: translateX(-5px);
     }
 
     /* ========================
-       RESPONSIVIDADE
+       NOTIFICAÇÕES - MESMO PADRÃO
     ======================== */
-    @media (max-width: 768px) {
-      .footer-content { flex-direction: column; text-align: center; }
-      .footer-brand { text-align: center; }
-      .section { padding: 30px 20px; margin: 20px; }
+    .floating-notification {
+      position: fixed;
+      top: clamp(1.25rem, 4vw, 1.875rem);
+      right: clamp(1.25rem, 4vw, 1.875rem);
+      background: var(--primary-color);
+      color: white;
+      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1001;
+      animation: slideInRight 0.3s ease;
+      max-width: min(300px, 90vw);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
 
+    .floating-notification.success {
+      background: var(--success-color);
+    }
+
+    .floating-notification.error {
+      background: var(--danger-color);
+    }
+
+    .floating-notification.info {
+      background: var(--info-color);
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS - MESMO PADRÃO
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
+      }
+      
+      .section {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      
+      .form-group {
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Mobile (até 480px) */
     @media (max-width: 480px) {
-      .section { padding: 20px 15px; }
-      .section-title { font-size: 1.5rem; }
+      .header-content {
+        flex-wrap: wrap;
+      }
+      
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--card-bg);
+        box-shadow: var(--shadow);
+        padding: 1rem 0;
+        gap: 0.5rem;
+      }
+      
+      .nav-links.show {
+        display: flex;
+      }
+      
+      #menuBtn {
+        display: block;
+      }
+      
+      .nav-link {
+        padding: 0.75rem 1rem;
+        text-align: center;
+      }
     }
 
-    html { scroll-behavior: smooth; }
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      /* Estilos específicos para tablet */
+    }
 
+    /* Desktop (acima de 1024px) */
+    @media (min-width: 1024px) {
+      /* Estilos específicos para desktop */
+    }
+
+    /* Orientação paisagem em mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+    }
+
+    /* Alturas específicas para mobile */
+    @media (max-height: 600px) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE - MESMO PADRÃO
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .theme-toggle:focus-visible,
+    .floating-config-btn:focus-visible,
+    .form-control:focus-visible,
+    .nav-link:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
 
 <!-- Preloader -->
 <div id="preloader">
-  <div class="preloader-logo">AGENDAR</div>
+  <div class="preloader-logo">Agendar</div>
+  <div class="preloader-text">Carregando serviços...</div>
 </div>
 
 <header>
   <div class="container header-content">
     <a href="dashboard.html" class="logo">Agendamento+</a>
-    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
+    <button id="menuBtn" aria-label="Abrir menu">Menu</button>
+    <nav id="menu" class="nav-links">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+      Tema Escuro
+    </button>
   </div>
 </header>
 
@@ -360,7 +704,9 @@
     <form id="agendamentoForm">
       <div class="form-group">
         <label for="servico" class="form-label">Serviço</label>
-        <select id="servico" class="form-control" required></select>
+        <select id="servico" class="form-control" required>
+          <option value="">Selecione um serviço</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -405,9 +751,36 @@
       <button type="submit" class="btn">Confirmar Agendamento</button>
     </form>
 
-    <div id="msgAgendamento" style="margin-top:20px; text-align:center; font-weight:bold;"></div>
+    <div id="msgAgendamento" style="margin-top:1.5rem; text-align:center; font-weight:600;"></div>
   </section>
 </main>
+
+<!-- Botão Flutuante de Configurações -->
+<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
+  Config
+</button>
+
+<!-- Menu Flutuante -->
+<div class="floating-menu" id="floatingMenu">
+    <a href="configuracoes.html" class="floating-menu-item">
+        Configurações
+    </a>
+    <a href="perfil.html" class="floating-menu-item">
+        Meu Perfil
+    </a>
+    <button class="floating-menu-item" onclick="alternarTema()">
+        <span id="themeText">Tema Escuro</span>
+    </button>
+    <button class="floating-menu-item" onclick="fazerBackupRapido()">
+        Backup Rápido
+    </button>
+    <button class="floating-menu-item" onclick="verEstatisticas()">
+        Estatísticas
+    </button>
+    <button class="floating-menu-item" onclick="sairSistema()">
+        Sair
+    </button>
+</div>
 
 <footer class="footer">
   <div class="container footer-content">
@@ -432,81 +805,83 @@
   </div>
 </footer>
 
-<!-- Botão Flutuante -->
-<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">⚙️</button>
-
-<!-- Menu Flutuante -->
-<div class="floating-menu" id="floatingMenu">
-    <a href="configuracoes.html" class="floating-menu-item">
-        <span class="icon">⚙️</span> Configurações
-    </a>
-    <a href="perfil.html" class="floating-menu-item">
-        <span class="icon">👤</span> Meu Perfil
-    </a>
-    <button class="floating-menu-item" onclick="alternarTema()">
-        <span class="icon" id="themeIcon">🌙</span> <span id="themeText">Tema Escuro</span>
-    </button>
-    <button class="floating-menu-item" onclick="fazerBackupRapido()">
-        <span class="icon">💾</span> Backup Rápido
-    </button>
-    <button class="floating-menu-item" onclick="verEstatisticas()">
-        <span class="icon">📊</span> Estatísticas
-    </button>
-    <button class="floating-menu-item" onclick="sairSistema()">
-        <span class="icon">🚪</span> Sair
-    </button>
-</div>
-
 <script>
+// =====================
+// INICIALIZAÇÃO - CÓDIGO REORGANIZADO E CORRIGIDO
+// =====================
 document.addEventListener('DOMContentLoaded', () => {
+  // Elementos DOM
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('menu');
   const themeToggle = document.getElementById('themeToggle');
   const agendamentoForm = document.getElementById('agendamentoForm');
   const servicoSelect = document.getElementById('servico');
   const servicePreview = document.getElementById('servicePreview');
   const dataInput = document.getElementById('data');
   const observacoes = document.getElementById('observacoes');
+  const telefoneInput = document.getElementById('telefone');
+  const floatingConfigBtn = document.getElementById('floatingConfigBtn');
+  const floatingMenu = document.getElementById('floatingMenu');
 
   // =====================
-  // TEMA CLARO / ESCURO
+  // FUNÇÕES DE UTILIDADE
   // =====================
-  const currentTheme = localStorage.getItem("theme") || "light";
-  document.documentElement.setAttribute("data-theme", currentTheme);
-  updateButtonText();
+  
+  function formatarData(data) {
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
 
-  themeToggle.addEventListener("click", () => {
-    alternarTema();
-  });
+  function formatarTelefone(value) {
+    let numbers = value.replace(/\D/g, '');
+    if (numbers.length > 11) numbers = numbers.substring(0, 11);
+
+    if (numbers.length === 11) {
+      return numbers.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (numbers.length >= 7) {
+      return numbers.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (numbers.length >= 3) {
+      return numbers.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+    } else if (numbers.length > 0) {
+      return numbers.replace(/^(\d{0,2})/, '($1');
+    }
+    return numbers;
+  }
+
+  function mostrarNotificacao(texto, tipo = 'success') {
+    const notificacao = document.createElement('div');
+    notificacao.className = `floating-notification ${tipo}`;
+    notificacao.textContent = texto;
+    document.body.appendChild(notificacao);
+    
+    setTimeout(() => {
+      notificacao.style.animation = 'slideOutRight 0.3s ease forwards';
+      setTimeout(() => notificacao.remove(), 300);
+    }, 3000);
+  }
 
   function updateButtonText() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
-    document.getElementById("themeText").textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
-    document.getElementById("themeIcon").textContent = theme === "light" ? "🌙" : "☀️";
+    const theme = document.documentElement.getAttribute('data-theme');
+    themeToggle.textContent = theme === 'light' ? 'Tema Escuro' : 'Tema Claro';
   }
 
-  window.alternarTema = function() {
-    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    updateButtonText();
+  function updateThemeButton() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    document.getElementById('themeText').textContent = theme === 'light' ? 'Tema Escuro' : 'Tema Claro';
   }
 
   // =====================
-  // PRELOADER - 3 SEGUNDOS
+  // FUNÇÕES PRINCIPAIS
   // =====================
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    setTimeout(() => preloader.classList.add("hidden"), 3000);
-  });
-
-  // =====================
-  // CARREGAR SERVIÇOS
-  // =====================
+  
   function carregarServicos() {
     const servicos = JSON.parse(localStorage.getItem('servicos')) || [
       { nome: "Corte de Cabelo", valor: 50, descricao: "Corte completo com lavagem" },
-      { nome: "Manicure", valor: 30, descricao: "Manicure completa" }
+      { nome: "Manicure", valor: 30, descricao: "Manicure completa" },
+      { nome: "Pedicure", valor: 35, descricao: "Pedicure completa" },
+      { nome: "Barba", valor: 25, descricao: "Aparar e modelar barba" }
     ];
+    
     servicoSelect.innerHTML = '<option value="">Selecione um serviço</option>';
     servicos.forEach(servico => {
       const option = document.createElement('option');
@@ -517,9 +892,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =====================
-  // PREVIEW DO SERVIÇO
-  // =====================
   function atualizarPreview() {
     const servicoSelecionado = servicoSelect.options[servicoSelect.selectedIndex];
     const data = document.getElementById('data').value;
@@ -531,26 +903,73 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('previewValor').textContent = servicoSelecionado.getAttribute('data-valor');
       document.getElementById('previewData').textContent = formatarData(data);
       document.getElementById('previewHora').textContent = hora;
-      document.getElementById('previewObservacoes').textContent = obs;
+      document.getElementById('previewObservacoes').textContent = obs || 'Nenhuma';
       servicePreview.style.display = 'block';
     } else {
       servicePreview.style.display = 'none';
     }
   }
 
+  function validarAgendamento(servico, data, hora) {
+    const dataAgendamento = new Date(data + 'T' + hora);
+    const agora = new Date();
+    
+    if (dataAgendamento <= agora) {
+      mostrarNotificacao('Por favor, selecione uma data e hora futuras!', 'error');
+      return false;
+    }
+    
+    // Verificar se já existe agendamento no mesmo horário
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const conflito = agendamentos.find(ag => 
+      ag.data === data && ag.hora === hora && ag.status !== 'cancelado'
+    );
+    
+    if (conflito) {
+      mostrarNotificacao('Já existe um agendamento para este horário!', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  // =====================
+  // EVENT LISTENERS
+  // =====================
+  
+  // Menu Mobile
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+
+  // Fechar menu ao clicar em um link
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('show');
+    });
+  });
+
+  // Tema
+  themeToggle.addEventListener('click', () => {
+    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateButtonText();
+    updateThemeButton();
+  });
+
+  // Formatação de telefone
+  telefoneInput.addEventListener('input', function(e) {
+    this.value = formatarTelefone(this.value);
+  });
+
+  // Preview do serviço
   servicoSelect.addEventListener('change', atualizarPreview);
   document.getElementById('data').addEventListener('change', atualizarPreview);
   document.getElementById('hora').addEventListener('change', atualizarPreview);
   observacoes.addEventListener('input', atualizarPreview);
 
-  function formatarData(data) {
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}/${mes}/${ano}`;
-  }
-
-  // =====================
-  // AGENDAMENTO
-  // =====================
+  // Formulário de agendamento
   agendamentoForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -564,13 +983,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicoSelecionado = servicoSelect.options[servicoSelect.selectedIndex];
     const valor = servicoSelecionado.getAttribute('data-valor');
 
-    const dataAgendamento = new Date(data + 'T' + hora);
-    const agora = new Date();
-    if (dataAgendamento <= agora) {
-      alert('Por favor, selecione uma data e hora futuras!');
+    // Validação
+    if (!validarAgendamento(servico, data, hora)) {
       return;
     }
 
+    // Criar agendamento
     const agendamento = {
       id: Date.now(),
       servico,
@@ -585,83 +1003,113 @@ document.addEventListener('DOMContentLoaded', () => {
       dataCriacao: new Date().toISOString()
     };
 
+    // Salvar no localStorage
     const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
     agendamentos.push(agendamento);
     localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
 
+    // Feedback visual
+    mostrarNotificacao('Agendamento confirmado com sucesso!', 'success');
+    
     const msg = document.getElementById('msgAgendamento');
-    msg.textContent = 'Agendamento confirmado com sucesso!';
+    msg.textContent = '✅ Agendamento realizado com sucesso!';
     msg.style.color = 'var(--success-color)';
 
+    // Limpar formulário
     agendamentoForm.reset();
     servicePreview.style.display = 'none';
 
+    // Redirecionar após 2 segundos
     setTimeout(() => {
       window.location.href = 'agendamento.html';
     }, 2000);
   });
 
+  // Menu flutuante
+  floatingConfigBtn.addEventListener('click', () => {
+    floatingMenu.classList.toggle('show');
+  });
+
+  window.addEventListener('click', (e) => {
+    if (!floatingMenu.contains(e.target) && !floatingConfigBtn.contains(e.target)) {
+      floatingMenu.classList.remove('show');
+    }
+  });
+
   // =====================
-  // DATA MÍNIMA HOJE
+  // FUNÇÕES GLOBAIS PARA O MENU FLUTUANTE
   // =====================
+  window.alternarTema = function() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateButtonText();
+    updateThemeButton();
+    mostrarNotificacao(`Tema ${theme === 'light' ? 'claro' : 'escuro'} ativado`, 'info');
+  };
+
+  window.fazerBackupRapido = function() {
+    const dados = {
+      agendamentos: JSON.parse(localStorage.getItem('agendamentos')) || [],
+      servicos: JSON.parse(localStorage.getItem('servicos')) || [],
+      dataBackup: new Date().toLocaleString()
+    };
+    const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `backup_agendamento_${Date.now()}.json`;
+    a.click();
+    mostrarNotificacao('Backup rápido gerado com sucesso!', 'success');
+  };
+
+  window.verEstatisticas = function() {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    const total = agendamentos.length;
+    const futuros = agendamentos.filter(a => new Date(a.data + 'T' + a.hora) > new Date()).length;
+    const confirmados = agendamentos.filter(a => a.status === 'confirmado').length;
+    mostrarNotificacao(`Total: ${total} | Próximos: ${futuros} | Confirmados: ${confirmados}`, 'info');
+  };
+
+  window.sairSistema = function() {
+    mostrarNotificacao('Sessão encerrada. Até breve!', 'success');
+    setTimeout(() => window.location.href = 'index.html', 1500);
+  };
+
+  // =====================
+  // INICIALIZAÇÃO FINAL
+  // =====================
+  
+  // Configurar tema inicial
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  updateButtonText();
+  updateThemeButton();
+
+  // Configurar data mínima
   const hoje = new Date().toISOString().split('T')[0];
   dataInput.min = hoje;
 
-  // =====================
-  // FORMATAÇÃO TELEFONE
-  // =====================
-  document.getElementById('telefone').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 11) value = value.substring(0, 11);
-
-    if (value.length > 10) {
-      value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-    } else if (value.length > 6) {
-      value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else if (value.length > 2) {
-      value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-    } else if (value.length > 0) {
-      value = value.replace(/^(\d{0,2})/, '($1');
-    }
-    
-    e.target.value = value;
-  });
-
-  // =====================
-  // FOCO NO NOME DO CLIENTE
-  // =====================
-  document.getElementById('cliente').focus();
-
-  // =====================
-  // CARREGAR SERVIÇOS INICIAL
-  // =====================
+  // Carregar serviços
   carregarServicos();
 
-  // =====================
-  // MENU FLUTUANTE
-  // =====================
-  const floatingBtn = document.getElementById('floatingConfigBtn');
-  const floatingMenu = document.getElementById('floatingMenu');
-
-  floatingBtn.addEventListener('click', () => {
-    floatingMenu.style.display = floatingMenu.style.display === 'flex' ? 'none' : 'flex';
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
   });
-
-  window.fazerBackupRapido = function() {
-    alert("Backup rápido realizado com sucesso!");
-  }
-
-  window.verEstatisticas = function() {
-    alert("Exibindo estatísticas do sistema...");
-  }
-
-  window.sairSistema = function() {
-    alert("Saindo do sistema...");
-    window.location.href = 'login.html';
-  }
-
 });
 </script>
-
 </body>
 </html>

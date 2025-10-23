@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Configurações - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO
+       TEMA CLARO/ESCURO - OTIMIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -17,7 +23,11 @@
       --success-color: #28a745;
       --warning-color: #ffc107;
       --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
     }
+    
     [data-theme="dark"] {
       --bg-color: #1e1e1e;
       --text-color: #f4f4f4;
@@ -27,44 +37,60 @@
       --success-color: #218838;
       --warning-color: #e0a800;
       --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      transition: all 0.3s ease;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
+    /* ========================
+       HEADER RESPONSIVO
+    ======================== */
     header {
       background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px 0;
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
     }
 
     .container {
       width: 90%;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 1rem;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
 
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
       color: var(--primary-color);
       text-decoration: none;
     }
@@ -73,30 +99,35 @@
       background: none;
       border: 2px solid var(--primary-color);
       color: var(--primary-color);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: clamp(0.875rem, 3vw, 1rem);
+      min-width: 80px;
     }
 
     .theme-toggle:hover {
       background: var(--primary-color);
       color: #fff;
+      transform: translateY(-2px);
     }
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 1rem;
       align-items: center;
     }
 
     .nav-link {
       color: var(--text-color);
       text-decoration: none;
-      padding: 8px 16px;
+      padding: 0.5rem 1rem;
       border-radius: 6px;
       transition: background-color 0.3s;
+      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+      white-space: nowrap;
     }
 
     .nav-link:hover {
@@ -111,42 +142,53 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--text-color);
+      padding: 0.25rem;
     }
 
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
     .main-content {
       flex: 1;
-      padding: 20px 0;
+      padding: 2rem 0;
     }
 
     .section {
       background: var(--card-bg);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
     }
 
     .section-title {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
       color: var(--text-color);
+      font-weight: 700;
     }
 
+    /* ========================
+       GRID DE CONFIGURAÇÕES
+    ======================== */
     .settings-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      margin-top: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
 
     .setting-card {
       background: var(--card-bg);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: clamp(1.25rem, 3vw, 1.5rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
       border-left: 5px solid var(--primary-color);
       transition: transform 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .setting-card:hover {
@@ -156,96 +198,76 @@
     .setting-header {
       display: flex;
       align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
     }
 
     .setting-icon {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
       color: var(--primary-color);
+      width: 3rem;
+      text-align: center;
     }
 
     .setting-title {
-      font-size: 1.3rem;
-      font-weight: bold;
+      font-size: clamp(1.125rem, 3vw, 1.3rem);
+      font-weight: 700;
       margin: 0;
       color: var(--text-color);
     }
 
     .setting-description {
       color: var(--secondary-color);
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
       line-height: 1.5;
+      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+      flex: 1;
     }
 
+    /* ========================
+       FORMULÁRIOS RESPONSIVOS
+    ======================== */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 1.25rem;
     }
 
     .form-label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
       color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .form-control {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) 1rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
       background: var(--card-bg);
       color: var(--text-color);
       transition: border-color 0.3s;
-      box-sizing: border-box;
+    }
+
+    [data-theme="dark"] .form-control {
+      border-color: #444;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
     }
 
-    .btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
     }
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .btn-success {
-      background-color: var(--success-color);
-      color: white;
-    }
-
-    .btn-danger {
-      background-color: var(--danger-color);
-      color: white;
-    }
-
-    .btn-warning {
-      background-color: var(--warning-color);
-      color: black;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      opacity: 0.9;
-    }
-
+    /* ========================
+       SWITCH PERSONALIZADO
+    ======================== */
     .switch {
       position: relative;
       display: inline-block;
@@ -291,68 +313,147 @@
       transform: translateX(26px);
     }
 
+    /* ========================
+       BOTÕES RESPONSIVOS
+    ======================== */
+    .btn {
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-success { background-color: var(--success-color); color: white; }
+    .btn-danger { background-color: var(--danger-color); color: white; }
+    .btn-warning { background-color: var(--warning-color); color: black; }
+    .btn-secondary { background-color: var(--secondary-color); color: white; }
+    .btn-info { background-color: var(--info-color); color: white; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    /* ========================
+       OPÇÕES DE BACKUP
+    ======================== */
     .backup-options {
       display: flex;
-      gap: 15px;
+      gap: 1rem;
+      margin-top: 1.5rem;
       flex-wrap: wrap;
-      margin-top: 20px;
     }
 
-    .danger-zone {
-      border-left-color: var(--danger-color) !important;
-      background: linear-gradient(45deg, var(--card-bg), rgba(220, 53, 69, 0.05));
+    .backup-options .btn {
+      flex: 1;
+      min-width: min(100%, 150px);
     }
 
-    .danger-zone .setting-icon {
-      color: var(--danger-color);
+    /* ========================
+       STATUS DO BACKUP
+    ======================== */
+    #backupStatus {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      display: none;
+      font-weight: 600;
+      text-align: center;
     }
 
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
     .footer {
       background: var(--card-bg);
-      padding: 20px 0;
+      padding: 2rem 0 1rem;
       text-align: center;
-      font-size: 14px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       margin-top: auto;
       width: 100%;
       box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
 
-    .footer a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
     .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
     }
 
     .footer-brand {
-      text-align: left;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
     }
 
     .footer-nav {
       display: flex;
-      gap: 15px;
       flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
     }
 
     .footer-social {
       display: flex;
-      gap: 15px;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
     }
 
     .footer-copy {
-      margin-top: 20px;
-      padding-top: 20px;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid #ddd;
+      color: var(--secondary-color);
     }
 
     [data-theme="dark"] .footer-copy {
@@ -360,7 +461,7 @@
     }
 
     /* ========================
-       PRELOADER (CONFIGURAÇÕES)
+       PRELOADER OTIMIZADO
     ======================== */
     #preloader {
       position: fixed;
@@ -370,10 +471,11 @@
       height: 100%;
       background-color: var(--bg-color);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.10s ease, visibility 0.10s ease;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     #preloader.hidden {
@@ -382,30 +484,67 @@
     }
 
     .preloader-logo {
-      font-size: 2rem;
-      font-weight: bold;
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
       color: var(--primary-color);
       animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
     }
 
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
       }
       
-      .footer-brand {
-        text-align: center;
+      .section {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
       }
       
       .settings-grid {
-        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .setting-card {
+        padding: 1rem;
+      }
+      
+      .backup-options {
+        flex-direction: column;
+      }
+      
+      .backup-options .btn {
+        width: 100%;
+      }
+    }
+
+    /* Mobile (até 480px) */
+    @media (max-width: 480px) {
+      .header-content {
+        flex-wrap: wrap;
       }
       
       .nav-links {
@@ -416,8 +555,9 @@
         left: 0;
         width: 100%;
         background: var(--card-bg);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        padding: 15px 0;
+        box-shadow: var(--shadow);
+        padding: 1rem 0;
+        gap: 0.5rem;
       }
       
       .nav-links.show {
@@ -428,39 +568,108 @@
         display: block;
       }
       
-      .backup-options {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .section {
-        padding: 20px;
-      }
-      
-      .setting-card {
-        padding: 20px;
+      .nav-link {
+        padding: 0.75rem 1rem;
+        text-align: center;
       }
       
       .setting-header {
         flex-direction: column;
         text-align: center;
-        gap: 10px;
+        gap: 0.75rem;
       }
+      
+      .setting-icon {
+        width: auto;
+      }
+    }
+
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Desktop (acima de 1024px) */
+    @media (min-width: 1024px) {
+      .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Orientação paisagem em mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+      
+      .settings-grid {
+        gap: 1rem;
+      }
+    }
+
+    /* Alturas específicas para mobile */
+    @media (max-height: 600px) {
+      .main-content {
+        padding: 1rem 0;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .form-control:focus-visible,
+    .theme-toggle:focus-visible,
+    .nav-link:focus-visible,
+    .switch:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
 
-<!-- Preloader (Configurações carregando) -->
+<!-- Preloader -->
 <div id="preloader">
-  <div class="preloader-logo">CONFIGURAÇÕES</div>
+  <div class="preloader-logo">Configurações</div>
+  <div class="preloader-text">Carregando configurações...</div>
 </div>
 
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">☰</button>
+    <button id="menuBtn" aria-label="Abrir menu">Menu</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
@@ -469,7 +678,9 @@
       <a href="perfil.html" class="nav-link">Perfil</a>
       <a href="configuracoes.html" class="nav-link">Configurações</a>
     </nav>
-    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
+    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+      Tema Escuro
+    </button>
   </div>
 </header>
 
@@ -542,11 +753,11 @@
         <p class="setting-description">Faça backup dos seus dados ou restaure de um backup anterior.</p>
         
         <div class="backup-options">
-          <button class="btn btn-success" onclick="fazerBackup()">📥 Fazer Backup</button>
-          <button class="btn btn-warning" onclick="restaurarBackup()">📤 Restaurar Backup</button>
+          <button class="btn btn-success" onclick="fazerBackup()">Fazer Backup</button>
+          <button class="btn btn-warning" onclick="restaurarBackup()">Restaurar Backup</button>
         </div>
 
-        <div class="form-group" style="margin-top: 20px;">
+        <div class="form-group" style="margin-top: 1.5rem;">
           <label for="autoBackup" class="form-label">Backup Automático</label>
           <label class="switch">
             <input type="checkbox" id="autoBackup">
@@ -554,32 +765,60 @@
           </label>
         </div>
 
-        <div id="backupStatus" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+        <div id="backupStatus" style="margin-top: 1rem; padding: 1rem; border-radius: var(--border-radius); display: none;"></div>
       </div>
 
-      <!-- Zona de Perigo -->
-      <div class="setting-card danger-zone">
+      <!-- Exportação de Dados -->
+      <div class="setting-card">
         <div class="setting-header">
-          <div class="setting-icon">⚠️</div>
-          <h3 class="setting-title">Zona de Perigo</h3>
+          <div class="setting-icon">📊</div>
+          <h3 class="setting-title">Exportação de Dados</h3>
         </div>
-        <p class="setting-description">Ações irreversíveis. Tenha cuidado ao usar estas opções.</p>
+        <p class="setting-description">Exporte relatórios e dados do sistema para análise externa.</p>
+        
+        <div class="backup-options">
+          <button class="btn btn-info" onclick="exportarRelatorioAgendamentos()">
+            Relatório de Agendamentos
+          </button>
+          <button class="btn btn-info" onclick="exportarRelatorioClientes()">
+            Relatório de Clientes
+          </button>
+        </div>
+
+        <div class="backup-options">
+          <button class="btn btn-primary" onclick="exportarDadosCompletos()">
+            Exportar Dados Completos
+          </button>
+        </div>
+      </div>
+
+      <!-- Configurações de Sistema -->
+      <div class="setting-card">
+        <div class="setting-header">
+          <div class="setting-icon">⚙️</div>
+          <h3 class="setting-title">Configurações do Sistema</h3>
+        </div>
+        <p class="setting-description">Configurações avançadas do sistema e manutenção.</p>
         
         <div class="form-group">
-          <button class="btn btn-danger" onclick="limparTodosDados()" style="width: 100%;">
-            🗑️ Limpar Todos os Dados
-          </button>
+          <label for="notifications" class="form-label">Notificações por Email</label>
+          <label class="switch">
+            <input type="checkbox" id="notifications">
+            <span class="slider"></span>
+          </label>
         </div>
 
         <div class="form-group">
-          <button class="btn btn-warning" onclick="resetarConfiguracoes()" style="width: 100%;">
-            🔄 Resetar Configurações
-          </button>
+          <label for="autoLogout" class="form-label">Logout Automático (minutos)</label>
+          <input type="number" id="autoLogout" class="form-control" min="5" max="120" value="30">
         </div>
 
-        <div class="form-group">
-          <button class="btn btn-danger" onclick="exportarDadosCompletos()" style="width: 100%;">
-            📊 Exportar Relatório Completo
+        <div class="backup-options">
+          <button class="btn btn-warning" onclick="resetarConfiguracoes()">
+            Resetar Configurações
+          </button>
+          <button class="btn btn-secondary" onclick="limparCache()">
+            Limpar Cache
           </button>
         </div>
       </div>
@@ -600,8 +839,8 @@
         </div>
 
         <div class="backup-options">
-          <button class="btn btn-primary" onclick="verificarAtualizacoes()">🔄 Verificar Atualizações</button>
-          <button class="btn btn-secondary" onclick="verLogs()">📋 Ver Logs do Sistema</button>
+          <button class="btn btn-primary" onclick="verificarAtualizacoes()">Verificar Atualizações</button>
+          <button class="btn btn-secondary" onclick="verLogs()">Ver Logs do Sistema</button>
         </div>
       </div>
     </div>
@@ -654,15 +893,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateButtonText() {
     const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
   }
+
+  // =====================
+  // MENU MOBILE
+  // =====================
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+
+  // Fechar menu ao clicar em um link
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('show');
+    });
+  });
 
   // =====================
   // PRELOADER - 3 SEGUNDOS
   // =====================
   window.addEventListener("load", () => {
     const preloader = document.getElementById("preloader");
-    setTimeout(() => preloader.classList.add("hidden"), 3000);
+    
+    // Garantir que o preloader fique pelo menos 1.5 segundos
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add("hidden");
+        
+        // Remover completamente do DOM após animação
+        setTimeout(() => {
+          preloader.remove();
+        }, 300);
+      }, remainingTime);
+    }, minLoadTime);
   });
 
   // =====================
@@ -683,6 +953,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Backup
     document.getElementById('autoBackup').checked = configuracoes.autoBackup || false;
+    
+    // Sistema
+    document.getElementById('notifications').checked = configuracoes.notifications || false;
+    document.getElementById('autoLogout').value = configuracoes.autoLogout || 30;
   }
 
   // =====================
@@ -702,6 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.documentElement.setAttribute("data-theme", "light");
     }
     
+    updateButtonText();
     alert('Configurações de aparência salvas com sucesso!');
   };
 
@@ -783,26 +1058,58 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =====================
-  // FUNÇÕES PERIGOSAS
+  // EXPORTAÇÃO DE RELATÓRIOS
   // =====================
-  window.limparTodosDados = () => {
-    if (confirm('⚠️ ATENÇÃO: Esta ação é irreversível! Todos os dados serão permanentemente apagados. Tem certeza?')) {
-      if (confirm('❌ CONFIRMAÇÃO FINAL: Esta ação não pode ser desfeita. Tem ABSOLUTA certeza?')) {
-        localStorage.clear();
-        alert('Todos os dados foram apagados. Redirecionando para a página inicial...');
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 2000);
-      }
+  window.exportarRelatorioAgendamentos = () => {
+    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+    
+    if (agendamentos.length === 0) {
+      alert('Não há agendamentos para exportar.');
+      return;
     }
+    
+    const relatorio = {
+      tipo: 'Relatório de Agendamentos',
+      dataExportacao: new Date().toISOString(),
+      totalAgendamentos: agendamentos.length,
+      agendamentos: agendamentos
+    };
+
+    const blob = new Blob([JSON.stringify(relatorio, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio-agendamentos-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('Relatório de agendamentos exportado com sucesso!');
   };
 
-  window.resetarConfiguracoes = () => {
-    if (confirm('Tem certeza que deseja resetar todas as configurações para os padrões de fábrica?')) {
-      localStorage.removeItem('configuracoes');
-      alert('Configurações resetadas com sucesso! A página será recarregada.');
-      location.reload();
+  window.exportarRelatorioClientes = () => {
+    const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+    
+    if (clientes.length === 0) {
+      alert('Não há clientes para exportar.');
+      return;
     }
+    
+    const relatorio = {
+      tipo: 'Relatório de Clientes',
+      dataExportacao: new Date().toISOString(),
+      totalClientes: clientes.length,
+      clientes: clientes
+    };
+
+    const blob = new Blob([JSON.stringify(relatorio, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio-clientes-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('Relatório de clientes exportado com sucesso!');
   };
 
   window.exportarDadosCompletos = () => {
@@ -822,17 +1129,38 @@ document.addEventListener('DOMContentLoaded', () => {
     a.download = `dados-completos-agendamento-plus-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    
+    alert('Dados completos exportados com sucesso!');
+  };
+
+  // =====================
+  // FUNÇÕES DE SISTEMA
+  // =====================
+  window.resetarConfiguracoes = () => {
+    if (confirm('Tem certeza que deseja resetar todas as configurações para os padrões de fábrica?')) {
+      localStorage.removeItem('configuracoes');
+      alert('Configurações resetadas com sucesso! A página será recarregada.');
+      location.reload();
+    }
+  };
+
+  window.limparCache = () => {
+    if (confirm('Deseja limpar o cache do sistema?')) {
+      // Limpar apenas dados temporários, mantendo agendamentos, clientes, etc.
+      localStorage.removeItem('cache');
+      alert('Cache limpo com sucesso!');
+    }
   };
 
   // =====================
   // FUNÇÕES ADICIONAIS
   // =====================
   window.verificarAtualizacoes = () => {
-    alert('✅ Seu sistema está atualizado com a versão mais recente (v2.1.0)');
+    alert('Seu sistema está atualizado com a versão mais recente (v2.1.0)');
   };
 
   window.verLogs = () => {
-    alert('📋 Funcionalidade de logs em desenvolvimento...');
+    alert('Funcionalidade de logs em desenvolvimento...');
   };
 
   // Formatação do telefone do negócio
@@ -853,15 +1181,22 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.value = value;
   });
 
-  // Menu hamburger
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
+  // Salvar configurações do sistema
+  window.salvarConfiguracoesSistema = () => {
+    const configuracoes = JSON.parse(localStorage.getItem('configuracoes')) || {};
+    configuracoes.notifications = document.getElementById('notifications').checked;
+    configuracoes.autoLogout = document.getElementById('autoLogout').value;
+    
+    localStorage.setItem('configuracoes', JSON.stringify(configuracoes));
+    alert('Configurações do sistema salvas com sucesso!');
+  };
+
+  // Adicionar evento de salvar para configurações do sistema
+  document.querySelector('.setting-card:nth-child(5) .btn-primary').addEventListener('click', window.salvarConfiguracoesSistema);
 
   // Carregar configurações ao iniciar
   carregarConfiguracoes();
 });
 </script>
-
 </body>
 </html>

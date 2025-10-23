@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO
+       TEMA CLARO/ESCURO - OTIMIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -16,7 +22,10 @@
       --secondary-color: #6c757d;
       --success-color: #28a745;
       --danger-color: #dc3545;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
     }
+    
     [data-theme="dark"] {
       --bg-color: #1e1e1e;
       --text-color: #f4f4f4;
@@ -25,44 +34,59 @@
       --secondary-color: #5a6268;
       --success-color: #218838;
       --danger-color: #c82333;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+      transition: all 0.3s ease;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
+    /* ========================
+       HEADER RESPONSIVO
+    ======================== */
     header {
       background: var(--card-bg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px 0;
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
     }
 
     .container {
       width: 90%;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 0 1rem;
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
 
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
       color: var(--primary-color);
       text-decoration: none;
     }
@@ -71,68 +95,82 @@
       background: none;
       border: 2px solid var(--primary-color);
       color: var(--primary-color);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: clamp(0.875rem, 3vw, 1rem);
+      min-width: 80px;
     }
 
     .theme-toggle:hover {
       background: var(--primary-color);
       color: #fff;
+      transform: translateY(-2px);
     }
 
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
     .main-content {
       flex: 1;
-      padding: 20px 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 2rem 1rem;
+      min-height: calc(100vh - 140px);
     }
 
     .section {
       background: var(--card-bg);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: clamp(1.5rem, 5vw, 2.5rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
       width: 100%;
       max-width: 500px;
+      margin: 0 auto;
     }
 
     .section-title {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
     }
 
+    /* ========================
+       SEÇÃO DE FOTO DE PERFIL
+    ======================== */
     .profile-photo-section {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 2rem;
     }
 
     .profile-avatar-container {
       position: relative;
       display: inline-block;
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
     }
 
     .profile-avatar {
-      width: 120px;
-      height: 120px;
+      width: clamp(100px, 20vw, 120px);
+      height: clamp(100px, 20vw, 120px);
       border-radius: 50%;
       background: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      font-size: clamp(2rem, 6vw, 3rem);
       margin: 0 auto;
       border: 4px solid var(--card-bg);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
       object-fit: cover;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-weight: 700;
     }
 
     .profile-avatar:hover {
@@ -142,10 +180,10 @@
 
     .change-photo-btn {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 36px;
-      height: 36px;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      width: clamp(2rem, 6vw, 2.25rem);
+      height: clamp(2rem, 6vw, 2.25rem);
       border-radius: 50%;
       background: var(--primary-color);
       color: white;
@@ -154,7 +192,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
     }
@@ -165,51 +203,62 @@
     }
 
     .photo-hint {
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       color: var(--secondary-color);
-      margin-top: 10px;
+      margin-top: 0.5rem;
     }
 
+    /* ========================
+       FORMULÁRIO RESPONSIVO
+    ======================== */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .form-label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
       color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
 
     .form-control {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) 1rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
       background: var(--card-bg);
       color: var(--text-color);
       transition: border-color 0.3s;
-      box-sizing: border-box;
+    }
+
+    [data-theme="dark"] .form-control {
+      border-color: #444;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
     }
 
+    /* ========================
+       BOTÕES RESPONSIVOS
+    ======================== */
     .btn {
       width: 100%;
-      padding: 12px;
+      padding: clamp(0.875rem, 3vw, 1rem);
       border: none;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       background-color: var(--success-color);
       color: white;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: clamp(1rem, 3vw, 1.125rem);
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      margin-top: 0.5rem;
     }
 
     .btn:hover {
@@ -230,52 +279,106 @@
       background-color: var(--danger-color);
     }
 
+    .register-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+    }
+
+    .register-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
     .footer {
       background: var(--card-bg);
-      padding: 20px 0;
+      padding: 2rem 0 1rem;
       text-align: center;
-      font-size: 14px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       margin-top: auto;
       width: 100%;
       box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
 
-    .footer a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
     .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
     }
 
     .footer-brand {
-      text-align: left;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
     }
 
     .footer-nav {
       display: flex;
-      gap: 15px;
       flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
     }
 
     .footer-social {
       display: flex;
-      gap: 15px;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
     }
 
     .footer-copy {
-      margin-top: 20px;
-      padding-top: 20px;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid #ddd;
+      color: var(--secondary-color);
     }
 
     [data-theme="dark"] .footer-copy {
@@ -283,41 +386,7 @@
     }
 
     /* ========================
-       PRELOADER (CADASTRO)
-    ======================== */
-    #preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--bg-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.10s ease, visibility 0.10s ease;
-    }
-
-    #preloader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .preloader-logo {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary-color);
-      animation: pulse 1.2s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    /* ========================
-       MODAL DE TROCA DE FOTO
+       MODAL DE FOTO
     ======================== */
     .modal-overlay {
       position: fixed;
@@ -333,6 +402,7 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
+      padding: 1rem;
     }
 
     .modal-overlay.show {
@@ -342,11 +412,11 @@
 
     .modal {
       background: var(--card-bg);
-      border-radius: 12px;
+      border-radius: var(--border-radius);
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      width: 90%;
+      width: 100%;
       max-width: 500px;
-      padding: 30px;
+      padding: clamp(1.5rem, 4vw, 2rem);
       transform: translateY(-20px);
       transition: transform 0.3s ease;
     }
@@ -359,9 +429,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
       border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
+      padding-bottom: 1rem;
     }
 
     [data-theme="dark"] .modal-header {
@@ -369,8 +439,8 @@
     }
 
     .modal-title {
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-weight: 700;
       margin: 0;
     }
 
@@ -381,21 +451,28 @@
       cursor: pointer;
       color: var(--secondary-color);
       transition: color 0.3s;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
 
     .modal-close:hover {
       color: var(--danger-color);
+      background-color: rgba(0,0,0,0.1);
     }
 
     .modal-body {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .photo-preview {
-      width: 150px;
-      height: 150px;
+      width: clamp(120px, 25vw, 150px);
+      height: clamp(120px, 25vw, 150px);
       border-radius: 50%;
-      margin: 0 auto 20px;
+      margin: 0 auto 1.5rem;
       background-color: #f8f9fa;
       display: flex;
       align-items: center;
@@ -418,12 +495,12 @@
     .photo-preview-placeholder {
       color: var(--secondary-color);
       text-align: center;
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
 
     .file-input-container {
       position: relative;
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
     }
 
     .file-input {
@@ -436,13 +513,14 @@
 
     .file-input-label {
       display: block;
-      padding: 12px 20px;
+      padding: clamp(0.75rem, 2.5vw, 0.875rem) 1.25rem;
       background-color: var(--primary-color);
       color: white;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       text-align: center;
       cursor: pointer;
       transition: background-color 0.3s;
+      font-weight: 600;
     }
 
     .file-input-label:hover {
@@ -451,35 +529,40 @@
 
     .photo-options {
       display: flex;
-      gap: 10px;
+      gap: 0.75rem;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    /* Notificações flutuantes */
+    /* ========================
+       NOTIFICAÇÕES
+    ======================== */
     .floating-notification {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      background-color: var(--success-color);
+      top: clamp(1.25rem, 4vw, 1.875rem);
+      right: clamp(1.25rem, 4vw, 1.875rem);
+      background: var(--success-color);
       color: white;
-      border-radius: 8px;
+      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
+      border-radius: var(--border-radius);
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       z-index: 1001;
       animation: slideInRight 0.3s ease;
+      max-width: min(300px, 90vw);
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     }
 
     .floating-notification.success {
-      background-color: var(--success-color);
+      background: var(--success-color);
     }
 
     .floating-notification.error {
-      background-color: var(--danger-color);
+      background: var(--danger-color);
     }
 
     .floating-notification.info {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
     }
 
     @keyframes slideInRight {
@@ -504,112 +587,184 @@
       }
     }
 
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .footer-brand {
-        text-align: center;
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
       }
       
       .section {
-        padding: 30px 20px;
-        margin: 20px;
+        padding: 1.25rem;
       }
       
-      .nav-links {
-        display: none;
+      .profile-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2rem;
       }
       
-      .modal {
-        padding: 20px;
+      .change-photo-btn {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.75rem;
       }
       
       .photo-options {
         flex-direction: column;
       }
+      
+      .photo-options .btn {
+        width: 100%;
+      }
     }
 
+    /* Mobile (até 480px) */
     @media (max-width: 480px) {
+      .main-content {
+        padding: 1rem;
+      }
+      
       .section {
-        padding: 20px 15px;
+        margin: 1rem;
+      }
+    }
+
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .section {
+        max-width: 450px;
+      }
+    }
+
+    /* Orientação paisagem em mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .main-content {
+        padding: 1rem;
+        min-height: auto;
       }
       
-      .section-title {
-        font-size: 1.5rem;
+      .section {
+        max-width: 90%;
+        margin: 1rem auto;
       }
       
-      .profile-avatar {
-        width: 100px;
-        height: 100px;
-        font-size: 2.5rem;
+      .form-group {
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Alturas específicas para mobile */
+    @media (max-height: 600px) {
+      .main-content {
+        padding: 1rem;
+        min-height: auto;
       }
       
-      .change-photo-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
+      .section {
+        margin: 1rem auto;
       }
+      
+      .profile-photo-section {
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .form-control:focus-visible,
+    .theme-toggle:focus-visible,
+    .file-input-label:focus-visible,
+    .modal-close:focus-visible,
+    .change-photo-btn:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
 
-<!-- Preloader (Cadastro carregando) -->
-<div id="preloader">
-  <div class="preloader-logo">CADASTRO</div>
-</div>
-
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
-    <button id="themeToggle" class="theme-toggle">🌙 Escuro</button>
+    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+      Tema Escuro
+    </button>
   </div>
 </header>
 
-<main class="main-content container">
-  <section class="section">
-    <h2 class="section-title">Criar sua Conta</h2>
-    
-    <!-- Seção da Foto de Perfil -->
-    <div class="profile-photo-section">
-      <div class="profile-avatar-container">
-        <img id="profileAvatar" class="profile-avatar" src="" alt="Foto de perfil">
-        <button class="change-photo-btn" onclick="openPhotoModal()">📷</button>
+<main class="main-content">
+  <div class="container">
+    <section class="section">
+      <h2 class="section-title">Criar sua Conta</h2>
+      
+      <!-- Seção da Foto de Perfil -->
+      <div class="profile-photo-section">
+        <div class="profile-avatar-container">
+          <img id="profileAvatar" class="profile-avatar" src="" alt="Foto de perfil">
+          <button class="change-photo-btn" onclick="openPhotoModal()" aria-label="Adicionar foto de perfil">
+            Foto
+          </button>
+        </div>
+        <p class="photo-hint">Clique em 'Foto' para adicionar uma foto de perfil (opcional)</p>
       </div>
-      <p class="photo-hint">Clique na câmera para adicionar uma foto de perfil (opcional)</p>
-    </div>
-    
-    <form id="cadastroForm">
-      <div class="form-group">
-        <label for="nome" class="form-label">Nome Completo</label>
-        <input type="text" id="nome" class="form-control" placeholder="Digite seu nome completo" required>
+      
+      <form id="cadastroForm">
+        <div class="form-group">
+          <label for="nome" class="form-label">Nome Completo</label>
+          <input type="text" id="nome" class="form-control" placeholder="Digite seu nome completo" required>
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
+        </div>
+        <div class="form-group">
+          <label for="telefone" class="form-label">Telefone</label>
+          <input type="tel" id="telefone" class="form-control" placeholder="(61) 99999-9999" required>
+        </div>
+        <div class="form-group">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" id="senha" class="form-control" placeholder="Crie uma senha forte" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+          <input type="password" id="confirmarSenha" class="form-control" placeholder="Digite a senha novamente" required>
+        </div>
+        <button type="submit" class="btn">Cadastrar</button>
+      </form>
+      
+      <div class="register-link">
+        <p>Já tem conta? <a href="index.html">Faça login</a></p>
       </div>
-      <div class="form-group">
-        <label for="email" class="form-label">E-mail</label>
-        <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
-      </div>
-      <div class="form-group">
-        <label for="telefone" class="form-label">Telefone</label>
-        <input type="tel" id="telefone" class="form-control" placeholder="(61) 99999-9999" required>
-      </div>
-      <div class="form-group">
-        <label for="senha" class="form-label">Senha</label>
-        <input type="password" id="senha" class="form-control" placeholder="Crie uma senha forte" required>
-      </div>
-      <div class="form-group">
-        <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
-        <input type="password" id="confirmarSenha" class="form-control" placeholder="Digite a senha novamente" required>
-      </div>
-      <button type="submit" class="btn">Cadastrar</button>
-    </form>
-    <p class="mt-2" style="text-align:center; margin-top:20px;">
-      Já tem conta? <a href="index.html">Faça login</a>
-    </p>
-  </section>
+    </section>
+  </div>
 </main>
 
 <footer class="footer">
@@ -640,7 +795,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title">Adicionar Foto de Perfil</h2>
-      <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+      <button class="modal-close" onclick="closePhotoModal()" aria-label="Fechar modal">&times;</button>
     </div>
     <div class="modal-body">
       <div class="photo-preview" id="photoPreview">
@@ -648,7 +803,7 @@
       </div>
       
       <div class="file-input-container">
-        <input type="file" id="photoInput" class="file-input" accept="image/*">
+        <input type="file" id="photoInput" class="file-input" accept="image/*" aria-label="Selecionar foto">
         <label for="photoInput" class="file-input-label">Escolher Foto</label>
       </div>
       
@@ -687,16 +842,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateButtonText() {
     const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "🌙 Escuro" : "☀️ Claro";
+    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
   }
-
-  // =====================
-  // PRELOADER - 3 SEGUNDOS
-  // =====================
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    setTimeout(() => preloader.classList.add("hidden"), 3000);
-  });
 
   // =====================
   // SISTEMA DE FOTO DE PERFIL
@@ -882,6 +1029,13 @@ window.addEventListener('load', () => {
   }
 });
 
+// Fechar modal ao clicar fora
+document.getElementById('photoModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closePhotoModal();
+  }
+});
+
 // Função para mostrar notificações
 function mostrarNotificacao(mensagem, tipo = 'info') {
   // Remove notificação anterior se existir
@@ -901,6 +1055,16 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
     setTimeout(() => notification.remove(), 300);
   }, 3000);
 }
+
+// Foco no primeiro campo ao carregar
+window.addEventListener('load', function() {
+  setTimeout(() => {
+    const nomeField = document.getElementById('nome');
+    if (nomeField) {
+      nomeField.focus();
+    }
+  }, 500);
+});
 </script>
 </body>
 </html>
