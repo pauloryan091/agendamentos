@@ -259,15 +259,46 @@
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
 
-    .card-img {
+    /* ========================
+       IMAGENS DOS CARDS - CORREÇÃO PRINCIPAL
+    ======================== */
+    .card-img-container {
       width: 100%;
-      height: clamp(150px, 30vw, 200px);
-      object-fit: cover;
+      height: clamp(180px, 35vw, 220px);
+      overflow: hidden;
+      position: relative;
       border-bottom: 1px solid #ddd;
+      background-color: #f8f9fa;
     }
 
-    [data-theme="dark"] .card-img {
+    [data-theme="dark"] .card-img-container {
       border-bottom-color: #444;
+      background-color: #333;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img {
+      transform: scale(1.05);
+    }
+
+    .card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+      color: white;
+      font-weight: 700;
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      text-align: center;
+      padding: 1rem;
     }
 
     .card-body {
@@ -829,7 +860,7 @@
 
 <header>
   <div class="container header-content">
-    <a href="index.html" class="logo">Agendamento+</a>
+    <a href="dashboard.html" class="logo">Agendamento+</a>
     <button id="menuBtn" aria-label="Abrir menu">Menu</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
@@ -877,7 +908,10 @@
       </div>
       <div class="form-group">
         <label for="fotoServico" class="form-label">Foto do Serviço</label>
-        <input type="file" id="fotoServico" class="form-control" accept="image/*" required>
+        <input type="file" id="fotoServico" class="form-control" accept="image/*">
+        <small style="color: var(--secondary-color); font-size: 0.875rem; margin-top: 0.5rem; display: block;">
+          A imagem será automaticamente ajustada ao tamanho do card. Formatos recomendados: JPG, PNG, WebP.
+        </small>
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-success">Adicionar Serviço</button>
@@ -1055,9 +1089,16 @@ document.addEventListener('DOMContentLoaded', () => {
     servicos.forEach((servico, index) => {
       const card = document.createElement('div');
       card.className = 'card';
+      
+      // Gerar placeholder se não houver imagem
+      const imagemHTML = servico.foto 
+        ? `<img src="${servico.foto}" alt="${servico.nome}" class="card-img">`
+        : `<div class="card-img-placeholder">${servico.nome}</div>`;
+      
       card.innerHTML = `
-        <img src="${servico.foto}" alt="${servico.nome}" class="card-img" 
-             onerror="this.src='https://via.placeholder.com/300x200/007bff/fff?text=${encodeURIComponent(servico.nome)}'">
+        <div class="card-img-container">
+          ${imagemHTML}
+        </div>
         <div class="card-body">
           <h3 class="card-title">${servico.nome}</h3>
           <p class="card-text">${servico.descricao}</p>
@@ -1087,30 +1128,76 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    if (!arquivo) {
-      mostrarNotificacao('Selecione uma foto para o serviço', 'error');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = event => {
-      const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-      servicos.push({
-        nome,
-        descricao,
-        valor: parseFloat(valor),
-        foto: event.target.result,
-        dataCriacao: new Date().toISOString()
+    // Processar imagem se for fornecida
+    if (arquivo) {
+      processarImagem(arquivo, (fotoProcessada) => {
+        salvarServico(nome, descricao, valor, fotoProcessada);
       });
-      
-      localStorage.setItem('servicos', JSON.stringify(servicos));
-      carregarServicos();
-      modal.style.display = 'none';
-      form.reset();
-      mostrarNotificacao('Serviço adicionado com sucesso!', 'success');
+    } else {
+      // Salvar sem imagem (usará placeholder)
+      salvarServico(nome, descricao, valor, null);
+    }
+  });
+
+  // Função para processar e otimizar a imagem
+  function processarImagem(arquivo, callback) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        // Criar canvas para redimensionar a imagem
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Definir tamanho máximo para otimização
+        const maxWidth = 600;
+        const maxHeight = 400;
+        let { width, height } = img;
+        
+        // Calcular novas dimensões mantendo proporção
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Desenhar imagem redimensionada
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Converter para base64 com qualidade otimizada
+        const fotoProcessada = canvas.toDataURL('image/jpeg', 0.8);
+        callback(fotoProcessada);
+      };
+      img.src = event.target.result;
     };
     reader.readAsDataURL(arquivo);
-  });
+  }
+
+  function salvarServico(nome, descricao, valor, foto) {
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    servicos.push({
+      nome,
+      descricao,
+      valor: parseFloat(valor),
+      foto: foto,
+      dataCriacao: new Date().toISOString()
+    });
+    
+    localStorage.setItem('servicos', JSON.stringify(servicos));
+    carregarServicos();
+    modal.style.display = 'none';
+    form.reset();
+    mostrarNotificacao('Serviço adicionado com sucesso!', 'success');
+  }
 
   window.editarServico = (index) => {
     const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
@@ -1248,14 +1335,14 @@ Serviço Mais Barato: R$ ${Math.min(...servicos.map(s => parseFloat(s.valor))) |
           nome: "Corte de Cabelo",
           descricao: "Corte completo com lavagem e finalização",
           valor: 50.00,
-          foto: "https://via.placeholder.com/300x200/007bff/fff?text=Corte+Cabelo",
+          foto: null, // Sem foto - usará placeholder
           dataCriacao: new Date().toISOString()
         },
         {
           nome: "Manicure Completa",
           descricao: "Manicure com corte, lixamento e esmaltação",
           valor: 35.00,
-          foto: "https://via.placeholder.com/300x200/28a745/fff?text=Manicure",
+          foto: null, // Sem foto - usará placeholder
           dataCriacao: new Date().toISOString()
         }
       ];
