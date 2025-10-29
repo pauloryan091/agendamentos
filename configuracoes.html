@@ -10,9 +10,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
   <meta name="msapplication-navbutton-color" content="#007bff">
   
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO - OTIMIZADO
+       TEMA CLARO/ESCURO - PADRONIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -26,6 +29,7 @@
       --info-color: #17a2b8;
       --shadow: 0 2px 10px rgba(0,0,0,0.1);
       --border-radius: 12px;
+      --transition: all 0.3s ease;
     }
     
     [data-theme="dark"] {
@@ -55,23 +59,10 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* ========================
-       HEADER RESPONSIVO
-    ======================== */
-    header {
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
     }
 
     .container {
@@ -79,70 +70,6 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 2px solid var(--primary-color);
-      color: var(--primary-color);
-      padding: 0.5rem 1rem;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: clamp(0.875rem, 3vw, 1rem);
-      min-width: 80px;
-    }
-
-    .theme-toggle:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-color);
-      padding: 0.25rem;
     }
 
     /* ========================
@@ -174,7 +101,7 @@
     ======================== */
     .settings-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
       gap: 1.5rem;
       margin-top: 2rem;
     }
@@ -314,30 +241,36 @@
     }
 
     /* ========================
-       BOTÕES RESPONSIVOS
+       BOTÕES PADRONIZADOS
     ======================== */
     .btn {
-      padding: clamp(0.75rem, 2.5vw, 0.875rem) clamp(1.25rem, 3vw, 1.5rem);
+      background: var(--primary-color);
+      color: white;
       border: none;
+      padding: clamp(0.875rem, 2.5vw, 1rem);
       border-radius: var(--border-radius);
+      cursor: pointer;
       font-size: clamp(0.875rem, 2.5vw, 1rem);
       font-weight: 600;
-      cursor: pointer;
       transition: all 0.3s ease;
+      text-align: center;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      text-align: center;
+      min-height: 50px;
     }
 
-    .btn-primary { background-color: var(--primary-color); color: white; }
-    .btn-success { background-color: var(--success-color); color: white; }
-    .btn-danger { background-color: var(--danger-color); color: white; }
-    .btn-warning { background-color: var(--warning-color); color: black; }
-    .btn-secondary { background-color: var(--secondary-color); color: white; }
-    .btn-info { background-color: var(--info-color); color: white; }
+    .btn-primary { background-color: var(--primary-color); }
+    .btn-success { background-color: var(--success-color); }
+    .btn-danger { background-color: var(--danger-color); }
+    .btn-warning { 
+      background-color: var(--warning-color); 
+      color: black; 
+    }
+    .btn-secondary { background-color: var(--secondary-color); }
+    .btn-info { background-color: var(--info-color); }
 
     .btn:hover {
       transform: translateY(-2px);
@@ -539,39 +472,6 @@
       .backup-options .btn {
         width: 100%;
       }
-    }
-
-    /* Mobile (até 480px) */
-    @media (max-width: 480px) {
-      .header-content {
-        flex-wrap: wrap;
-      }
-      
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--card-bg);
-        box-shadow: var(--shadow);
-        padding: 1rem 0;
-        gap: 0.5rem;
-      }
-      
-      .nav-links.show {
-        display: flex;
-      }
-      
-      #menuBtn {
-        display: block;
-      }
-      
-      .nav-link {
-        padding: 0.75rem 1rem;
-        text-align: center;
-      }
       
       .setting-header {
         flex-direction: column;
@@ -581,6 +481,21 @@
       
       .setting-icon {
         width: auto;
+      }
+    }
+
+    /* Mobile (até 480px) */
+    @media (max-width: 480px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .backup-options {
+        flex-direction: column;
+      }
+      
+      .backup-options .btn {
+        width: 100%;
       }
     }
 
@@ -669,18 +584,15 @@
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">Menu</button>
+    <button id="menuBtn" aria-label="Abrir menu">☰</button>
     <nav id="menu" class="nav-links">
       <a href="dashboard.html" class="nav-link">Dashboard</a>
       <a href="serviços.html" class="nav-link">Serviços</a>
       <a href="agendamento.html" class="nav-link">Agendamentos</a>
       <a href="clientes.html" class="nav-link">Clientes</a>
       <a href="perfil.html" class="nav-link">Perfil</a>
-      <a href="configuracoes.html" class="nav-link">Configurações</a>
     </nav>
-    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-      Tema Escuro
-    </button>
+    <button id="themeToggle" class="theme-toggle">🌙 Tema Escuro</button>
   </div>
 </header>
 
@@ -893,7 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateButtonText() {
     const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
+    themeToggle.textContent = theme === "light" ? "🌙 Tema Escuro" : "☀️ Tema Claro";
   }
 
   // =====================
@@ -901,12 +813,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   menuBtn.addEventListener('click', () => {
     navLinks.classList.toggle('show');
+    menuBtn.textContent = navLinks.classList.contains('show') ? '✕' : '☰';
   });
 
   // Fechar menu ao clicar em um link
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('show');
+      menuBtn.textContent = '☰';
     });
   });
 

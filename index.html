@@ -343,6 +343,80 @@
       text-align: center;
     }
 
+    /* ========================
+       MODAL DE ALERTA
+    ======================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--danger-color);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .modal-message {
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
     @keyframes pulse {
       0%, 100% { 
         opacity: 0.7; 
@@ -399,6 +473,10 @@
       .btn {
         min-height: 45px;
         padding: 0.875rem;
+      }
+      
+      .modal {
+        padding: 1.5rem;
       }
     }
 
@@ -502,6 +580,16 @@
   <div class="preloader-text">Carregando sistema...</div>
 </div>
 
+<!-- Modal de Alerta -->
+<div class="modal-overlay" id="loginAlertModal">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <h2 class="modal-title">Acesso Restrito</h2>
+    <p class="modal-message">Faça login primeiro para entrar nesta página...</p>
+    <button class="modal-btn" id="closeModalBtn">Entendi</button>
+  </div>
+</div>
+
 <header>
   <div class="container header-content">
     <a href="index.html" class="logo">
@@ -555,11 +643,11 @@
       </div>
       
       <nav class="footer-nav" aria-label="Navegação secundária">
-        <a href="dashboard.html" class="nav-link">Dashboard</a>
-        <a href="serviços.html" class="nav-link">Serviços</a>
-        <a href="agendamento.html" class="nav-link">Agendamentos</a>
-        <a href="clientes.html" class="nav-link">Clientes</a>
-        <a href="perfil.html" class="nav-link">Perfil</a>
+        <a href="dashboard.html" class="nav-link footer-link">Dashboard</a>
+        <a href="serviços.html" class="nav-link footer-link">Serviços</a>
+        <a href="agendamento.html" class="nav-link footer-link">Agendamentos</a>
+        <a href="clientes.html" class="nav-link footer-link">Clientes</a>
+        <a href="perfil.html" class="nav-link footer-link">Perfil</a>
       </nav>
 
       <div class="footer-social">
@@ -592,8 +680,11 @@
       btn.innerHTML = 'Acessando...';
       btn.style.backgroundColor = 'var(--success-color)';
       
+      // Salvar status de login
+      localStorage.setItem('isLoggedIn', 'true');
+      
       setTimeout(() => {
-        window.location.href = "modos.html";
+        window.location.href = "dashboard.html";
       }, 1000);
     } else {
       // Feedback de erro
@@ -656,6 +747,65 @@
         }, 300);
       }, remainingTime);
     }, minLoadTime);
+  });
+
+  // =====================
+  // PROTEÇÃO DE NAVEGAÇÃO NO FOOTER
+  // =====================
+  document.addEventListener('DOMContentLoaded', function() {
+    const footerLinks = document.querySelectorAll('.footer-link');
+    const loginAlertModal = document.getElementById('loginAlertModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    
+    // Verificar se o usuário está logado
+    function isUserLoggedIn() {
+      return localStorage.getItem('isLoggedIn') === 'true';
+    }
+    
+    // Função para mostrar o modal
+    function showLoginAlert() {
+      loginAlertModal.classList.add('active');
+      closeModalBtn.focus();
+    }
+    
+    // Função para fechar o modal
+    function closeLoginAlert() {
+      loginAlertModal.classList.remove('active');
+    }
+    
+    // Adicionar evento de clique para todos os links do footer
+    footerLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        // Permitir links externos (Instagram, WhatsApp)
+        if (this.href.includes('instagram.com') || this.href.includes('wa.me')) {
+          return; // Não fazer nada, permitir navegação normal
+        }
+        
+        // Verificar se o usuário não está logado
+        if (!isUserLoggedIn()) {
+          e.preventDefault(); // Impedir navegação
+          showLoginAlert(); // Mostrar alerta
+        }
+        // Se o usuário estiver logado, permitir navegação normal
+      });
+    });
+    
+    // Fechar modal com botão
+    closeModalBtn.addEventListener('click', closeLoginAlert);
+    
+    // Fechar modal clicando fora
+    loginAlertModal.addEventListener('click', function(e) {
+      if (e.target === loginAlertModal) {
+        closeLoginAlert();
+      }
+    });
+    
+    // Fechar modal com tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && loginAlertModal.classList.contains('active')) {
+        closeLoginAlert();
+      }
+    });
   });
 
   // =====================

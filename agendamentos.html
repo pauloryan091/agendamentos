@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamentos - Sistema Completo</title>
+  <style>
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.875rem 1.25rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .agendamentos-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-left: 5px solid;
+    }
+
+    .stat-card.primary { border-left-color: var(--primary-color); }
+    .stat-card.success { border-left-color: var(--success-color); }
+    .stat-card.warning { border-left-color: var(--warning-color); }
+    .stat-card.danger { border-left-color: var(--danger-color); }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .filters-container {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filters-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: end;
+    }
+
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: 1rem;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .table th, .table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-confirmado { background-color: var(--success-color); color: white; }
+    .status-pendente { background-color: var(--warning-color); color: black; }
+    .status-cancelado { background-color: var(--danger-color); color: white; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="section">
+      <div class="page-header">
+        <h1>Gerenciar Agendamentos</h1>
+        <button id="btnNovoAgendamento" class="btn btn-success">+ Novo Agendamento</button>
+      </div>
+
+      <div class="agendamentos-stats">
+        <div class="stat-card primary">
+          <h3 class="stat-value" id="totalAgendamentos">0</h3>
+          <p>Total de Agendamentos</p>
+        </div>
+        <div class="stat-card success">
+          <h3 class="stat-value" id="agendamentosHoje">0</h3>
+          <p>Agendamentos Hoje</p>
+        </div>
+        <div class="stat-card warning">
+          <h3 class="stat-value" id="agendamentosPendentes">0</h3>
+          <p>Pendentes</p>
+        </div>
+        <div class="stat-card danger">
+          <h3 class="stat-value" id="faturamentoTotal">R$ 0</h3>
+          <p>Faturamento Total</p>
+        </div>
+      </div>
+
+      <div class="filters-container">
+        <div class="filters-row">
+          <div class="filter-group">
+            <label for="filtroData" class="form-label">Data</label>
+            <input type="date" id="filtroData" class="form-control">
+          </div>
+          <div class="filter-group">
+            <label for="filtroServico" class="form-label">Serviço</label>
+            <select id="filtroServico" class="form-control">
+              <option value="">Todos os serviços</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtroStatus" class="form-label">Status</label>
+            <select id="filtroStatus" class="form-control">
+              <option value="">Todos os status</option>
+              <option value="confirmado">Confirmado</option>
+              <option value="pendente">Pendente</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filtroCliente" class="form-label">Cliente</label>
+            <input type="text" id="filtroCliente" class="form-control" placeholder="Buscar por cliente...">
+          </div>
+          <div class="filter-group">
+            <button class="btn btn-primary" onclick="filtrarAgendamentos()">🔍 Filtrar</button>
+            <button class="btn btn-secondary" onclick="limparFiltros()">🔄 Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table" id="tabelaAgendamentos">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Serviço</th>
+              <th>Valor</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaAgendamentosBody">
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modalAgendamento">
+    <div class="modal-content">
+      <button class="modal-close" onclick="fecharModalAgendamento()">&times;</button>
+      <h2 id="modalTitulo">Novo Agendamento</h2>
+      <form id="formAgendamento">
+        <div class="form-group">
+          <label for="editCliente" class="form-label">Cliente</label>
+          <input type="text" id="editCliente" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editServico" class="form-label">Serviço</label>
+          <select id="editServico" class="form-control" required>
+            <option value="">Selecione um serviço</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editValor" class="form-label">Valor (R$)</label>
+          <input type="number" id="editValor" class="form-control" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="editData" class="form-label">Data</label>
+          <input type="date" id="editData" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editHora" class="form-label">Hora</label>
+          <input type="time" id="editHora" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editStatus" class="form-label">Status</label>
+          <select id="editStatus" class="form-control" required>
+            <option value="confirmado">Confirmado</option>
+            <option value="pendente">Pendente</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">Salvar Agendamento</button>
+          <button type="button" class="btn btn-secondary" onclick="fecharModalAgendamento()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let agendamentoEditando = null;
+
+    // Carregar dados iniciais
+    document.addEventListener('DOMContentLoaded', function() {
+      carregarAgendamentos();
+      carregarServicos();
+      
+      document.getElementById('btnNovoAgendamento').addEventListener('click', abrirModalNovo);
+      document.getElementById('formAgendamento').addEventListener('submit', salvarAgendamento);
+    });
+
+    async function carregarAgendamentos() {
+      try {
+        const response = await fetch('/api/agendamentos');
+        const agendamentos = await response.json();
+        atualizarTabela(agendamentos);
+        atualizarEstatisticas();
+      } catch (error) {
+        console.error('Erro ao carregar agendamentos:', error);
+      }
+    }
+
+    async function carregarServicos() {
+      try {
+        const response = await fetch('/api/servicos');
+        const servicos = await response.json();
+        
+        const selectFiltro = document.getElementById('filtroServico');
+        const selectEdit = document.getElementById('editServico');
+        
+        selectFiltro.innerHTML = '<option value="">Todos os serviços</option>';
+        selectEdit.innerHTML = '<option value="">Selecione um serviço</option>';
+        
+        servicos.forEach(servico => {
+          const option1 = new Option(servico.nome, servico.id);
+          const option2 = new Option(servico.nome, servico.id);
+          selectFiltro.add(option1);
+          selectEdit.add(option2);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar serviços:', error);
+      }
+    }
+
+    async function atualizarEstatisticas() {
+      try {
+        const response = await fetch('/api/estatisticas');
+        const stats = await response.json();
+        
+        document.getElementById('totalAgendamentos').textContent = stats.total_agendamentos;
+        document.getElementById('agendamentosHoje').textContent = stats.agendamentos_hoje;
+        document.getElementById('agendamentosPendentes').textContent = stats.agendamentos_pendentes;
+        document.getElementById('faturamentoTotal').textContent = `R$ ${stats.faturamento_total.toFixed(2)}`;
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+      }
+    }
+
+    function atualizarTabela(agendamentos) {
+      const tbody = document.getElementById('tabelaAgendamentosBody');
+      tbody.innerHTML = '';
+
+      if (agendamentos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum agendamento encontrado</td></tr>';
+        return;
+      }
+
+      agendamentos.forEach(agendamento => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${agendamento.cliente_nome}</td>
+          <td>${agendamento.servico_nome}</td>
+          <td>R$ ${parseFloat(agendamento.valor).toFixed(2)}</td>
+          <td>${formatarData(agendamento.data_agendamento)}</td>
+          <td>${agendamento.hora_agendamento}</td>
+          <td><span class="status-badge status-${agendamento.status}">${agendamento.status}</span></td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="editarAgendamento(${agendamento.id})">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="cancelarAgendamento(${agendamento.id})">🗑️ Cancelar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function formatarData(data) {
+      const [ano, mes, dia] = data.split('-');
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    async function filtrarAgendamentos() {
+      const params = new URLSearchParams();
+      
+      const data = document.getElementById('filtroData').value;
+      const servico = document.getElementById('filtroServico').value;
+      const status = document.getElementById('filtroStatus').value;
+      const cliente = document.getElementById('filtroCliente').value;
+      
+      if (data) params.append('data', data);
+      if (servico) params.append('servico_id', servico);
+      if (status) params.append('status', status);
+      if (cliente) params.append('cliente_nome', cliente);
+      
+      try {
+        const response = await fetch(`/api/agendamentos?${params}`);
+        const agendamentos = await response.json();
+        atualizarTabela(agendamentos);
+      } catch (error) {
+        console.error('Erro ao filtrar agendamentos:', error);
+      }
+    }
+
+    function limparFiltros() {
+      document.getElementById('filtroData').value = '';
+      document.getElementById('filtroServico').value = '';
+      document.getElementById('filtroStatus').value = '';
+      document.getElementById('filtroCliente').value = '';
+      carregarAgendamentos();
+    }
+
+    function abrirModalNovo() {
+      agendamentoEditando = null;
+      document.getElementById('modalTitulo').textContent = 'Novo Agendamento';
+      document.getElementById('formAgendamento').reset();
+      document.getElementById('editStatus').value = 'pendente';
+      document.getElementById('modalAgendamento').style.display = 'flex';
+    }
+
+    async function editarAgendamento(id) {
+      try {
+        const response = await fetch(`/api/agendamentos/${id}`);
+        const agendamento = await response.json();
+        
+        agendamentoEditando = id;
+        document.getElementById('modalTitulo').textContent = 'Editar Agendamento';
+        document.getElementById('editCliente').value = agendamento.cliente_nome;
+        document.getElementById('editServico').value = agendamento.servico_id;
+        document.getElementById('editValor').value = agendamento.valor;
+        document.getElementById('editData').value = agendamento.data_agendamento;
+        document.getElementById('editHora').value = agendamento.hora_agendamento;
+        document.getElementById('editStatus').value = agendamento.status;
+        
+        document.getElementById('modalAgendamento').style.display = 'flex';
+      } catch (error) {
+        console.error('Erro ao carregar agendamento:', error);
+        alert('Erro ao carregar agendamento para edição');
+      }
+    }
+
+    function fecharModalAgendamento() {
+      document.getElementById('modalAgendamento').style.display = 'none';
+      agendamentoEditando = null;
+    }
+
+    async function salvarAgendamento(e) {
+      e.preventDefault();
+      
+      const dados = {
+        cliente_nome: document.getElementById('editCliente').value,
+        servico_id: parseInt(document.getElementById('editServico').value),
+        valor: parseFloat(document.getElementById('editValor').value),
+        data_agendamento: document.getElementById('editData').value,
+        hora_agendamento: document.getElementById('editHora').value,
+        status: document.getElementById('editStatus').value
+      };
+
+      try {
+        if (agendamentoEditando) {
+          // Editar
+          await fetch(`/api/agendamentos/${agendamentoEditando}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+          });
+          alert('Agendamento atualizado com sucesso!');
+        } else {
+          // Novo
+          await fetch('/api/agendamentos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+          });
+          alert('Agendamento criado com sucesso!');
+        }
+        
+        fecharModalAgendamento();
+        carregarAgendamentos();
+      } catch (error) {
+        console.error('Erro ao salvar agendamento:', error);
+        alert('Erro ao salvar agendamento');
+      }
+    }
+
+    async function cancelarAgendamento(id) {
+      if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+        try {
+          await fetch(`/api/agendamentos/${id}/cancelar`, { method: 'PUT' });
+          alert('Agendamento cancelado com sucesso!');
+          carregarAgendamentos();
+        } catch (error) {
+          console.error('Erro ao cancelar agendamento:', error);
+          alert('Erro ao cancelar agendamento');
+        }
+      }
+    }
+
+    // Fechar modal clicando fora
+    document.getElementById('modalAgendamento').addEventListener('click', function(e) {
+      if (e.target === this) fecharModalAgendamento();
+    });
+  </script>
+</body>
+</html>
+    

@@ -10,6 +10,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
   <meta name="msapplication-navbutton-color" content="#007bff">
   
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
   <style>
     /* ========================
        TEMA CLARO/ESCURO - OTIMIZADO
@@ -26,6 +29,7 @@
       --info-color: #17a2b8;
       --shadow: 0 2px 10px rgba(0,0,0,0.1);
       --border-radius: 12px;
+      --transition: all 0.3s ease;
     }
     
     [data-theme="dark"] {
@@ -55,23 +59,10 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* ========================
-       HEADER RESPONSIVO
-    ======================== */
-    header {
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
     }
 
     .container {
@@ -79,70 +70,6 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 2px solid var(--primary-color);
-      color: var(--primary-color);
-      padding: 0.5rem 1rem;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: clamp(0.875rem, 3vw, 1rem);
-      min-width: 80px;
-    }
-
-    .theme-toggle:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-color);
-      padding: 0.25rem;
     }
 
     /* ========================
@@ -467,97 +394,6 @@
     }
 
     /* ========================
-       BOTÃO FLUTUANTE
-    ======================== */
-    .floating-config-btn {
-      position: fixed;
-      bottom: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      width: clamp(3.125rem, 8vw, 3.75rem);
-      height: clamp(3.125rem, 8vw, 3.75rem);
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: clamp(1rem, 3vw, 1.25rem);
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .floating-config-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
-      background: var(--secondary-color);
-    }
-
-    .floating-config-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Menu flutuante */
-    .floating-menu {
-      position: fixed;
-      bottom: clamp(5rem, 12vw, 6.25rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      padding: 1rem;
-      z-index: 999;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-width: min(200px, 80vw);
-      border: 2px solid var(--primary-color);
-    }
-
-    .floating-menu.show {
-      display: flex;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .floating-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
-      border: none;
-      border-radius: 8px;
-      color: var(--text-color);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      font-size: clamp(0.8rem, 2.5vw, 0.875rem);
-      font-weight: 500;
-      text-align: left;
-    }
-
-    .floating-menu-item:hover {
-      background: var(--primary-color);
-      color: white;
-      transform: translateX(-5px);
-    }
-
-    /* ========================
        PRELOADER OTIMIZADO
     ======================== */
     #preloader {
@@ -606,58 +442,6 @@
     }
 
     /* ========================
-       NOTIFICAÇÕES
-    ======================== */
-    .floating-notification {
-      position: fixed;
-      top: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--primary-color);
-      color: white;
-      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      z-index: 1001;
-      animation: slideInRight 0.3s ease;
-      max-width: min(300px, 90vw);
-      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-    }
-
-    .floating-notification.success {
-      background: var(--success-color);
-    }
-
-    .floating-notification.error {
-      background: var(--danger-color);
-    }
-
-    .floating-notification.info {
-      background: var(--info-color);
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideOutRight {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-    }
-
-    /* ========================
        BREAKPOINTS ESPECÍFICOS
     ======================== */
     
@@ -689,36 +473,6 @@
 
     /* Mobile (até 480px) */
     @media (max-width: 480px) {
-      .header-content {
-        flex-wrap: wrap;
-      }
-      
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--card-bg);
-        box-shadow: var(--shadow);
-        padding: 1rem 0;
-        gap: 0.5rem;
-      }
-      
-      .nav-links.show {
-        display: flex;
-      }
-      
-      #menuBtn {
-        display: block;
-      }
-      
-      .nav-link {
-        padding: 0.75rem 1rem;
-        text-align: center;
-      }
-      
       .charts-grid {
         grid-template-columns: 1fr;
       }
@@ -743,38 +497,6 @@
       
       .quick-actions {
         grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    /* Orientação paisagem em mobile */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-
-    /* Alturas específicas para mobile */
-    @media (max-height: 600px) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .stat-card {
-        min-height: 100px;
-        padding: 1rem;
       }
     }
 
@@ -805,7 +527,6 @@
     .btn:focus-visible,
     .action-btn:focus-visible,
     .theme-toggle:focus-visible,
-    .floating-config-btn:focus-visible,
     .nav-link:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
@@ -820,20 +541,7 @@
   <div class="preloader-text">Carregando dados...</div>
 </div>
 
-<header>
-  <div class="container header-content">
-    <a href="dashboard.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">☰</button>
-    <nav id="menu" class="nav-links">
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="serviços.html" class="nav-link">Serviços</a>
-      <a href="agendamento.html" class="nav-link">Agendamentos</a>
-      <a href="clientes.html" class="nav-link">Clientes</a>
-      <a href="perfil.html" class="nav-link">Perfil</a>
-    </nav>
-    <button id="themeToggle" class="theme-toggle">Tema Escuro</button> 
-  </div>
-</header>
+<!-- Header será inserido automaticamente aqui -->
 
 <main class="main-content container">
   <section class="section">
@@ -911,33 +619,6 @@
   </section>
 </main>
 
-<!-- Botão Flutuante de Configurações -->
-<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
-  Config
-</button>
-
-<!-- Menu Flutuante -->
-<div class="floating-menu" id="floatingMenu">
-    <a href="configuracoes.html" class="floating-menu-item">
-        Configurações
-    </a>
-    <a href="perfil.html" class="floating-menu-item">
-        Meu Perfil
-    </a>
-    <button class="floating-menu-item" onclick="alternarTema()">
-        <span id="themeText">Tema Escuro</span>
-    </button>
-    <button class="floating-menu-item" onclick="fazerBackupRapido()">
-        Backup Rápido
-    </button>
-    <button class="floating-menu-item" onclick="verEstatisticas()">
-        Estatísticas
-    </button>
-    <button class="floating-menu-item" onclick="sairSistema()">
-        Sair
-    </button>
-</div>
-
 <footer class="footer">
   <div class="container footer-content">
     <div class="footer-brand">
@@ -961,18 +642,12 @@
   </div>
 </footer>
 
+<script src="header.js"></script>
 <script>
 // =====================
 // INICIALIZAÇÃO - CÓDIGO REORGANIZADO E CORRIGIDO
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
-  // Elementos DOM
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-  const themeToggle = document.getElementById('themeToggle');
-  const floatingConfigBtn = document.getElementById('floatingConfigBtn');
-  const floatingMenu = document.getElementById('floatingMenu');
-
   // =====================
   // FUNÇÕES DE UTILIDADE
   // =====================
@@ -987,36 +662,6 @@ document.addEventListener('DOMContentLoaded', () => {
       style: 'currency',
       currency: 'BRL'
     }).format(valor);
-  }
-
-  function mostrarNotificacao(mensagem, tipo = 'info') {
-    // Remove notificação anterior se existir
-    const notificacaoAnterior = document.querySelector('.floating-notification');
-    if (notificacaoAnterior) {
-      notificacaoAnterior.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `floating-notification ${tipo}`;
-    notification.textContent = mensagem;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
-
-  function updateButtonText() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    themeToggle.textContent = theme === 'light' ? 'Tema Escuro' : 'Tema Claro';
-  }
-
-  function updateThemeButton() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    const themeText = document.getElementById('themeText');
-    themeText.textContent = theme === 'light' ? 'Tema Escuro' : 'Tema Claro';
   }
 
   // =====================
@@ -1142,118 +787,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =====================
-  // EVENT LISTENERS
-  // =====================
-  
-  // Menu Mobile
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar em um link
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('show');
-    });
-  });
-
-  // Tema
-  themeToggle.addEventListener('click', () => {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateButtonText();
-    updateThemeButton();
-  });
-
-  // Menu flutuante
-  floatingConfigBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    floatingMenu.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar fora
-  document.addEventListener('click', (e) => {
-    if (!floatingMenu.contains(e.target) && !floatingConfigBtn.contains(e.target)) {
-      floatingMenu.classList.remove('show');
-    }
-  });
-
-  // =====================
-  // FUNÇÕES GLOBAIS PARA O MENU FLUTUANTE
-  // =====================
-  window.alternarTema = () => {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeButton();
-    updateButtonText();
-    floatingMenu.classList.remove('show');
-    mostrarNotificacao(`Tema ${newTheme === 'light' ? 'claro' : 'escuro'} ativado`, 'info');
-  };
-
-  window.fazerBackupRapido = () => {
-    const backup = {
-      agendamentos: JSON.parse(localStorage.getItem('agendamentos')) || [],
-      clientes: JSON.parse(localStorage.getItem('clientes')) || [],
-      servicos: JSON.parse(localStorage.getItem('servicos')) || [],
-      configuracoes: JSON.parse(localStorage.getItem('configuracoes')) || {},
-      dataBackup: new Date().toISOString()
-    };
-
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup-rapido-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    floatingMenu.classList.remove('show');
-    mostrarNotificacao('Backup rápido realizado com sucesso!', 'success');
-  };
-
-  window.verEstatisticas = () => {
-    const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    
-    const hoje = new Date().toISOString().split('T')[0];
-    const agendamentosHoje = agendamentos.filter(a => a.data === hoje).length;
-    const totalClientes = [...new Set(agendamentos.map(a => a.cliente))].length;
-    const totalServicos = servicos.length;
-    const faturamentoTotal = agendamentos.reduce((total, a) => {
-      const servico = servicos.find(s => s.nome === a.servico);
-      return total + (servico ? parseFloat(servico.valor) : 0);
-    }, 0);
-    
-    const estatisticas = `📊 ESTATÍSTICAS RÁPIDAS:\n\n👥 Clientes: ${totalClientes}\n💼 Serviços: ${totalServicos}\n📅 Agendamentos Hoje: ${agendamentosHoje}\n💰 Faturamento Total: ${formatarMoeda(faturamentoTotal)}\n📋 Total de Agendamentos: ${agendamentos.length}`;
-    
-    alert(estatisticas);
-    floatingMenu.classList.remove('show');
-  };
-
-  window.sairSistema = () => {
-    if (confirm('Deseja realmente sair do sistema?')) {
-      localStorage.removeItem('usuarioLogado');
-      mostrarNotificacao('Sessão encerrada com sucesso!', 'success');
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1500);
-    }
-    floatingMenu.classList.remove('show');
-  };
-
-  // =====================
   // INICIALIZAÇÃO FINAL
   // =====================
   
-  // Configurar tema inicial
-  const currentTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateButtonText();
-  updateThemeButton();
-
   // Carrega dados do dashboard
   carregarDashboard();
 

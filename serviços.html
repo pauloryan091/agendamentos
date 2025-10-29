@@ -10,9 +10,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
   <meta name="msapplication-navbutton-color" content="#007bff">
   
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO - MESMO PADRÃO DASHBOARD
+       TEMA CLARO/ESCURO - OTIMIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -26,6 +29,7 @@
       --info-color: #17a2b8;
       --shadow: 0 2px 10px rgba(0,0,0,0.1);
       --border-radius: 12px;
+      --transition: all 0.3s ease;
     }
     
     [data-theme="dark"] {
@@ -42,7 +46,7 @@
     }
 
     /* ========================
-       RESET E BASE RESPONSIVA - MESMO PADRÃO
+       RESET E BASE RESPONSIVA
     ======================== */
     * {
       margin: 0;
@@ -55,23 +59,10 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* ========================
-       HEADER RESPONSIVO - IDÊNTICO AO DASHBOARD
-    ======================== */
-    header {
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
     }
 
     .container {
@@ -81,72 +72,8 @@
       padding: 0 1rem;
     }
 
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 2px solid var(--primary-color);
-      color: var(--primary-color);
-      padding: 0.5rem 1rem;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: clamp(0.875rem, 3vw, 1rem);
-      min-width: 80px;
-    }
-
-    .theme-toggle:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-color);
-      padding: 0.25rem;
-    }
-
     /* ========================
-       MAIN CONTENT RESPONSIVO - MESMO PADRÃO
+       MAIN CONTENT RESPONSIVO
     ======================== */
     .main-content {
       flex: 1;
@@ -170,7 +97,7 @@
     }
 
     /* ========================
-       PAGE HEADER - MESMO PADRÃO DASHBOARD
+       PAGE HEADER
     ======================== */
     .page-header {
       display: flex;
@@ -182,7 +109,7 @@
     }
 
     /* ========================
-       BOTÕES - MESMO PADRÃO DASHBOARD
+       BOTÕES
     ======================== */
     .btn {
       padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1rem, 3vw, 1.25rem);
@@ -229,7 +156,28 @@
     }
 
     /* ========================
-       GRID DE SERVIÇOS - MESMO PADRÃO DASHBOARD GRID
+       FILTROS
+    ======================== */
+    .filtros-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filtro-select {
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      background: var(--card-bg);
+      color: var(--text-color);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    /* ========================
+       GRID DE SERVIÇOS
     ======================== */
     .servicos-grid {
       display: grid;
@@ -248,6 +196,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      cursor: pointer;
     }
 
     [data-theme="dark"] .card {
@@ -260,7 +209,7 @@
     }
 
     /* ========================
-       IMAGENS DOS CARDS - CORREÇÃO PRINCIPAL
+       IMAGENS DOS CARDS
     ======================== */
     .card-img-container {
       width: 100%;
@@ -323,11 +272,45 @@
       font-size: clamp(0.875rem, 2.5vw, 1rem);
     }
 
-    .card-price {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: clamp(0.75rem, 2vw, 1rem);
+    .card-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-ativo {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: var(--success-color);
+    }
+
+    .status-inativo {
+      background-color: rgba(220, 53, 69, 0.2);
+      color: var(--danger-color);
+    }
+
+    .card-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-detail {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+
+    .card-detail-label {
+      color: var(--secondary-color);
+    }
+
+    .card-detail-value {
+      font-weight: 600;
+      color: var(--text-color);
     }
 
     .card-actions {
@@ -338,7 +321,7 @@
     }
 
     /* ========================
-       MODAL - MESMO PADRÃO
+       MODAL
     ======================== */
     .modal {
       display: none;
@@ -359,7 +342,7 @@
       padding: clamp(1.5rem, 4vw, 2rem);
       border-radius: var(--border-radius);
       width: 100%;
-      max-width: min(500px, 95vw);
+      max-width: min(600px, 95vw);
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
@@ -421,7 +404,7 @@
     }
 
     /* ========================
-       FOOTER RESPONSIVO - IDÊNTICO AO DASHBOARD
+       FOOTER RESPONSIVO
     ======================== */
     .footer {
       background: var(--card-bg);
@@ -509,98 +492,7 @@
     }
 
     /* ========================
-       BOTÃO FLUTUANTE - IDÊNTICO AO DASHBOARD
-    ======================== */
-    .floating-config-btn {
-      position: fixed;
-      bottom: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      width: clamp(3.125rem, 8vw, 3.75rem);
-      height: clamp(3.125rem, 8vw, 3.75rem);
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: clamp(1rem, 3vw, 1.25rem);
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .floating-config-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
-      background: var(--secondary-color);
-    }
-
-    .floating-config-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Menu flutuante */
-    .floating-menu {
-      position: fixed;
-      bottom: clamp(5rem, 12vw, 6.25rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      padding: 1rem;
-      z-index: 999;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-width: min(200px, 80vw);
-      border: 2px solid var(--primary-color);
-    }
-
-    .floating-menu.show {
-      display: flex;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .floating-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
-      border: none;
-      border-radius: 8px;
-      color: var(--text-color);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      font-size: clamp(0.8rem, 2.5vw, 0.875rem);
-      font-weight: 500;
-      text-align: left;
-    }
-
-    .floating-menu-item:hover {
-      background: var(--primary-color);
-      color: white;
-      transform: translateX(-5px);
-    }
-
-    /* ========================
-       PRELOADER OTIMIZADO - MESMO PADRÃO
+       PRELOADER OTIMIZADO
     ======================== */
     #preloader {
       position: fixed;
@@ -648,55 +540,7 @@
     }
 
     /* ========================
-       NOTIFICAÇÕES - MESMO PADRÃO
-    ======================== */
-    .floating-notification {
-      position: fixed;
-      top: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--primary-color);
-      color: white;
-      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      z-index: 1001;
-      animation: slideInRight 0.3s ease;
-      max-width: min(300px, 90vw);
-      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-    }
-
-    .floating-notification.success {
-      background: var(--success-color);
-    }
-
-    .floating-notification.error {
-      background: var(--danger-color);
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideOutRight {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-    }
-
-    /* ========================
-       BREAKPOINTS ESPECÍFICOS - MESMO PADRÃO
+       BREAKPOINTS ESPECÍFICOS
     ======================== */
     
     /* Mobile Small (até 360px) */
@@ -730,36 +574,6 @@
 
     /* Mobile (até 480px) */
     @media (max-width: 480px) {
-      .header-content {
-        flex-wrap: wrap;
-      }
-      
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--card-bg);
-        box-shadow: var(--shadow);
-        padding: 1rem 0;
-        gap: 0.5rem;
-      }
-      
-      .nav-links.show {
-        display: flex;
-      }
-      
-      #menuBtn {
-        display: block;
-      }
-      
-      .nav-link {
-        padding: 0.75rem 1rem;
-        text-align: center;
-      }
-      
       .page-header {
         flex-direction: column;
         align-items: stretch;
@@ -767,6 +581,11 @@
       
       .btn {
         width: 100%;
+      }
+      
+      .filtros-container {
+        flex-direction: column;
+        align-items: stretch;
       }
     }
 
@@ -784,39 +603,8 @@
       }
     }
 
-    /* Orientação paisagem em mobile */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .servicos-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-
-    /* Alturas específicas para mobile */
-    @media (max-height: 600px) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .modal-content {
-        max-height: 80vh;
-      }
-    }
-
     /* ========================
-       ACESSIBILIDADE - MESMO PADRÃO
+       ACESSIBILIDADE
     ======================== */
     @media (prefers-reduced-motion: reduce) {
       * {
@@ -840,14 +628,39 @@
 
     /* Foco visível para acessibilidade */
     .btn:focus-visible,
-    .theme-toggle:focus-visible,
-    .floating-config-btn:focus-visible,
     .form-control:focus-visible,
     .modal-close:focus-visible,
     .nav-link:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
+    /* LINKS DO MENU */
+.nav-link {
+  position: relative;
+  color: var(--text-color, #333);
+  text-decoration: none;
+  padding: 10px 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Cor do link ativo */
+.nav-link.active {
+  color: #007bff;
+}
+
+/* Faixa azul sob o link ativo */
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #007bff;
+  border-radius: 2px;
+}
+
   </style>
 </head>
 <body>
@@ -858,28 +671,32 @@
   <div class="preloader-text">Carregando serviços...</div>
 </div>
 
-<header>
-  <div class="container header-content">
-    <a href="dashboard.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">Menu</button>
-    <nav id="menu" class="nav-links">
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="serviços.html" class="nav-link">Serviços</a>
-      <a href="agendamento.html" class="nav-link">Agendamentos</a>
-      <a href="clientes.html" class="nav-link">Clientes</a>
-      <a href="perfil.html" class="nav-link">Perfil</a>
-    </nav>
-    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-      Tema Escuro
-    </button>
-  </div>
-</header>
+<!-- Header será inserido automaticamente aqui -->
 
 <main class="main-content container">
   <section class="section">
     <div class="page-header">
       <h1 class="section-title">Nossos Serviços</h1>
       <button id="btnAddServico" class="btn btn-success">+ Adicionar Serviço</button>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="filtros-container">
+      <label for="filtroStatus">Filtrar por Status:</label>
+      <select id="filtroStatus" class="filtro-select">
+        <option value="todos">Todos</option>
+        <option value="ativo">Ativo</option>
+        <option value="inativo">Inativo</option>
+      </select>
+      
+      <label for="filtroCategoria">Filtrar por Categoria:</label>
+      <select id="filtroCategoria" class="filtro-select">
+        <option value="todos">Todas</option>
+        <option value="beleza">Beleza</option>
+        <option value="saude">Saúde</option>
+        <option value="bem-estar">Bem-estar</option>
+        <option value="outros">Outros</option>
+      </select>
     </div>
     
     <div id="listaServicos" class="servicos-grid" aria-live="polite">
@@ -899,12 +716,32 @@
         <input type="text" id="nomeServico" class="form-control" placeholder="Ex: Corte de Cabelo" required>
       </div>
       <div class="form-group">
+        <label for="categoriaServico" class="form-label">Categoria</label>
+        <select id="categoriaServico" class="form-control" required>
+          <option value="beleza">Beleza</option>
+          <option value="saude">Saúde</option>
+          <option value="bem-estar">Bem-estar</option>
+          <option value="outros">Outros</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label for="descricaoServico" class="form-label">Descrição</label>
         <textarea id="descricaoServico" class="form-control" placeholder="Descreva o serviço..." required></textarea>
       </div>
       <div class="form-group">
         <label for="valorServico" class="form-label">Valor (R$)</label>
         <input type="number" id="valorServico" class="form-control" placeholder="50.00" step="0.01" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="clientesMensais" class="form-label">Clientes Mensais</label>
+        <input type="number" id="clientesMensais" class="form-control" placeholder="0" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="statusServico" class="form-label">Status</label>
+        <select id="statusServico" class="form-control" required>
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="fotoServico" class="form-label">Foto do Serviço</label>
@@ -919,33 +756,6 @@
       </div>
     </form>
   </div>
-</div>
-
-<!-- Botão Flutuante de Configurações -->
-<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
-  Config
-</button>
-
-<!-- Menu Flutuante -->
-<div class="floating-menu" id="floatingMenu">
-    <a href="configuracoes.html" class="floating-menu-item">
-        Configurações
-    </a>
-    <a href="perfil.html" class="floating-menu-item">
-        Meu Perfil
-    </a>
-    <button class="floating-menu-item" onclick="alternarTema()">
-        <span id="themeText">Tema Escuro</span>
-    </button>
-    <button class="floating-menu-item" onclick="fazerBackupRapido()">
-        Backup Rápido
-    </button>
-    <button class="floating-menu-item" onclick="verEstatisticas()">
-        Estatísticas
-    </button>
-    <button class="floating-menu-item" onclick="sairSistema()">
-        Sair
-    </button>
 </div>
 
 <footer class="footer">
@@ -971,77 +781,16 @@
   </div>
 </footer>
 
+<script src="header.js"></script>
 <script>
-// MESMO CÓDIGO JAVASCRIPT DO DASHBOARD, ADAPTADO PARA SERVIÇOS
+// GERENCIAMENTO DE SERVIÇOS
 document.addEventListener('DOMContentLoaded', () => {
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-  const themeToggle = document.getElementById('themeToggle');
   const modal = document.getElementById('modalServico');
   const form = document.getElementById('formServico');
   const listaServicos = document.getElementById('listaServicos');
   const btnAddServico = document.getElementById('btnAddServico');
-  const floatingConfigBtn = document.getElementById('floatingConfigBtn');
-  const floatingMenu = document.getElementById('floatingMenu');
-
-  // =====================
-  // TEMA CLARO / ESCURO - MESMO CÓDIGO
-  // =====================
-  const currentTheme = localStorage.getItem("theme") || "light";
-  document.documentElement.setAttribute("data-theme", currentTheme);
-  updateButtonText();
-
-  themeToggle.addEventListener("click", () => {
-    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    updateButtonText();
-    updateThemeButton();
-  });
-
-  function updateButtonText() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
-  }
-
-  // =====================
-  // MENU MOBILE - MESMO CÓDIGO
-  // =====================
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar em um link
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('show');
-    });
-  });
-
-  // =====================
-  // PRELOADER - 3 SEGUNDOS - MESMO CÓDIGO
-  // =====================
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    
-    // Garantir que o preloader fique pelo menos 1.5 segundos
-    const minLoadTime = 1500;
-    const loadStart = Date.now();
-    
-    setTimeout(() => {
-      const loadTime = Date.now() - loadStart;
-      const remainingTime = Math.max(3000 - loadTime, 0);
-      
-      setTimeout(() => {
-        preloader.classList.add("hidden");
-        
-        // Remover completamente do DOM após animação
-        setTimeout(() => {
-          preloader.remove();
-        }, 300);
-      }, remainingTime);
-    }, minLoadTime);
-  });
+  const filtroStatus = document.getElementById('filtroStatus');
+  const filtroCategoria = document.getElementById('filtroCategoria');
 
   // =====================
   // MODAL DE SERVIÇOS
@@ -1064,16 +813,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fecha modal com ESC
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.style.display === 'flex') {
-      closeModalServico();
+    if (e.key === 'Escape') {
+      if (modal.style.display === 'flex') closeModalServico();
     }
   });
 
   // =====================
+  // FILTROS
+  // =====================
+  filtroStatus.addEventListener('change', filtrarServicos);
+  filtroCategoria.addEventListener('change', filtrarServicos);
+
+  function filtrarServicos() {
+    const statusFiltro = filtroStatus.value;
+    const categoriaFiltro = filtroCategoria.value;
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+    
+    let servicosFiltrados = servicos;
+    
+    if (statusFiltro !== 'todos') {
+      servicosFiltrados = servicosFiltrados.filter(servico => servico.status === statusFiltro);
+    }
+    
+    if (categoriaFiltro !== 'todos') {
+      servicosFiltrados = servicosFiltrados.filter(servico => servico.categoria === categoriaFiltro);
+    }
+    
+    carregarServicos(servicosFiltrados);
+  }
+
+  // =====================
   // GERENCIAMENTO DE SERVIÇOS
   // =====================
-  function carregarServicos(){
-    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
+  function carregarServicos(servicosParaExibir = null){
+    const servicos = servicosParaExibir || JSON.parse(localStorage.getItem('servicos')) || [];
     listaServicos.innerHTML = '';
     
     if (servicos.length === 0) {
@@ -1095,21 +868,38 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<img src="${servico.foto}" alt="${servico.nome}" class="card-img">`
         : `<div class="card-img-placeholder">${servico.nome}</div>`;
       
+      // Calcular faturamento mensal
+      const faturamentoMensal = parseFloat(servico.valor) * parseInt(servico.clientesMensais);
+      
       card.innerHTML = `
         <div class="card-img-container">
           ${imagemHTML}
         </div>
         <div class="card-body">
           <h3 class="card-title">${servico.nome}</h3>
+          <span class="card-status status-${servico.status}">${servico.status === 'ativo' ? 'Ativo' : 'Inativo'}</span>
           <p class="card-text">${servico.descricao}</p>
-          <p class="card-price">R$ ${parseFloat(servico.valor).toFixed(2)}</p>
+          <div class="card-details">
+            <div class="card-detail">
+              <span class="card-detail-label">Valor:</span>
+              <span class="card-detail-value">R$ ${parseFloat(servico.valor).toFixed(2)}</span>
+            </div>
+            <div class="card-detail">
+              <span class="card-detail-label">Clientes/Mês:</span>
+              <span class="card-detail-value">${servico.clientesMensais}</span>
+            </div>
+            <div class="card-detail">
+              <span class="card-detail-label">Faturamento:</span>
+              <span class="card-detail-value">R$ ${faturamentoMensal.toFixed(2)}</span>
+            </div>
+          </div>
           <div class="card-actions">
-            <a href="agendar.html?servico=${encodeURIComponent(servico.nome)}" class="btn btn-primary btn-sm">Agendar</a>
             <button class="btn btn-secondary btn-sm" onclick="editarServico(${index})">Editar</button>
             <button class="btn btn-danger btn-sm" onclick="excluirServico(${index})">Excluir</button>
           </div>
         </div>
       `;
+      
       listaServicos.appendChild(card);
     });
   }
@@ -1119,23 +909,26 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     
     const nome = document.getElementById('nomeServico').value.trim();
+    const categoria = document.getElementById('categoriaServico').value;
     const descricao = document.getElementById('descricaoServico').value.trim();
     const valor = document.getElementById('valorServico').value;
+    const clientesMensais = document.getElementById('clientesMensais').value;
+    const status = document.getElementById('statusServico').value;
     const arquivo = document.getElementById('fotoServico').files[0];
     
-    if (!nome || !descricao || !valor) {
-      mostrarNotificacao('Preencha todos os campos obrigatórios', 'error');
+    if (!nome || !descricao || !valor || !clientesMensais) {
+      alert('Preencha todos os campos obrigatórios');
       return;
     }
     
     // Processar imagem se for fornecida
     if (arquivo) {
       processarImagem(arquivo, (fotoProcessada) => {
-        salvarServico(nome, descricao, valor, fotoProcessada);
+        salvarServico(nome, categoria, descricao, valor, clientesMensais, status, fotoProcessada);
       });
     } else {
       // Salvar sem imagem (usará placeholder)
-      salvarServico(nome, descricao, valor, null);
+      salvarServico(nome, categoria, descricao, valor, clientesMensais, status, null);
     }
   });
 
@@ -1182,12 +975,15 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(arquivo);
   }
 
-  function salvarServico(nome, descricao, valor, foto) {
+  function salvarServico(nome, categoria, descricao, valor, clientesMensais, status, foto) {
     const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
     servicos.push({
       nome,
+      categoria,
       descricao,
       valor: parseFloat(valor),
+      clientesMensais: parseInt(clientesMensais),
+      status,
       foto: foto,
       dataCriacao: new Date().toISOString()
     });
@@ -1196,7 +992,7 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarServicos();
     modal.style.display = 'none';
     form.reset();
-    mostrarNotificacao('Serviço adicionado com sucesso!', 'success');
+    alert('Serviço adicionado com sucesso!');
   }
 
   window.editarServico = (index) => {
@@ -1204,8 +1000,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const servico = servicos[index];
     
     document.getElementById('nomeServico').value = servico.nome;
+    document.getElementById('categoriaServico').value = servico.categoria;
     document.getElementById('descricaoServico').value = servico.descricao;
     document.getElementById('valorServico').value = servico.valor;
+    document.getElementById('clientesMensais').value = servico.clientesMensais;
+    document.getElementById('statusServico').value = servico.status;
     document.getElementById('modalTitulo').textContent = 'Editar Serviço';
     
     // Remove o serviço da lista temporariamente para edição
@@ -1222,105 +1021,9 @@ document.addEventListener('DOMContentLoaded', () => {
       servicos.splice(index, 1);
       localStorage.setItem('servicos', JSON.stringify(servicos));
       carregarServicos();
-      mostrarNotificacao('Serviço excluído com sucesso!', 'success');
+      alert('Serviço excluído com sucesso!');
     }
   };
-
-  // =====================
-  // BOTÃO FLUTUANTE CONFIGURAÇÕES - MESMO CÓDIGO
-  // =====================
-  floatingConfigBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    floatingMenu.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar fora
-  document.addEventListener('click', (e) => {
-    if (!floatingMenu.contains(e.target) && !floatingConfigBtn.contains(e.target)) {
-      floatingMenu.classList.remove('show');
-    }
-  });
-
-  // Funções do menu flutuante - MESMO CÓDIGO
-  window.alternarTema = () => {
-    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    updateButtonText();
-    updateThemeButton();
-    floatingMenu.classList.remove('show');
-  };
-
-  window.fazerBackupRapido = () => {
-    const backup = {
-      servicos: JSON.parse(localStorage.getItem('servicos')) || [],
-      dataBackup: new Date().toISOString()
-    };
-
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup-servicos-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    floatingMenu.classList.remove('show');
-    mostrarNotificacao('Backup rápido realizado com sucesso!', 'success');
-  };
-
-  window.verEstatisticas = () => {
-    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
-    const stats = `
-ESTATÍSTICAS DE SERVIÇOS:
-
-Total de Serviços: ${servicos.length}
-Valor Médio: R$ ${(servicos.reduce((acc, s) => acc + parseFloat(s.valor), 0) / servicos.length || 0).toFixed(2)}
-Serviço Mais Caro: R$ ${Math.max(...servicos.map(s => parseFloat(s.valor))) || 0}
-Serviço Mais Barato: R$ ${Math.min(...servicos.map(s => parseFloat(s.valor))) || 0}
-    `;
-    alert(stats);
-    floatingMenu.classList.remove('show');
-  };
-
-  window.sairSistema = () => {
-    if (confirm('Deseja realmente sair do sistema?')) {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'index.html';
-    }
-  };
-
-  // Atualizar texto do botão de tema
-  function updateThemeButton() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    const themeText = document.getElementById('themeText');
-    
-    if (theme === "light") {
-      themeText.textContent = "Tema Escuro";
-    } else {
-      themeText.textContent = "Tema Claro";
-    }
-  }
-
-  // Função para mostrar notificações - MESMO CÓDIGO
-  function mostrarNotificacao(mensagem, tipo = 'info') {
-    // Remove notificação anterior se existir
-    const notificacaoAnterior = document.querySelector('.floating-notification');
-    if (notificacaoAnterior) {
-      notificacaoAnterior.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `floating-notification ${tipo}`;
-    notification.textContent = mensagem;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
 
   // =====================
   // INICIALIZAÇÃO
@@ -1333,16 +1036,32 @@ Serviço Mais Barato: R$ ${Math.min(...servicos.map(s => parseFloat(s.valor))) |
       const servicosExemplo = [
         {
           nome: "Corte de Cabelo",
+          categoria: "beleza",
           descricao: "Corte completo com lavagem e finalização",
           valor: 50.00,
-          foto: null, // Sem foto - usará placeholder
+          clientesMensais: 25,
+          status: "ativo",
+          foto: null,
           dataCriacao: new Date().toISOString()
         },
         {
           nome: "Manicure Completa",
+          categoria: "beleza",
           descricao: "Manicure com corte, lixamento e esmaltação",
           valor: 35.00,
-          foto: null, // Sem foto - usará placeholder
+          clientesMensais: 40,
+          status: "ativo",
+          foto: null,
+          dataCriacao: new Date().toISOString()
+        },
+        {
+          nome: "Massagem Relaxante",
+          categoria: "bem-estar",
+          descricao: "Massagem relaxante de 60 minutos",
+          valor: 120.00,
+          clientesMensais: 15,
+          status: "inativo",
+          foto: null,
           dataCriacao: new Date().toISOString()
         }
       ];
@@ -1350,10 +1069,26 @@ Serviço Mais Barato: R$ ${Math.min(...servicos.map(s => parseFloat(s.valor))) |
     }
   }
 
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
   // Inicializar
   inicializarDadosExemplo();
   carregarServicos();
-  updateThemeButton();
 });
 </script>
 </body>

@@ -10,9 +10,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
   <meta name="msapplication-navbutton-color" content="#007bff">
   
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
   <style>
     /* ========================
-       TEMA CLARO/ESCURO - MESMO PADRÃO DASHBOARD
+       TEMA CLARO/ESCURO - OTIMIZADO
     ======================== */
     :root {
       --bg-color: #f4f4f4;
@@ -26,6 +29,7 @@
       --info-color: #17a2b8;
       --shadow: 0 2px 10px rgba(0,0,0,0.1);
       --border-radius: 12px;
+      --transition: all 0.3s ease;
     }
     
     [data-theme="dark"] {
@@ -42,7 +46,7 @@
     }
 
     /* ========================
-       RESET E BASE RESPONSIVA - MESMO PADRÃO
+       RESET E BASE RESPONSIVA
     ======================== */
     * {
       margin: 0;
@@ -55,23 +59,10 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* ========================
-       HEADER RESPONSIVO - IDÊNTICO AO DASHBOARD
-    ======================== */
-    header {
-      background: var(--card-bg);
-      box-shadow: var(--shadow);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
     }
 
     .container {
@@ -81,72 +72,8 @@
       padding: 0 1rem;
     }
 
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 2px solid var(--primary-color);
-      color: var(--primary-color);
-      padding: 0.5rem 1rem;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: clamp(0.875rem, 3vw, 1rem);
-      min-width: 80px;
-    }
-
-    .theme-toggle:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    #menuBtn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-color);
-      padding: 0.25rem;
-    }
-
     /* ========================
-       MAIN CONTENT RESPONSIVO - MESMO PADRÃO
+       MAIN CONTENT RESPONSIVO
     ======================== */
     .main-content {
       flex: 1;
@@ -170,7 +97,7 @@
     }
 
     /* ========================
-       PAGE HEADER - MESMO PADRÃO DASHBOARD
+       PAGE HEADER
     ======================== */
     .page-header {
       display: flex;
@@ -182,7 +109,7 @@
     }
 
     /* ========================
-       BOTÕES - MESMO PADRÃO DASHBOARD
+       BOTÕES
     ======================== */
     .btn {
       padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1rem, 3vw, 1.25rem);
@@ -234,7 +161,7 @@
     }
 
     /* ========================
-       ESTATÍSTICAS - MESMO PADRÃO DASHBOARD
+       ESTATÍSTICAS
     ======================== */
     .agendamentos-stats {
       display: grid;
@@ -341,7 +268,7 @@
     }
 
     /* ========================
-       TABELA RESPONSIVA - MESMO PADRÃO DASHBOARD
+       TABELA RESPONSIVA
     ======================== */
     .table-responsive {
       overflow-x: auto;
@@ -420,7 +347,7 @@
     }
 
     /* ========================
-       MODAL - MESMO PADRÃO
+       MODAL
     ======================== */
     .modal {
       display: none;
@@ -473,7 +400,7 @@
     }
 
     /* ========================
-       FOOTER RESPONSIVO - IDÊNTICO AO DASHBOARD
+       FOOTER RESPONSIVO
     ======================== */
     .footer {
       background: var(--card-bg);
@@ -561,7 +488,7 @@
     }
 
     /* ========================
-       PRELOADER OTIMIZADO - MESMO PADRÃO
+       PRELOADER OTIMIZADO
     ======================== */
     #preloader {
       position: fixed;
@@ -609,146 +536,7 @@
     }
 
     /* ========================
-       BOTÃO FLUTUANTE - IDÊNTICO AO DASHBOARD
-    ======================== */
-    .floating-config-btn {
-      position: fixed;
-      bottom: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      width: clamp(3.125rem, 8vw, 3.75rem);
-      height: clamp(3.125rem, 8vw, 3.75rem);
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: clamp(1rem, 3vw, 1.25rem);
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .floating-config-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
-      background: var(--secondary-color);
-    }
-
-    .floating-config-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Menu flutuante */
-    .floating-menu {
-      position: fixed;
-      bottom: clamp(5rem, 12vw, 6.25rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      padding: 1rem;
-      z-index: 999;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-width: min(200px, 80vw);
-      border: 2px solid var(--primary-color);
-    }
-
-    .floating-menu.show {
-      display: flex;
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .floating-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
-      border: none;
-      border-radius: 8px;
-      color: var(--text-color);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      font-size: clamp(0.8rem, 2.5vw, 0.875rem);
-      font-weight: 500;
-      text-align: left;
-    }
-
-    .floating-menu-item:hover {
-      background: var(--primary-color);
-      color: white;
-      transform: translateX(-5px);
-    }
-
-    /* ========================
-       NOTIFICAÇÕES - MESMO PADRÃO
-    ======================== */
-    .floating-notification {
-      position: fixed;
-      top: clamp(1.25rem, 4vw, 1.875rem);
-      right: clamp(1.25rem, 4vw, 1.875rem);
-      background: var(--primary-color);
-      color: white;
-      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.25rem);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      z-index: 1001;
-      animation: slideInRight 0.3s ease;
-      max-width: min(300px, 90vw);
-      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-    }
-
-    .floating-notification.success {
-      background: var(--success-color);
-    }
-
-    .floating-notification.error {
-      background: var(--danger-color);
-    }
-
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideOutRight {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-    }
-
-    /* ========================
-       BREAKPOINTS ESPECÍFICOS - MESMO PADRÃO
+       BREAKPOINTS ESPECÍFICOS
     ======================== */
     
     /* Mobile Small (até 360px) */
@@ -787,36 +575,6 @@
 
     /* Mobile (até 480px) */
     @media (max-width: 480px) {
-      .header-content {
-        flex-wrap: wrap;
-      }
-      
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--card-bg);
-        box-shadow: var(--shadow);
-        padding: 1rem 0;
-        gap: 0.5rem;
-      }
-      
-      .nav-links.show {
-        display: flex;
-      }
-      
-      #menuBtn {
-        display: block;
-      }
-      
-      .nav-link {
-        padding: 0.75rem 1rem;
-        text-align: center;
-      }
-      
       .page-header {
         flex-direction: column;
         align-items: stretch;
@@ -849,40 +607,8 @@
       }
     }
 
-    /* Orientação paisagem em mobile */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .agendamentos-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-
-    /* Alturas específicas para mobile */
-    @media (max-height: 600px) {
-      .main-content {
-        padding: 1rem 0;
-      }
-      
-      .section {
-        margin: 1rem auto;
-      }
-      
-      .stat-card {
-        min-height: 100px;
-        padding: 1rem;
-      }
-    }
-
     /* ========================
-       ACESSIBILIDADE - MESMO PADRÃO
+       ACESSIBILIDADE
     ======================== */
     @media (prefers-reduced-motion: reduce) {
       * {
@@ -906,11 +632,9 @@
 
     /* Foco visível para acessibilidade */
     .btn:focus-visible,
-    .theme-toggle:focus-visible,
-    .floating-config-btn:focus-visible,
     .form-control:focus-visible,
-    .nav-link:focus-visible,
-    .modal-close:focus-visible {
+    .modal-close:focus-visible,
+    .nav-link:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
@@ -924,28 +648,13 @@
   <div class="preloader-text">Carregando agendamentos...</div>
 </div>
 
-<header>
-  <div class="container header-content">
-    <a href="index.html" class="logo">Agendamento+</a>
-    <button id="menuBtn" aria-label="Abrir menu">Menu</button>
-    <nav id="menu" class="nav-links">
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="serviços.html" class="nav-link">Serviços</a>
-      <a href="agendamento.html" class="nav-link">Agendamentos</a>
-      <a href="clientes.html" class="nav-link">Clientes</a>
-      <a href="perfil.html" class="nav-link">Perfil</a>
-    </nav>
-    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-      Tema Escuro
-    </button>
-  </div>
-</header>
+<!-- Header será inserido automaticamente aqui -->
 
 <main class="main-content container">
   <section class="section">
     <div class="page-header">
       <h1 class="section-title">Gerenciar Agendamentos</h1>
-      <a href="agendar.html" class="btn btn-success">+ Novo Agendamento</a>
+      <button id="btnNovoAgendamento" class="btn btn-success">+ Novo Agendamento</button>
     </div>
 
     <div class="agendamentos-stats">
@@ -1024,7 +733,7 @@
 <div class="modal" id="modalAgendamento" aria-hidden="true" aria-labelledby="modalTitulo">
   <div class="modal-content">
     <button class="modal-close" onclick="fecharModalAgendamento()" aria-label="Fechar modal">&times;</button>
-    <h2 id="modalTitulo">Editar Agendamento</h2>
+    <h2 id="modalTitulo">Novo Agendamento</h2>
     <form id="formAgendamento">
       <div class="form-group">
         <label for="editCliente" class="form-label">Cliente</label>
@@ -1057,38 +766,11 @@
         </select>
       </div>
       <div class="form-actions">
-        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+        <button type="submit" class="btn btn-success">Salvar Agendamento</button>
         <button type="button" class="btn btn-secondary" onclick="fecharModalAgendamento()">Cancelar</button>
       </div>
     </form>
   </div>
-</div>
-
-<!-- Botão Flutuante de Configurações -->
-<button class="floating-config-btn" id="floatingConfigBtn" title="Configurações Rápidas">
-  Config
-</button>
-
-<!-- Menu Flutuante -->
-<div class="floating-menu" id="floatingMenu">
-    <a href="configuracoes.html" class="floating-menu-item">
-        Configurações
-    </a>
-    <a href="perfil.html" class="floating-menu-item">
-        Meu Perfil
-    </a>
-    <button class="floating-menu-item" onclick="alternarTema()">
-        <span id="themeText">Tema Escuro</span>
-    </button>
-    <button class="floating-menu-item" onclick="fazerBackupRapido()">
-        Backup Rápido
-    </button>
-    <button class="floating-menu-item" onclick="verEstatisticas()">
-        Estatísticas
-    </button>
-    <button class="floating-menu-item" onclick="sairSistema()">
-        Sair
-    </button>
 </div>
 
 <footer class="footer">
@@ -1114,78 +796,16 @@
   </div>
 </footer>
 
+<script src="header.js"></script>
 <script>
-// MESMO CÓDIGO JAVASCRIPT DO DASHBOARD, ADAPTADO PARA AGENDAMENTOS
-document.addEventListener('DOMContentLoaded', () => {
-  const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('menu');
-  const themeToggle = document.getElementById('themeToggle');
+// GERENCIAMENTO DE AGENDAMENTOS
+document.addEventListener('DOMContentLoaded', function() {
   const modalAgendamento = document.getElementById('modalAgendamento');
   const formAgendamento = document.getElementById('formAgendamento');
-  const floatingConfigBtn = document.getElementById('floatingConfigBtn');
-  const floatingMenu = document.getElementById('floatingMenu');
+  const btnNovoAgendamento = document.getElementById('btnNovoAgendamento');
 
   // =====================
-  // TEMA CLARO / ESCURO - MESMO CÓDIGO
-  // =====================
-  const currentTheme = localStorage.getItem("theme") || "light";
-  document.documentElement.setAttribute("data-theme", currentTheme);
-  updateButtonText();
-
-  themeToggle.addEventListener("click", () => {
-    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    updateButtonText();
-    updateThemeButton();
-  });
-
-  function updateButtonText() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
-  }
-
-  // =====================
-  // MENU MOBILE - MESMO CÓDIGO
-  // =====================
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar em um link
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('show');
-    });
-  });
-
-  // =====================
-  // PRELOADER - 3 SEGUNDOS - MESMO CÓDIGO
-  // =====================
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-    
-    // Garantir que o preloader fique pelo menos 1.5 segundos
-    const minLoadTime = 1500;
-    const loadStart = Date.now();
-    
-    setTimeout(() => {
-      const loadTime = Date.now() - loadStart;
-      const remainingTime = Math.max(3000 - loadTime, 0);
-      
-      setTimeout(() => {
-        preloader.classList.add("hidden");
-        
-        // Remover completamente do DOM após animação
-        setTimeout(() => {
-          preloader.remove();
-        }, 300);
-      }, remainingTime);
-    }, minLoadTime);
-  });
-
-  // =====================
-  // GERENCIAMENTO DE AGENDAMENTOS (MANTIDO)
+  // GERENCIAMENTO DE AGENDAMENTOS
   // =====================
   let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
   let agendamentoEditando = null;
@@ -1216,7 +836,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <td class="actions-cell">
           <button class="btn btn-secondary btn-sm" onclick="editarAgendamento(${index})">✏️ Editar</button>
           <button class="btn btn-danger btn-sm" onclick="cancelarAgendamento(${index})">🗑️ Cancelar</button>
-          <button class="btn btn-primary btn-sm" onclick="verDetalhes(${index})">👁️ Detalhes</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -1229,7 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function carregarFiltros() {
     const filtroServico = document.getElementById('filtroServico');
     const editServico = document.getElementById('editServico');
-    const servicos = [...new Set(agendamentos.map(a => a.servico))];
+    const servicos = JSON.parse(localStorage.getItem('servicos')) || [];
     
     // Limpar selects
     filtroServico.innerHTML = '<option value="">Todos os serviços</option>';
@@ -1238,13 +857,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Popular selects
     servicos.forEach(servico => {
       const option1 = document.createElement('option');
-      option1.value = servico;
-      option1.textContent = servico;
+      option1.value = servico.nome;
+      option1.textContent = servico.nome;
       filtroServico.appendChild(option1);
 
       const option2 = document.createElement('option');
-      option2.value = servico;
-      option2.textContent = servico;
+      option2.value = servico.nome;
+      option2.textContent = servico.nome;
       editServico.appendChild(option2);
     });
   }
@@ -1267,7 +886,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Filtros
-  window.filtrarAgendamentos = () => {
+  window.filtrarAgendamentos = function() {
     const data = document.getElementById('filtroData').value;
     const servico = document.getElementById('filtroServico').value;
     const status = document.getElementById('filtroStatus').value;
@@ -1303,14 +922,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <td class="actions-cell">
           <button class="btn btn-secondary btn-sm" onclick="editarAgendamento(${originalIndex})">✏️ Editar</button>
           <button class="btn btn-danger btn-sm" onclick="cancelarAgendamento(${originalIndex})">🗑️ Cancelar</button>
-          <button class="btn btn-primary btn-sm" onclick="verDetalhes(${originalIndex})">👁️ Detalhes</button>
         </td>
       `;
       tbody.appendChild(tr);
     });
   };
 
-  window.limparFiltros = () => {
+  window.limparFiltros = function() {
     document.getElementById('filtroData').value = '';
     document.getElementById('filtroServico').value = '';
     document.getElementById('filtroStatus').value = '';
@@ -1319,7 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Modal functions
-  window.abrirModalAgendamento = (editarIndex = null) => {
+  window.abrirModalAgendamento = function(editarIndex = null) {
     agendamentoEditando = editarIndex;
     const modalTitulo = document.getElementById('modalTitulo');
     
@@ -1346,14 +964,14 @@ document.addEventListener('DOMContentLoaded', () => {
     modalAgendamento.style.display = 'flex';
   };
 
-  window.fecharModalAgendamento = () => {
+  window.fecharModalAgendamento = function() {
     modalAgendamento.style.display = 'none';
     agendamentoEditando = null;
     formAgendamento.reset();
   };
 
   // Form submission
-  formAgendamento.addEventListener('submit', (e) => {
+  formAgendamento.addEventListener('submit', function(e) {
     e.preventDefault();
     
     const agendamento = {
@@ -1379,147 +997,37 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarAgendamentos();
     fecharModalAgendamento();
     
-    mostrarNotificacao(agendamentoEditando !== null ? 'Agendamento atualizado com sucesso!' : 'Agendamento criado com sucesso!', 'success');
+    alert(agendamentoEditando !== null ? 'Agendamento atualizado com sucesso!' : 'Agendamento criado com sucesso!');
   });
 
-  window.editarAgendamento = (index) => {
+  window.editarAgendamento = function(index) {
     abrirModalAgendamento(index);
   };
 
-  window.cancelarAgendamento = (index) => {
+  window.cancelarAgendamento = function(index) {
     if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
       agendamentos[index].status = 'cancelado';
       localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
       carregarAgendamentos();
-      mostrarNotificacao('Agendamento cancelado com sucesso!', 'success');
+      alert('Agendamento cancelado com sucesso!');
     }
   };
 
-  window.verDetalhes = (index) => {
-    const agendamento = agendamentos[index];
-    const detalhes = `
-Cliente: ${agendamento.cliente}
-Serviço: ${agendamento.servico}
-Valor: R$ ${agendamento.valor.toFixed(2)}
-Data: ${formatarData(agendamento.data)}
-Hora: ${agendamento.hora}
-Status: ${agendamento.status}
-Data de Criação: ${new Date(agendamento.dataCriacao).toLocaleString()}
-    `;
-    alert(detalhes);
-  };
-
   // Novo agendamento via botão
-  document.querySelector('.btn-success[href="agendar.html"]').addEventListener('click', (e) => {
+  btnNovoAgendamento.addEventListener('click', function(e) {
     e.preventDefault();
     abrirModalAgendamento();
   });
 
   // Fecha modal clicando fora
-  modalAgendamento.addEventListener('click', e => {
+  modalAgendamento.addEventListener('click', function(e) {
     if (e.target === modalAgendamento) fecharModalAgendamento();
   });
 
   // =====================
-  // BOTÃO FLUTUANTE CONFIGURAÇÕES - MESMO CÓDIGO
+  // INICIALIZAÇÃO
   // =====================
-  floatingConfigBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    floatingMenu.classList.toggle('show');
-  });
-
-  // Fechar menu ao clicar fora
-  document.addEventListener('click', (e) => {
-    if (!floatingMenu.contains(e.target) && !floatingConfigBtn.contains(e.target)) {
-      floatingMenu.classList.remove('show');
-    }
-  });
-
-  // Funções do menu flutuante - MESMO CÓDIGO
-  window.alternarTema = () => {
-    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    updateButtonText();
-    updateThemeButton();
-    floatingMenu.classList.remove('show');
-  };
-
-  window.fazerBackupRapido = () => {
-    const backupData = {
-      agendamentos: agendamentos,
-      dataBackup: new Date().toISOString(),
-      total: agendamentos.length
-    };
-    
-    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup-agendamentos-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    mostrarNotificacao('Backup realizado com sucesso!', 'success');
-    floatingMenu.classList.remove('show');
-  };
-
-  window.verEstatisticas = () => {
-    const stats = `
-ESTATÍSTICAS DO SISTEMA:
-
-Total de Agendamentos: ${agendamentos.length}
-Agendamentos Hoje: ${agendamentos.filter(a => a.data === new Date().toISOString().split('T')[0]).length}
-Agendamentos Pendentes: ${agendamentos.filter(a => a.status === 'pendente').length}
-Agendamentos Confirmados: ${agendamentos.filter(a => a.status === 'confirmado').length}
-Agendamentos Cancelados: ${agendamentos.filter(a => a.status === 'cancelado').length}
-Faturamento Total: R$ ${agendamentos.reduce((total, a) => total + a.valor, 0).toFixed(2)}
-    `;
-    alert(stats);
-    floatingMenu.classList.remove('show');
-  };
-
-  window.sairSistema = () => {
-    if (confirm('Deseja realmente sair do sistema?')) {
-      localStorage.removeItem('agendamentos');
-      window.location.href = 'index.html';
-    }
-  };
-
-  // Atualizar texto do botão de tema
-  function updateThemeButton() {
-    const theme = document.documentElement.getAttribute("data-theme");
-    const themeText = document.getElementById('themeText');
-    
-    if (theme === "light") {
-      themeText.textContent = "Tema Escuro";
-    } else {
-      themeText.textContent = "Tema Claro";
-    }
-  }
-
-  // Função para mostrar notificações - MESMO CÓDIGO
-  function mostrarNotificacao(mensagem, tipo = 'info') {
-    // Remove notificação anterior se existir
-    const notificacaoAnterior = document.querySelector('.floating-notification');
-    if (notificacaoAnterior) {
-      notificacaoAnterior.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `floating-notification ${tipo}`;
-    notification.textContent = mensagem;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => notification.remove(), 300);
-    }, 3000);
-  }
-
+  
   // Inicializar dados de exemplo se não existirem
   function inicializarDadosExemplo() {
     if (agendamentos.length === 0) {
@@ -1559,10 +1067,26 @@ Faturamento Total: R$ ${agendamentos.reduce((total, a) => total + a.valor, 0).to
     }
   }
 
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
   // Inicializar
   inicializarDadosExemplo();
   carregarAgendamentos();
-  updateThemeButton();
 });
 </script>
 </body>
